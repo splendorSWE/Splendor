@@ -1,3 +1,7 @@
+import app from "./config/firebaseConfig.js";
+
+
+
 function MyButton() {
     return (
       <button>
@@ -7,6 +11,7 @@ function MyButton() {
   }
   
   export default function MyApp() {
+    console.log("Firebase App Initialized:", app);
     return (
       <div className="first-button">
         <h1>Welcome to my app heh</h1>
@@ -14,3 +19,4 @@ function MyButton() {
       </div>
     );
   }
+
