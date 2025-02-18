@@ -1,4 +1,6 @@
-import app from "./config/firebaseConfig.js";
+
+import Home from "./pages/Home.js"
+import firebase from "./firebase.js"
 
 
 
@@ -11,12 +13,15 @@ function MyButton() {
   }
   
   export default function MyApp() {
-    console.log("Firebase App Initialized:", app);
     return (
-      <div className="first-button">
-        <h1>Welcome to my app heh</h1>
-        <MyButton />
-      </div>
+      <>
+        <div className="App">
+          <Home/>
+        </div>
+        <div className='first-button'>
+          <MyButton/>
+        </div>
+      </>
     );
   }
 
