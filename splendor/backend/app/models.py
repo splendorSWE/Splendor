@@ -1,6 +1,6 @@
 pass
 # fake temp user class
-class Temp_User:
+class User:
     def __init__(self, user_id, name, email, profile_image=None):
         self.user_id = user_id
         self.name = name

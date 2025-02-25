@@ -2,7 +2,12 @@ from flask import Blueprint, request, jsonify
 from .services.user_service import create_user
 from .models import User
 
+
+
+
 user_routes = Blueprint("user_routes", __name__)
+
+
 
 @user_routes.route("/create-user", methods=["POST"])
 def create_user_route():
