@@ -8,7 +8,7 @@ function MyButton() {
     return (
       <Link to="/gameboard">
         <button>
-          I'm a button
+          Go to gameboard
         </button>
       </Link>
     );
