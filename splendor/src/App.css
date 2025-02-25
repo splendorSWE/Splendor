@@ -1,5 +1,8 @@
 .App {
-  text-align: center;
+  min-height: 100vh;
+  background-image: url("/public/Images/SplendorBackground.jpg");
+  background-size: cover;
+  background-position: center;
 }
 
 .App-logo {
@@ -39,4 +42,9 @@
 
 .first-button {
   border-radius: 50%;
+}
+
+.GemCard img {
+  width: 100px;
+  height: Auto;
 }
