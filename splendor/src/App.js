@@ -1,13 +1,16 @@
 import Home from "./pages/Home.js"
 import firebase from "./firebase.js"
+import { Link } from 'react-router-dom';
 import "./App.css"
 
 
 function MyButton() {
     return (
-      <button>
-        I'm a button
-      </button>
+      <Link to="/gameboard">
+        <button>
+          I'm a button
+        </button>
+      </Link>
     );
   }
   
