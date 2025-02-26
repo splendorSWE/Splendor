@@ -39,11 +39,12 @@ function Header() {
 function PlayerCollection() {
   return (
     <div style={{
-      position: 'fixed',
+      position: 'aboslute',
       left: '20px',
-      marginTop: '30px',
+      top: 'calc(50vh + 15px)', // Centered while accounting for 30px header
+      transform: 'translateY(-50%)',
       width: '20vw',
-      height: '90vh',
+      height: 'calc(90vh - 30px)',
       backgroundColor: '#f0f0f0',
       boxShadow: '2px 0 5px rgba(0,0,0,0.2)',
       display: 'flex',
@@ -55,10 +56,8 @@ function PlayerCollection() {
         display: 'flex',
         flexDirection: 'row',          // Place points and label side by side
         alignItems: 'center',           // Vertically center them in this row
-        justifyContent: 'center',
         fontSize: '1.5vw',
         fontFamily: 'Fondamento, sans-serif',
-        textAlign: 'center',
               }}>
         
         <h2 style= {{marginRight: '1vw'}}>
