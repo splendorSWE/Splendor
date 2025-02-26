@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+
 function HomeButton() {
   return (
     <Link to="/">
-      <button>
+      <button style={{ margin: '5px'}}>
         Home
       </button>
     </Link>
@@ -19,21 +20,32 @@ function PlayerPoints() {
   );
 }
 
+function Header() {
+  return(
+    <div style={{
+      position: 'fixed',
+      width: '100%',
+      height: '30px',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'flex-end', 
+      backgroundColor: 'gold',
+    }}>
+    <HomeButton  />
+    </div>
+  )
+}
+
 function PlayerCollection() {
   return (
     <div style={{
       position: 'fixed',
       left: '20px',
-      top: '55%',
-      transform: 'translateY(-50%)',
-      width: '15vw',
-      height: '80vh',
+      marginTop: '30px',
+      width: '20vw',
+      height: '90vh',
       backgroundColor: '#f0f0f0',
-      padding: '20px',
       boxShadow: '2px 0 5px rgba(0,0,0,0.2)',
-      fontSize: '24px',
-      fontFamily: 'Fondamento, sans-serif',
-      textAlign: 'center',
       display: 'flex',
       flexDirection: 'column',        // Align elements in a column
       alignItems: 'center',       // Align elements to the left horizontally
@@ -44,12 +56,15 @@ function PlayerCollection() {
         flexDirection: 'row',          // Place points and label side by side
         alignItems: 'center',           // Vertically center them in this row
         justifyContent: 'center',
+        fontSize: '1.5vw',
+        fontFamily: 'Fondamento, sans-serif',
+        textAlign: 'center',
               }}>
-        <PlayerPoints />
-        <h2 style={{
-          marginLeft: '10px',           // Space between points and label
-          fontSize: '3vw',              // Font size scales with viewport width
-        }}>
+        
+        <h2 style= {{marginRight: '1vw'}}>
+          <PlayerPoints /> 
+        </h2>
+        <h2>
           Points
         </h2>
       </div>
@@ -60,9 +75,13 @@ function PlayerCollection() {
 export default function Gameboard() {
   return(
     <div>
-      <PlayerCollection />
-      play the game here
-      <HomeButton />
+      <Header />
+      <div>
+        <PlayerCollection />
+        play the game here
+        <HomeButton />
+      </div>
     </div>
   );
 }
+
