@@ -22,11 +22,14 @@ export default function UserProfile() {
         } else {
           console.log("No user data found!");
         }
+      } else {
+        setUserInfo("No User")
       }
     };
 
     fetchUserInfo();
   }, []);
+
 
   if (!userInfo) {
     return <p>Loading your profile...</p>;
@@ -34,10 +37,16 @@ export default function UserProfile() {
 
   return (
     <div style={{ padding: "1rem", textAlign: "center" }}>
-      <h2>User Profile</h2>
-      <p><strong>Username:</strong> {userInfo.username}</p>
-      <p><strong>Account Created:</strong> {userInfo.createdAt}</p>
-      <p><strong>Wins:</strong> {userInfo.wins}</p>
+      {(userInfo !== "No User") ? (
+      <>
+        <h2>User Profile</h2>
+        <p><strong>Username:</strong> {userInfo.username}</p>
+        <p><strong>Account Created:</strong> {userInfo.createdAt}</p>
+        <p><strong>Wins:</strong> {userInfo.wins}</p>
+      </>
+    ) : (
+      <h2>Not signed in</h2>
+    )}
     </div>
   );
 }

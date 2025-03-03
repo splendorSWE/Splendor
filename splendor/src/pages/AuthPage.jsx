@@ -1,10 +1,24 @@
 // src/pages/AuthPage.jsx
 import { useState } from "react";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut} from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { ref, set } from "firebase/database";
 import { db } from "../firebase";
+
+
+
+function SignOutButton() {
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
+  };
+
+  return <button onClick={handleSignOut}>Sign Out</button>;
+}
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Sign Up
@@ -24,13 +38,14 @@ export default function AuthPage() {
       } else {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-    
+        const randomNumber = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
+        const userName = "User" + randomNumber
         // ✅ Save user info to Realtime Database
         await set(ref(db, "users/" + user.uid), {
           email: user.email,
           createdAt: new Date().toISOString(),
-          highScore: 0,
-          username: "NewUser"
+          wins: 0,
+          username: userName
         });
       }
       navigate("/");
@@ -83,6 +98,7 @@ export default function AuthPage() {
         >
           {isLogin ? "Sign up here" : "Login here"}
         </button>
+        <SignOutButton />
       </p>
 
       
