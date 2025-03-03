@@ -1,4 +1,4 @@
-import Home from "./pages/Home.js"
+import Home from "./pages/Home"
 import firebase from "./firebase.js"
 import { Link } from 'react-router-dom';
 import "./App.css"
