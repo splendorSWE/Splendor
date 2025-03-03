@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import "./App.css"
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { AuthProvider } from "./context/AuthContext.jsx";
 import UserStats from "./components/UserStats";
 
 // Connect to WebSocket server
@@ -30,7 +29,7 @@ function UserAuthButton() {
   )
 }
 
-export function MyAppContent() {
+export default function MyApp() {
   const [messages, setMessages] = useState([]);
   const [showUserStats, setShowUserStats] = useState(false);
   // Listen for messages from the server
@@ -73,10 +72,5 @@ export function MyAppContent() {
 }
 
 
-export default function MyApp() {
-  return (
-    <AuthProvider>
-      <MyAppContent />
-    </AuthProvider>
-);
-}
+
+
