@@ -1,0 +1,77 @@
+.home-button {
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    color: #27394D;
+    background-color: white;
+    border: none;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 3vh;
+    font-family: "Fondamento", cursive;
+    flex-direction: column;
+    left: 2vh;
+    bottom: 2vh;
+}
+
+.home-button:hover {
+    background-color: #27394D;
+    /* colors switch on hover */
+    color: white;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* Full viewport height */
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    width: 30vw;
+    height: 65vh;
+    background: #27394D;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-pic {
+    width: 15vw;
+    height: 15vw;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.info {
+    margin: 1vh;
+    font-size: 2vw;
+    color: white;
+    font-family: "Fondamento", cursive;
+}
+
+.button {
+    color: #27394D;
+    background-color: #FEDB5F;
+    border-radius: 0%;
+    width: 7vw;
+    font-size: 1.5vw;
+    font-family: "Fondamento", cursive;
+    margin-top: 3vh;
+}
+
+.password-input {
+    width: 20vw;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}

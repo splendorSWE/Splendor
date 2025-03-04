@@ -19,6 +19,16 @@ function MyButton() {
   );
 }
 
+function ProfileButton() {
+  return (
+    <Link to="/profile">
+      <button>
+        Profile
+      </button>
+    </Link>
+  );
+}
+
 function Rules() {
   return (
     <Link to='/rules'>
@@ -70,6 +80,9 @@ export default function MyApp() {
         <div className='first-button'>
           <Rules/>
         </div>
+        <div className='profile-button'>
+          <ProfileButton/>
+        </div>
         <div>
         <button onClick={toggleUserStats}>
           {showUserStats ? "Hide User Stats" : "Show User Stats"}
@@ -83,7 +96,3 @@ export default function MyApp() {
     </>
   );
 }
-
-
-
-
