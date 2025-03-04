@@ -7,26 +7,27 @@ import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import AuthPage from './pages/AuthPage.jsx';
+import Rules from './pages/Rules.jsx'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/gameboard" element={<Gameboard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/editprofile" element={<EditProfile />} />
-      </Routes>
-    </BrowserRouter>
-    
+  <React.StrictMode>    
+      <BrowserRouter>
+      <AuthProvider>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/gameboard" element={<Gameboard />} />
+            <Route path="/user-auth" element={<AuthPage />} />
+            <Route path="/rules" element={<Rules />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/editprofile" element={<EditProfile />} />
+          </Routes>
+        </AuthProvider>
+      </BrowserRouter>   
   </React.StrictMode>
 );
-
-// ReactDOM.render(
-  
-//   document.getElementById('root')
-// );
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
