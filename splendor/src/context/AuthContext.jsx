@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
       setUser(currentUser);
       setLoading(false);
       if (!currentUser) {
+        // TODO: Decide where we want to direct users when not logged in.
         // Redirect to login page if not authenticated
         // navigate("/user-auth");
       }
