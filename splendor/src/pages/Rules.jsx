@@ -17,7 +17,7 @@ export default function Rules() {
         </p>
         <h2>Basic Gameplay</h2>
         <ul>
-          <li>Collect gems and tokens on your turn.</li>
+          <li>Collect gems on your turn.</li>
           <li>Purchase cards to increase your resource pool.</li>
           <li>Reserve cards for future moves.</li>
           <li>Accumulate prestige points to win the game.</li>
