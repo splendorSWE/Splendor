@@ -20,8 +20,7 @@ function Header() {
       height: '30px',
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'flex-end', 
-      backgroundColor: 'gold',
+      justifyContent: 'flex-end',
     }}>
     <HomeButton  />
     </div>
@@ -32,7 +31,7 @@ function CollectionButton({player}) {
   return(
     <button style={{ 
       height: '60px',
-      width: '110px',
+      width: '105px',
       marginTop: '40px',
       marginLeft: '10px',
       fontFamily: 'Inknut Antiqua, sans-serif',
@@ -65,8 +64,8 @@ function Token({ ImagePath, number }) {
         top: '50%', 
         left: '50%', 
         transform: 'translate(-50%, -50%)', 
-        fontSize: '30px', 
-        fontWeight: 'bold', 
+        fontSize: '35px', 
+        fontWeight: '900', 
         color: 'black', 
         fontFamily: 'Ponomar, sans-serif',
       }}>
@@ -99,7 +98,7 @@ function ReservedCard() {
         left: '50%', 
         transform: 'translate(-50%, -50%)', 
         fontSize: '20px', 
-        fontWeight: 'bold', 
+        fontWeight: '800', 
         color: 'White', 
         fontFamily: 'Ponomar, sans-serif',
       }}>
@@ -131,8 +130,8 @@ function CollectionCard({ ImagePath, number }) {
         top: '50%', 
         left: '50%', 
         transform: 'translate(-50%, -50%)', 
-        fontSize: '30px', 
-        fontWeight: 'bold', 
+        fontSize: '35px', 
+        fontWeight: '900', 
         color: 'black', 
         fontFamily: 'Ponomar, sans-serif',
       }}>
@@ -179,42 +178,42 @@ function PlayerCollection({ Points }) {
         display: 'flex',
         flexDirection: 'row' 
         }}>  
-        <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={5} />
+        <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={1} />
         <ReservedCard />
       </div>
       <div style={{ 
         display: 'flex',
         flexDirection: 'row' 
         }}>  
-        <Token ImagePath={"/Images/Tokens/White Token.png"} number={5} />
+        <Token ImagePath={"/Images/Tokens/White Token.png"} number={1} />
         <CollectionCard ImagePath={"/Images/Plain Cards/White Card.png"} number={1}/>
         </div>
       <div style={{ 
         display: 'flex',
         flexDirection: 'row' 
         }}>   
-        <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={5} />
+        <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={2} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Blue Card.png"} number={1}/>
         </div>
       <div style={{ 
         display: 'flex',
         flexDirection: 'row' 
         }}> 
-        <Token ImagePath={"/Images/Tokens/Red Token.png"} number={5} />
+        <Token ImagePath={"/Images/Tokens/Red Token.png"} number={1} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Red Card.png"} number={1}/>
         </div>
       <div style={{ 
         display: 'flex',
         flexDirection: 'row' 
         }}> 
-        <Token ImagePath={"/Images/Tokens/Green Token.png"} number={5} />
+        <Token ImagePath={"/Images/Tokens/Green Token.png"} number={1} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Green Card.png"} number={1}/>
         </div>
       <div style={{ 
         display: 'flex',
         flexDirection: 'row' 
         }}> 
-        <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={5} />
+        <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={0} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Yellow Card.png"} number={1}/>
         </div>
 
@@ -222,19 +221,53 @@ function PlayerCollection({ Points }) {
   );
 }
 
-
-
-export default function Gameboard() {
-  return(
-    <div>
-      <Header />
-      <div>
-        <CollectionButton player={'Your'}/>
-        <CollectionButton player={"Opponent's"}/>
-        <PlayerCollection Points={12}/>
-      </div>
-      
+function BoardTokens() {
+  return (
+    <div style={{
+      width: '150',
+      display: 'flex',
+      flexDirection: 'column',
+      marginLeft: '30px',
+      alignItems: 'center'
+    }}>
+      <button style={{
+        width: '150px',
+        height: '50px',
+        fontFamily: 'Inknut Antiqua, sans-serif',
+        fontWeight: '800',
+        lineHeight: '20px',
+        marginBottom: '15px'
+      }}>
+        Select Tokens
+      </button>
+      <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={3} />
+      <Token ImagePath={"/Images/Tokens/White Token.png"} number={1} />
+      <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={2} />
+      <Token ImagePath={"/Images/Tokens/Red Token.png"} number={1} />
+      <Token ImagePath={"/Images/Tokens/Green Token.png"} number={2} />
+      <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={2} />
     </div>
   );
 }
+
+
+export default function Gameboard() {
+  return (
+    <div>
+      <Header />
+      <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+        <div>
+          <CollectionButton player={'Your'} />
+          <CollectionButton player={"Opponent's"} />
+          <PlayerCollection Points={10} />
+        </div>
+        <div style={{marginTop: '100px'}}> 
+          <BoardTokens />
+        </div>
+        
+      </div>
+    </div>
+  );
+}
+
 
