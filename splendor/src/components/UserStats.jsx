@@ -10,25 +10,35 @@ export default function UserProfile() {
     const fetchUserInfo = async () => {
       const user = auth.currentUser;
       if (user) {
-        const userId = user.uid;
-        const snapshot = await get(ref(db, "users/" + userId));
-        if (snapshot.exists()) {
-          const data = snapshot.val();
+        if (user.isAnonymous) {
           setUserInfo({
-            username: data.username,
-            createdAt: new Date(data.createdAt).toLocaleDateString(),
-            wins: data.wins,
+            username: "Guest",
+            createdAt: "N/A",
+            wins: "N/A",
+            isGuest: true,
           });
         } else {
-          console.log("No user data found!");
+          const userId = user.uid;
+          const snapshot = await get(ref(db, "users/" + userId));
+          if (snapshot.exists()) {
+            const data = snapshot.val();
+            setUserInfo({
+              username: data.username,
+              createdAt: new Date(data.createdAt).toLocaleDateString(),
+              wins: data.wins,
+            });
+          } else {
+            console.log("No user data found!");
+          }
         }
       } else {
-        setUserInfo("No User")
+        setUserInfo("No User");
       }
     };
 
     fetchUserInfo();
   }, []);
+
 
 
   if (!userInfo) {
