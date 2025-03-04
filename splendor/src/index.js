@@ -5,6 +5,7 @@ import App from './App';
 import Gameboard from './pages/Gameboard'; 
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Rules from './pages/Rules'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,6 +14,7 @@ root.render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/gameboard" element={<Gameboard />} />
+        <Route path="/rules" element={<Rules />} />
       </Routes>
     </BrowserRouter>
     

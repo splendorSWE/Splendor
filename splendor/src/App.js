@@ -18,6 +18,14 @@ function MyButton() {
   );
 }
 
+function Rules() {
+  return (
+    <Link to="/rules">
+      <button>Rules</button>
+    </Link>
+  )
+}
+
 export default function MyApp() {
   const [messages, setMessages] = useState([]);
 
@@ -38,6 +46,9 @@ export default function MyApp() {
         <Home/>
         <div className='first-button'>
           <MyButton/>
+        </div>
+        <div className='rules-button'>
+          <Rules/>
         </div>
         <div className="GemCard">
           <img src="/Images/MainCards/Blue 1.0.png" alt="Card" />
