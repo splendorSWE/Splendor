@@ -19,6 +19,16 @@ function MyButton() {
   );
 }
 
+function Rules() {
+  return (
+    <Link to='/rules'>
+      <button>
+        Rules
+      </button>
+    </Link>
+  )
+}
+
 function UserAuthButton() {
   return (
     <Link to="/user-auth">
@@ -56,6 +66,9 @@ export default function MyApp() {
         </div>
         <div className='first-button'>
           <UserAuthButton />
+        </div>
+        <div className='first-button'>
+          <Rules/>
         </div>
         <div>
         <button onClick={toggleUserStats}>
