@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import Gameboard from './pages/Gameboard'; 
 import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -15,6 +16,7 @@ root.render(
         <Route path="/" element={<App />} />
         <Route path="/gameboard" element={<Gameboard />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/editprofile" element={<EditProfile />} />
       </Routes>
     </BrowserRouter>
     

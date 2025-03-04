@@ -2,32 +2,24 @@ import React from 'react';
 import "./Profile.css";
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-
-
-function HomeButton() {
-    return (
-        <Link to="/" style={{ textDecoration: "none" }}>
-            <button className='home-button'>
-                Home
-            </button>
-        </Link>
-    );
-}
+import { useNavigate } from 'react-router-dom';
 
 export default function Profile() {
+    const navigate = useNavigate();
+
     return (
-        <div>
-            <div className="profile-container">
-                <div>
-                    <div className="profile-card">
-                        <img src="../images/default_pfp.jpg" alt="Profile" className="profile-pic" />
-                        <h2 className="username-show">Username</h2>
-                        <input type="password" placeholder="New Password" className="password-input" />
-                    </div>
-                </div>
-                <HomeButton />
-            </div >
-        </div>
+        <div className="profile-container">
+            <div className="profile-card">
+                <img src="../images/default_pfp.jpg" className="profile-pic" />
+                <h2 className="info">Username</h2>
+                <h2 className="info">Email</h2>
+                <h2 className="info">Password</h2>
+                <button className="button" onClick={() => navigate("/editprofile")}>Edit</button >
+            </div>
+            <button className='home-button' onClick={() => navigate("/")}>
+                Home
+            </button>
+        </div >
 
     )
 }
