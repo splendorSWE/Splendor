@@ -1,14 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./Home.css"; 
+import './pageStyles/Home.css'
 
 export default function Home() {
   return (
     <div className="home-page">
-      <header className="home-header">
-        <img src="/Images/splendor-logo.png" alt="Splendor Logo" className="logo" />
-      </header>
       <main className="home-menu">
+        <Link to='/user-auth'>
+            <button className='menu-button'> Login </button>
+        </Link>
         <Link to="/gameboard">
           <button className="menu-button">Gameboard</button>
         </Link>

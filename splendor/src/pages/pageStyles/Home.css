@@ -1,0 +1,45 @@
+.home-page {
+    background: url('../../../public/Images/SplendorBackground.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+    color: #333;
+  }
+  
+  .home-header {
+    margin-bottom: 40px;
+  }
+  
+  .logo {
+    font-family: 'Inknut Antiqua, sans-serif';
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .home-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .menu-button {
+    font-family: 'Inknut Antiqua, sans-serif';
+    font-size: 18px;
+    font-weight: bold;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #f6d354;
+    transition: background-color 0.3s ease;
+  }
+  
+  .menu-button:hover {
+    background-color: #d9a640;
+  }
+  
