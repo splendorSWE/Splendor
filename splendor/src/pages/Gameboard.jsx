@@ -40,7 +40,7 @@ function CollectionButton({player}) {
   return(
     <button style={{ 
       height: '60px',
-      width: '120px',
+      width: '105px',
       marginTop: '40px',
       marginLeft: '10px',
       fontFamily: 'Inknut Antiqua, sans-serif',
