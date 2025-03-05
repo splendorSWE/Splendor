@@ -1,0 +1,14 @@
+.page-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: gold;
+    height: 60px; 
+  }
+  
+  
+  .spacer {
+    flex: 1;
+  }

@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "./pageStyles/Rules.css";
 import PageHeader from "../components/PageHeader";
 

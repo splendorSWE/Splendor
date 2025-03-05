@@ -1,6 +1,5 @@
 import React from 'react';
 import "./pageStyles/Profile.css";
-import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,6 +15,7 @@ export default function EditProfile() {
                 <button className='button' onClick={() => navigate("/profile")}>
                     Submit
                 </button>
+                
             </div>
         </div>
     )
