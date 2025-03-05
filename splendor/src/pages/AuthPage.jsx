@@ -1,10 +1,31 @@
 // src/pages/AuthPage.jsx
 import { useState, useEffect } from "react";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, signInAnonymously} from "firebase/auth";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, signInAnonymously } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { ref, set } from "firebase/database";
 import { db } from "../firebase";
+import PageHeader from '../components/PageHeader';
+import NavigationButton from "../components/NavigationButton";
+
+
+
+
+function SignOutButton() {
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
+  };
+
+  return <button className='dark-button'
+                onClick={handleSignOut}>Sign Out</button>;
+}
+
+
+
 
 
 
@@ -49,7 +70,7 @@ export default function AuthPage() {
       // if set to login, call signin.
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
-      } 
+      }
       // if else (sign up), then create user.
       else {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -66,13 +87,17 @@ export default function AuthPage() {
       }
       // navigate to the home page.
       navigate("/");
-    
+
     } catch (err) {
       setError(err.message);
-    } 
+    }
   };
 
-    return (
+
+  return (
+    <>
+      <PageHeader title='Sign In/Sign Up' />
+
       <div
         style={{
           display: "flex",
@@ -104,7 +129,7 @@ export default function AuthPage() {
           >
             Splendor
           </h1>
-  
+
           <form
             onSubmit={handleSubmit}
             style={{
@@ -162,7 +187,7 @@ export default function AuthPage() {
               {isLogin ? "log in" : "create account"}
             </button>
           </form>
-  
+
           <p
             style={{
               marginTop: "1rem",
@@ -186,37 +211,21 @@ export default function AuthPage() {
               {isLogin ? "sign-up" : "login"}
             </button>
           </p>
-  
-          <div style={{ marginTop: "1rem" }}>
-            {user && <button onClick={handleSignOut} style={{
-                marginTop: "0.5rem",
-                padding: "0.5rem 1rem",
-                background: "none",
-                border: "1px solid #F7D774",
-                color: "#F7D774",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontFamily: "YourCustomFont, serif",
-              }}>Sign Out</button>}
-            <button
+
+
+          <div className='nav-buttons'>
+            {user && <SignOutButton />}
+            <NavigationButton
               onClick={handleGuestSignIn}
-              style={{
-                marginTop: "0.5rem",
-                marginLeft: "0.5rem",
-                padding: "0.5rem 1rem",
-                background: "none",
-                border: "1px solid #F7D774",
-                color: "#F7D774",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontFamily: "YourCustomFont, serif",
-              }}
-            >
-              Continue as Guest
-            </button>
+              destination='Continue As Guest'
+              link='/'
+            />
+
+
           </div>
         </div>
       </div>
-    );
-  }
-  
+    </>
+  );
+}
+
