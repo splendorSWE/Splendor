@@ -29,6 +29,7 @@ function SignOutButton() {
 
 
 
+
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Sign Up
   const [email, setEmail] = useState("");
@@ -213,15 +214,14 @@ export default function AuthPage() {
           </p>
 
 
-          <div className='nav-buttons'>
+          <div>
             {user && <SignOutButton />}
             <NavigationButton
               onClick={handleGuestSignIn}
               destination='Continue As Guest'
               link='/'
+              styling='dark-button'
             />
-
-
           </div>
         </div>
       </div>

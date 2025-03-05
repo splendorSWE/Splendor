@@ -1,5 +1,5 @@
 import Home from "./pages/Home"
-import { Link } from 'react-router-dom';
+
 import "./App.css"
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
@@ -12,25 +12,6 @@ const socket = io("http://localhost:4000");
 
 
 
-function ProfileButton() {
-  return (
-    <Link to="/profile">
-      <button>
-        Profile
-      </button>
-    </Link>
-  );
-}
-
-function Rules() {
-  return (
-    <Link to='/rules'>
-      <button>
-        Rules
-      </button>
-    </Link>
-  )
-}
 
 
 
@@ -55,22 +36,24 @@ export default function MyApp() {
   return (
     
       <div className="App">
-
+        <Home/>
         
         <div className="page-header"><PageHeader title='Home'/></div>
           
         <div className="content-container">
-          <div className='nav-buttons vertical'>
+          <div>
             {/* <Home/> */}
-            <NavigationButton 
+            <NavigationButton styling='dark-button vertical'
               destination="Gameboard"
               link='/gameboard'/>
             <NavigationButton 
+            styling='dark-button vertical'
             destination="Rules"
             link='/rules'/>
-            <NavigationButton
-              destination='User Profile"
-              link='/profile'
+            <NavigationButton 
+            styling='dark-button vertical'
+            destination="User Profile"
+            link='/profile'/>
             
             
           </div>
