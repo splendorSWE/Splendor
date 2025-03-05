@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import PageHeader from '../components/PageHeader';
 
 function HomeButton() {
   return (
@@ -237,8 +237,8 @@ function PlayerCollection() {
 export default function Gameboard() {
   return(
     <div>
-      <Header />
-      <div>
+      <PageHeader title='Gameboard'/>
+      <div style={{marginTop:"25px"}}>
         <CollectionButton player={'Your'}/>
         <CollectionButton player={"Opponent's"}/>
         <PlayerCollection />
