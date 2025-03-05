@@ -10,6 +10,7 @@ import NavigationButton from "../components/NavigationButton";
 
 
 
+
 function SignOutButton() {
   const handleSignOut = async () => {
     try {
@@ -22,6 +23,7 @@ function SignOutButton() {
   return <button className='dark-button'
                 onClick={handleSignOut}>Sign Out</button>;
 }
+
 
 
 
@@ -49,6 +51,14 @@ export default function AuthPage() {
       navigate("/");
     } catch (error) {
       setError(error.message);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error("Error signing out: ", error);
     }
   };
 
@@ -83,9 +93,11 @@ export default function AuthPage() {
     }
   };
 
+
   return (
     <>
       <PageHeader title='Sign In/Sign Up' />
+
       <div
         style={{
           display: "flex",
@@ -200,6 +212,7 @@ export default function AuthPage() {
             </button>
           </p>
 
+
           <div className='nav-buttons'>
             {user && <SignOutButton />}
             <NavigationButton
@@ -215,3 +228,4 @@ export default function AuthPage() {
     </>
   );
 }
+

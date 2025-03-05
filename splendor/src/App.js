@@ -12,6 +12,16 @@ const socket = io("http://localhost:4000");
 
 
 
+function ProfileButton() {
+  return (
+    <Link to="/profile">
+      <button>
+        Profile
+      </button>
+    </Link>
+  );
+}
+
 function Rules() {
   return (
     <Link to='/rules'>
@@ -45,6 +55,7 @@ export default function MyApp() {
   return (
     
       <div className="App">
+
         
         <div className="page-header"><PageHeader title='Home'/></div>
           
@@ -57,6 +68,9 @@ export default function MyApp() {
             <NavigationButton 
             destination="Rules"
             link='/rules'/>
+            <NavigationButton
+              destination='User Profile"
+              link='/profile'
             
             
           </div>
@@ -70,8 +84,11 @@ export default function MyApp() {
           <div className="GemCard">
             <img src="/Images/MainCards/Blue 1.0.png" alt="Card" />
           </div>
+
         </div>
       </div>
       
   );
+
 }
+
