@@ -11,20 +11,6 @@ import NavigationButton from "../components/NavigationButton";
 
 
 
-function SignOutButton() {
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error("Error signing out: ", error);
-    }
-  };
-
-  return <button className='dark-button'
-                onClick={handleSignOut}>Sign Out</button>;
-}
-
-
 
 
 
@@ -54,6 +40,7 @@ export default function AuthPage() {
       setError(error.message);
     }
   };
+  
 
   const handleSignOut = async () => {
     try {
@@ -215,7 +202,12 @@ export default function AuthPage() {
 
 
           <div>
-            {user && <SignOutButton />}
+            {user && <NavigationButton
+              onClick={handleSignOut}
+              destination='Sign Out'
+              link='/'
+              styling='dark-button'
+            />}
             <NavigationButton
               onClick={handleGuestSignIn}
               destination='Continue As Guest'
