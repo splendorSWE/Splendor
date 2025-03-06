@@ -1,31 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Gameboard.css'
+import PageHeader from '../components/PageHeader';
 
 
-function HomeButton() {
+function PlayerPoints() {
   return (
-    <Link to="/">
-      <button style={{ margin: '5px'}}>
-        Home
-      </button>
-    </Link>
-  );
-}
-
-function Header() {
-  return(
-    <div style={{
-      position: 'fixed',
-      width: '100%',
-      height: '30px',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-    }}>
-    <HomeButton  />
+    <div>
+      12
     </div>
-  )
+  );
 }
 
 function CollectionButton({player}) {
@@ -269,17 +253,11 @@ function NobleCard({ImagePath}) {
 export default function Gameboard() {
   return (
     <div>
-      <Header />
-    <div class='main'>
-      <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-        <div>
-          <CollectionButton player={'Your'} />
-          <CollectionButton player={"Opponent's"} />
-          <PlayerCollection Points={10} />
-        </div>
-        <div style={{marginTop: '100px'}}> 
-          <BoardTokens />
-        </div>
+      <PageHeader title='Gameboard'/>
+      <div style={{marginTop:"25px"}}>
+        <CollectionButton player={'Your'}/>
+        <CollectionButton player={"Opponent's"}/>
+        <PlayerCollection Points={10}/>
       </div>
       <div class='cards'>
           <div class='cards-row'>
