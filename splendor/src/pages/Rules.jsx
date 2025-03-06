@@ -1,15 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "./pageStyles/Rules.css";
+import PageHeader from "../components/PageHeader";
 
 export default function Rules() {
   return (
+    <>
+    <PageHeader />
     <div className="rules-page">
-      <header className="rules-header">
-        <Link to="/">
-          <button className="home-button">Home</button>
-        </Link>
-      </header>
+      
       <main className="rules-content">
         <h1>Splendor Rules</h1>
         <p>
@@ -27,5 +25,6 @@ export default function Rules() {
         </p>
       </main>
     </div>
+    </>
   );
 }

@@ -1,53 +1,19 @@
 import Home from "./pages/Home"
-import firebase from "./firebase.js"
-import { Link } from 'react-router-dom';
+
 import "./App.css"
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import UserStats from "./components/UserStats";
+import PageHeader from "./components/PageHeader";
+import NavigationButton from "./components/NavigationButton";
 
 // Connect to WebSocket server
 const socket = io("http://localhost:4000");
 
-function MyButton() {
-  return (
-    <Link to="/gameboard">
-      <button>
-        Go to gameboard
-      </button>
-    </Link>
-  );
-}
 
-function ProfileButton() {
-  return (
-    <Link to="/profile">
-      <button>
-        Profile
-      </button>
-    </Link>
-  );
-}
 
-function Rules() {
-  return (
-    <Link to='/rules'>
-      <button>
-        Rules
-      </button>
-    </Link>
-  )
-}
 
-function UserAuthButton() {
-  return (
-    <Link to="/user-auth">
-      <button>
-        Go to Login/SignUp
-      </button>
-    </Link>
-  )
-}
+
 
 export default function MyApp() {
   const [messages, setMessages] = useState([]);
@@ -68,31 +34,44 @@ export default function MyApp() {
     setShowUserStats((prev) => !prev);
   };
   return (
-    <>
+    
       <div className="App">
         <Home/>
-        <div className='first-button'>
-          <MyButton/>
-        </div>
-        <div className='first-button'>
-          <UserAuthButton />
-        </div>
-        <div className='first-button'>
-          <Rules/>
-        </div>
-        <div className='profile-button'>
-          <ProfileButton/>
-        </div>
-        <div>
-        <button onClick={toggleUserStats}>
-          {showUserStats ? "Hide User Stats" : "Show User Stats"}
-          {showUserStats && <UserStats />}
-        </button>
-        </div>
-        <div className="GemCard">
-          <img src="/Images/MainCards/Blue 1.0.png" alt="Card" />
+        
+        <div className="page-header"><PageHeader title='Home'/></div>
+          
+        <div className="content-container">
+          <div>
+            {/* <Home/> */}
+            <NavigationButton styling='dark-button vertical'
+              destination="Gameboard"
+              link='/gameboard'/>
+            <NavigationButton 
+            styling='dark-button vertical'
+            destination="Rules"
+            link='/rules'/>
+            <NavigationButton 
+            styling='dark-button vertical'
+            destination="User Profile"
+            link='/profile'/>
+            
+            
+          </div>
+          <div>
+            <button className='dark-button'
+            onClick={toggleUserStats}>
+              {showUserStats ? "Hide User Stats" : "Show User Stats"}
+              {showUserStats && <UserStats />}
+            </button>
+          </div>
+          <div className="GemCard">
+            <img src="/Images/MainCards/Blue 1.0.png" alt="Card" />
+          </div>
+
         </div>
       </div>
-    </>
+      
   );
+
 }
+

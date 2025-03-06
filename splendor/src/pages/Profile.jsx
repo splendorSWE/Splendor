@@ -3,7 +3,7 @@ import "./pageStyles/Profile.css";
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import UserProfile from '../components/UserStats';
+import NavigationButton from '../components/NavigationButton';
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -17,10 +17,11 @@ export default function Profile() {
                 <h2 className="info">Password</h2>
                 <button className="button" onClick={() => navigate("/editprofile")}>Edit</button >
             </div>
-            <UserProfile/>
-            <button className='home' onClick={() => navigate("/")}>
+            {/*LEAVING THIS FOR REVIEW/APPROVAL/DISAPPROVAL BY SAM*/}
+            {/* <button className='home' onClick={() => navigate("/")}>
                 Home
-            </button>
+            </button> */}
+            <NavigationButton styling='home' destination="Home" link="/" />
         </div >
 
     )

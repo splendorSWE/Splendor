@@ -1,16 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import PageHeader from '../components/PageHeader';
 
 
-function HomeButton() {
-  return (
-    <Link to="/">
-      <button style={{ margin: '5px'}}>
-        Home
-      </button>
-    </Link>
-  );
-}
 
 function PlayerPoints() {
   return (
@@ -20,21 +11,7 @@ function PlayerPoints() {
   );
 }
 
-function Header() {
-  return(
-    <div style={{
-      position: 'fixed',
-      width: '100%',
-      height: '30px',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-end', 
-      backgroundColor: 'gold',
-    }}>
-    <HomeButton  />
-    </div>
-  )
-}
+
 
 function CollectionButton({player}) {
   return(
@@ -237,8 +214,8 @@ function PlayerCollection() {
 export default function Gameboard() {
   return(
     <div>
-      <Header />
-      <div>
+      <PageHeader title='Gameboard'/>
+      <div style={{marginTop:"25px"}}>
         <CollectionButton player={'Your'}/>
         <CollectionButton player={"Opponent's"}/>
         <PlayerCollection />
