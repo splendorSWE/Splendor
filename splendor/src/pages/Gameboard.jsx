@@ -224,13 +224,7 @@ function PlayerCollection({ Points }) {
 
 function BoardTokens() {
   return (
-    <div style={{
-      width: '150',
-      display: 'flex',
-      flexDirection: 'column',
-      marginLeft: '30px',
-      alignItems: 'center'
-    }}>
+    <div class='board-tokens-section'>
       <button style={{
         width: '150px',
         height: '50px',
@@ -256,7 +250,17 @@ function DevelopmentCard({ImagePath}) {
     <img 
         src={ImagePath} 
         alt="Development Card" 
-        style={{ width: '132px', height: '187px', marginLeft: '30px' }} 
+        class='development-card'
+      />
+  )
+}
+
+function NobleCard({ImagePath}) {
+  return(
+    <img 
+        src={ImagePath} 
+        alt="Noble Card" 
+        class='noble-card'
       />
   )
 }
@@ -264,8 +268,9 @@ function DevelopmentCard({ImagePath}) {
 
 export default function Gameboard() {
   return (
-    <div class='main'>
+    <div>
       <Header />
+    <div class='main'>
       <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
         <div>
           <CollectionButton player={'Your'} />
@@ -282,20 +287,24 @@ export default function Gameboard() {
             <DevelopmentCard ImagePath={"/Images/MainCards/Green 3.0.png"}/>
             <DevelopmentCard ImagePath={"/Images/MainCards/Red 3.0.png"}/>
             <DevelopmentCard ImagePath={"/Images/MainCards/White 3.0.png"}/>
+            <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"}/>
           </div>
           <div class='cards-row'>
             <DevelopmentCard ImagePath={"/Images/MainCards/Blue 2.0.png"}/>
             <DevelopmentCard ImagePath={"/Images/MainCards/Green 2.0.png"}/>
             <DevelopmentCard ImagePath={"/Images/MainCards/Red 2.0.png"}/>
             <DevelopmentCard ImagePath={"/Images/MainCards/White 2.0.png"}/>
+            <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"}/>
           </div>
           <div class='cards-row'>
             <DevelopmentCard ImagePath={"/Images/MainCards/Blue 1.0.png"}/>
             <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"}/>
             <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"}/>
             <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"}/>
+            <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"}/>
           </div>
         </div>
+    </div>
     </div>
   );
 }
