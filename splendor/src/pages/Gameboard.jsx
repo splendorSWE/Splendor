@@ -256,7 +256,7 @@ function DevelopmentCard({ImagePath}) {
     <img 
         src={ImagePath} 
         alt="Development Card" 
-        style={{ width: '132px', height: '187px', marginLeft: '20px' }} 
+        style={{ width: '132px', height: '187px', marginLeft: '30px' }} 
       />
   )
 }
