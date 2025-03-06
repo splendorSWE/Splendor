@@ -1,16 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './Gameboard.css'
 import PageHeader from '../components/PageHeader';
-
-
-function PlayerPoints() {
-  return (
-    <div>
-      12
-    </div>
-  );
-}
 
 function CollectionButton({player}) {
   return(
@@ -254,11 +244,13 @@ export default function Gameboard() {
   return (
     <div>
       <PageHeader title='Gameboard'/>
+      <div class='main'>
       <div style={{marginTop:"25px"}}>
         <CollectionButton player={'Your'}/>
         <CollectionButton player={"Opponent's"}/>
         <PlayerCollection Points={10}/>
       </div>
+      <BoardTokens/>
       <div class='cards'>
           <div class='cards-row'>
             <DevelopmentCard ImagePath={"/Images/MainCards/Blue 3.0.png"}/>
@@ -282,6 +274,7 @@ export default function Gameboard() {
             <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"}/>
           </div>
         </div>
+    </div>
     </div>
   );
 }
