@@ -17,10 +17,6 @@ export default function Profile() {
                 <h2 className="info">Password</h2>
                 <button className="button" onClick={() => navigate("/editprofile")}>Edit</button >
             </div>
-            {/*LEAVING THIS FOR REVIEW/APPROVAL/DISAPPROVAL BY SAM*/}
-            {/* <button className='home' onClick={() => navigate("/")}>
-                Home
-            </button> */}
             <NavigationButton styling='home' destination="Home" link="/" />
         </div >
 
