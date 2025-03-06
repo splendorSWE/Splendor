@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import './Gameboard.css'
 import PageHeader from '../components/PageHeader';
-
 
 
 function PlayerPoints() {
@@ -10,8 +11,6 @@ function PlayerPoints() {
     </div>
   );
 }
-
-
 
 function CollectionButton({player}) {
   return(
@@ -29,198 +28,263 @@ function CollectionButton({player}) {
   )
 }
 
-function WildToken({ number }) {
+function Token({ ImagePath, number }) {
   return (
-    <div style={{
-      width: '80px',
-      height: '80px',
-      borderRadius: '50%',
-      backgroundColor: '#4A4A4A', // Dark Gray
-      display: 'flex',
-      justifyContent: 'center',
+    <div style={{ 
+      position: 'relative', 
+      width: '80px', 
+      height: '80px', 
+      display: 'flex', 
+      justifyContent: 'center', 
       alignItems: 'center',
-      position: 'relative'
+      marginBottom: '5px',
     }}>
-      <div style={{
-        width: '60px',
-        height: '52px',
-        backgroundColor: '#D9D9D9', // Light Gray
-        clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+      <img 
+        src={ImagePath} 
+        alt="Token" 
+        style={{ width: '80px', height: '80px' }} 
+      />
+      <span style={{ 
+        position: 'absolute', 
+        top: '50%', 
+        left: '50%', 
+        transform: 'translate(-50%, -50%)', 
+        fontSize: '35px', 
+        fontWeight: '900', 
+        color: 'black', 
+        fontFamily: 'Ponomar, sans-serif',
       }}>
-        <span style={{
-          fontSize: '26px',
-          fontFamily: 'Fondamento, sans-serif',
-          color: 'black',
-          fontWeight: 'bold'
-        }}>
-          {number}
-        </span>
-      </div>
+        {number}
+      </span>
     </div>
   );
 }
 
-function PinkToken({ number }) {
+function ReservedCard() {
   return (
-    <div style={{
-      width: '80px',
-      height: '80px',
-      borderRadius: '50%',
-      backgroundColor: '#FF7878',
-      display: 'flex',
-      justifyContent: 'center',
+    <div style={{ 
+      position: 'relative', 
+      width: '56.41px', 
+      height: '80px', 
+      display: 'flex', 
+      justifyContent: 'center', 
       alignItems: 'center',
-      position: 'relative'
+      marginBottom: '5px',
+      marginLeft: '40px'
     }}>
-      {/* Star Shape */}
-      <div style={{
-        width: '70px',
-        height: '70px',
-        backgroundColor: '#D9D9D9', // Light Gray
-        clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute'
+      <img 
+        src="/Images/Plain Cards/Reserved Card.png"
+        alt="CollectionCard" 
+        style={{ width: '56.41px', height: '80px' }} 
+      />
+      <span style={{ 
+        position: 'absolute', 
+        top: '50%', 
+        left: '50%', 
+        transform: 'translate(-50%, -50%)', 
+        fontSize: '20px', 
+        fontWeight: '800', 
+        color: 'White', 
+        fontFamily: 'Ponomar, sans-serif',
       }}>
-        {/* Number inside the star */}
-        <span style={{
-          fontSize: '26px',
-          fontFamily: 'Fondamento, sans-serif',
-          color: 'black',
-          fontWeight: 'bold'
-        }}>
-          {number}
-        </span>
-      </div>
+        Res
+      </span>
     </div>
   );
 }
 
-function GreenToken({ number }) {
+function CollectionCard({ ImagePath, number }) {
   return (
-    <div style={{
-      width: '80px',
-      height: '80px',
-      borderRadius: '50%',
-      backgroundColor: '#7CE078',
-      display: 'flex',
-      justifyContent: 'center',
+    <div style={{ 
+      position: 'relative', 
+      width: '56.41px', 
+      height: '80px', 
+      display: 'flex', 
+      justifyContent: 'center', 
       alignItems: 'center',
-      position: 'relative'
+      marginBottom: '5px',
+      marginLeft: '40px'
     }}>
-      {/* Triangle */}
-      <div style={{
-        width: '0px',
-        height: '0px',
-        borderLeft: '30px solid transparent',
-        borderRight: '30px solid transparent',
-        borderBottom: '52px solid #D9D9D9', // Light Gray Triangle
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute'
+      <img 
+        src={ImagePath} 
+        alt="CollectionCard" 
+        style={{ width: '56.41px', height: '80px' }} 
+      />
+      <span style={{ 
+        position: 'absolute', 
+        top: '50%', 
+        left: '50%', 
+        transform: 'translate(-50%, -50%)', 
+        fontSize: '35px', 
+        fontWeight: '900', 
+        color: 'black', 
+        fontFamily: 'Ponomar, sans-serif',
       }}>
-        {/* Number inside the triangle */}
-        <div style={{
-          fontSize: '26px',
-          fontFamily: 'Fondamento, sans-serif',
-          color: 'black',
-          fontWeight: 'bold'
-        }}>
-          {number}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function YellowToken({ number }) {
-  return (
-    <div style={{
-      width: '80px',
-      height: '80px',
-      borderRadius: '50%',
-      backgroundColor: '#F6D354',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      position: 'relative'
-    }}>
-      {/* Pentagon Shape */}
-      <div style={{
-        width: '60px',
-        height: '55px',
-        backgroundColor: '#D9D9D9', // Light Gray
-        clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        position: 'absolute',
-      }}>
-        {/* Number inside the pentagon */}
-        <span style={{
-          fontSize: '26px',
-          fontFamily: 'Fondamento, sans-serif',
-          color: 'black',
-          fontWeight: 'bold'
-        }}>
-          {number}
-        </span>
-      </div>
+        {number}
+      </span>
     </div>
   );
 }
 
 
-function PlayerCollection() {
+
+function PlayerCollection({ Points }) {
   return (
     <div style={{
       left: '20px',
-      width: '250px',
+      width: '220px',
       marginTop: '10px',
       marginLeft: '10px',
-      height: 'calc(80vh)',
+      height: '600px',
       backgroundColor: '#E8E8E8',
       boxShadow: '2px 0 5px rgba(0,0,0,0.2)',
       display: 'flex',
-      flexDirection: 'column',        // Align elements in a column 
+      flexDirection: 'column',
+      alignItems: 'center'
     }}>
+      {/* Centered Points Label */}
       <div style={{
         display: 'flex',
-        flexDirection: 'row',
+        justifyContent: 'center', // Centers the text horizontally
+        alignItems: 'center', // Aligns items vertically
         fontSize: '40px',
         fontFamily: 'Fondamento, sans-serif',
         marginTop: '10px',
-        width: '100%'
-              }}>
+        fontWeight: '600',
+        width: '100%', // Makes sure centering works properly
+        textAlign: 'center'
+      }}>
+        <span style={{ marginRight: '10px' }}>{Points}</span> Points
         
-        <div style= {{marginRight: '15px'}}>
-          <PlayerPoints /> 
-        </div>
-          Points
       </div>
-      <WildToken number={10}/>
-      <PinkToken number={10}/>
-      <GreenToken number={10}/>
-      <YellowToken number={10}/>
+
+      
+      <div style={{ 
+        display: 'flex',
+        flexDirection: 'row' 
+        }}>  
+        <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={1} />
+        <ReservedCard />
+      </div>
+      <div style={{ 
+        display: 'flex',
+        flexDirection: 'row' 
+        }}>  
+        <Token ImagePath={"/Images/Tokens/White Token.png"} number={1} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/White Card.png"} number={1}/>
+        </div>
+      <div style={{ 
+        display: 'flex',
+        flexDirection: 'row' 
+        }}>   
+        <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={2} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/Blue Card.png"} number={1}/>
+        </div>
+      <div style={{ 
+        display: 'flex',
+        flexDirection: 'row' 
+        }}> 
+        <Token ImagePath={"/Images/Tokens/Red Token.png"} number={1} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/Red Card.png"} number={1}/>
+        </div>
+      <div style={{ 
+        display: 'flex',
+        flexDirection: 'row' 
+        }}> 
+        <Token ImagePath={"/Images/Tokens/Green Token.png"} number={1} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/Green Card.png"} number={1}/>
+        </div>
+      <div style={{ 
+        display: 'flex',
+        flexDirection: 'row' 
+        }}> 
+        <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={0} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/Yellow Card.png"} number={1}/>
+        </div>
+
     </div>
   );
 }
 
-export default function Gameboard() {
+function BoardTokens() {
+  return (
+    <div class='board-tokens-section'>
+      <button style={{
+        width: '150px',
+        height: '50px',
+        fontFamily: 'Inknut Antiqua, sans-serif',
+        fontWeight: '800',
+        lineHeight: '20px',
+        marginBottom: '15px'
+      }}>
+        Select Tokens
+      </button>
+      <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={3} />
+      <Token ImagePath={"/Images/Tokens/White Token.png"} number={1} />
+      <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={2} />
+      <Token ImagePath={"/Images/Tokens/Red Token.png"} number={1} />
+      <Token ImagePath={"/Images/Tokens/Green Token.png"} number={2} />
+      <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={2} />
+    </div>
+  );
+}
+
+function DevelopmentCard({ImagePath}) {
   return(
+    <img 
+        src={ImagePath} 
+        alt="Development Card" 
+        class='development-card'
+      />
+  )
+}
+
+function NobleCard({ImagePath}) {
+  return(
+    <img 
+        src={ImagePath} 
+        alt="Noble Card" 
+        class='noble-card'
+      />
+  )
+}
+
+
+export default function Gameboard() {
+  return (
     <div>
       <PageHeader title='Gameboard'/>
       <div style={{marginTop:"25px"}}>
         <CollectionButton player={'Your'}/>
         <CollectionButton player={"Opponent's"}/>
-        <PlayerCollection />
+        <PlayerCollection Points={10}/>
       </div>
+      <div class='cards'>
+          <div class='cards-row'>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 3.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Green 3.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Red 3.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/White 3.0.png"}/>
+            <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"}/>
+          </div>
+          <div class='cards-row'>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 2.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Green 2.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Red 2.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/White 2.0.png"}/>
+            <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"}/>
+          </div>
+          <div class='cards-row'>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 1.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"}/>
+            <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"}/>
+          </div>
+        </div>
+    </div>
     </div>
   );
 }
+
 
