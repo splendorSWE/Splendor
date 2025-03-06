@@ -283,7 +283,6 @@ export default function Gameboard() {
           </div>
         </div>
     </div>
-    </div>
   );
 }
 
