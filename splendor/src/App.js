@@ -64,9 +64,6 @@ export default function MyApp() {
               {showUserStats && <UserStats />}
             </button>
           </div>
-          <div className="GemCard">
-            <img src="/Images/MainCards/Blue 1.0.png" alt="Card" />
-          </div>
 
         </div>
       </div>
