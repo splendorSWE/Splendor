@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import './Gameboard.css'
 
 
 function HomeButton() {
@@ -250,10 +251,20 @@ function BoardTokens() {
   );
 }
 
+function DevelopmentCard({ImagePath}) {
+  return(
+    <img 
+        src={ImagePath} 
+        alt="Development Card" 
+        style={{ width: '132px', height: '187px', marginLeft: '20px' }} 
+      />
+  )
+}
+
 
 export default function Gameboard() {
   return (
-    <div>
+    <div class='main'>
       <Header />
       <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
         <div>
@@ -264,8 +275,27 @@ export default function Gameboard() {
         <div style={{marginTop: '100px'}}> 
           <BoardTokens />
         </div>
-        
       </div>
+      <div class='cards'>
+          <div class='cards-row'>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 3.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Green 3.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Red 3.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/White 3.0.png"}/>
+          </div>
+          <div class='cards-row'>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 2.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Green 2.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Red 2.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/White 2.0.png"}/>
+          </div>
+          <div class='cards-row'>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 1.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"}/>
+            <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"}/>
+          </div>
+        </div>
     </div>
   );
 }
