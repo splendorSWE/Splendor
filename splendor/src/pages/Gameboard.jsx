@@ -135,7 +135,7 @@ function PlayerCollection({ Points }) {
       width: '220px',
       marginTop: '10px',
       marginLeft: '10px',
-      height: '600px',
+      height: '580px',
       backgroundColor: '#E8E8E8',
       boxShadow: '2px 0 5px rgba(0,0,0,0.2)',
       display: 'flex',
@@ -155,9 +155,7 @@ function PlayerCollection({ Points }) {
         textAlign: 'center'
       }}>
         <span style={{ marginRight: '10px' }}>{Points}</span> Points
-        
       </div>
-
       
       <div style={{ 
         display: 'flex',
@@ -254,11 +252,16 @@ export default function Gameboard() {
   return (
     <div>
       <PageHeader title='Gameboard'/>
-      <div style={{marginTop:"25px"}}>
-        <CollectionButton player={'Your'}/>
-        <CollectionButton player={"Opponent's"}/>
-        <PlayerCollection Points={10}/>
-      </div>
+      <div class='main'>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div>
+            <CollectionButton player={'Your'} />
+            <CollectionButton player={"Opponent's"} />
+            <PlayerCollection Points={10} />
+          </div>
+          <div> 
+            <BoardTokens />
+          </div>
       <div class='cards'>
           <div class='cards-row'>
             <DevelopmentCard ImagePath={"/Images/MainCards/Blue 3.0.png"}/>
@@ -282,6 +285,7 @@ export default function Gameboard() {
             <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"}/>
           </div>
         </div>
+    </div>
     </div>
     </div>
   );
