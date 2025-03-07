@@ -2,6 +2,7 @@ import React from 'react';
 import "./pageStyles/Profile.css";
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PageHeader from '../components/PageHeader';
 
 export default function EditProfile() {
     const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function EditProfile() {
 
     return (
         <div className="profile-container">
+            <PageHeader title='Edit Profile'/>
             <div className="profile-card">
                 <label htmlFor="profile-pic-input" style={{ cursor: "pointer" }}>
                     <img src={profilePic} alt="Profile" className="profile-pic" />
