@@ -18,6 +18,8 @@ const socket = io("http://localhost:4000");
 export default function MyApp() {
   const [messages, setMessages] = useState([]);
   const [showUserStats, setShowUserStats] = useState(false);
+  const [profilePic, setProfilePic] = useState("../images/default_pfp.jpg")
+
   // Listen for messages from the server
   useEffect(() => {
     socket.on("message", (msg) => {
@@ -53,7 +55,8 @@ export default function MyApp() {
             <NavigationButton 
             styling='dark-button vertical'
             destination="User Profile"
-            link='/profile'/>
+            link='/profile'
+            state={{ profilePic}}/>
             
             
           </div>
