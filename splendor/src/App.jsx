@@ -1,7 +1,6 @@
 import Home from "./pages/Home"
 
 import "./App.css"
-import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
 
