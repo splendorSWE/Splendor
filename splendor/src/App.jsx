@@ -16,6 +16,7 @@ const socket = io("http://localhost:4000");
 
 
 export default function MyApp() {
+  /*
   const [messages, setMessages] = useState([]);
   const [showUserStats, setShowUserStats] = useState(false);
   const [profilePic, setProfilePic] = useState("../images/default_pfp.jpg")
@@ -35,6 +36,7 @@ export default function MyApp() {
   const toggleUserStats = () => {
     setShowUserStats((prev) => !prev);
   };
+  
   return (
     
       <div className="App">
@@ -44,7 +46,6 @@ export default function MyApp() {
           
         <div className="content-container">
           <div>
-            {/* <Home/> */}
             <NavigationButton styling='dark-button vertical'
               destination="Gameboard"
               link='/gameboard'/>
@@ -72,6 +73,10 @@ export default function MyApp() {
       </div>
       
   );
+  */
+ return(
+  <Home/>
+ )
 
 }
 
