@@ -18,6 +18,7 @@ export default function EditProfile({ initialProfilePic }) {
 
     const [userInfo, setUserInfo] = useState(null);
     const [newPassword, updatePassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -104,12 +105,17 @@ export default function EditProfile({ initialProfilePic }) {
                     <>
                         <p className="info"><strong>Username:</strong> {userInfo.username}</p>
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             placeholder="New Password"
                             className="password-input"
                             value={newPassword}
                             onChange={(e) => updatePassword(e.target.value)}
                         />
+                        <button
+                                type="button"
+                                className="view-password-btn"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >{showPassword ? "hide" : "show"}</button>
                         <button className="button" onClick={handlePasswordChange}>
                             Update Password
                         </button>
