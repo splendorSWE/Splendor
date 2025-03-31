@@ -53,7 +53,7 @@ export default function Profile() {
 
 
     if (!userInfo) {
-        return <p>Loading your profile...</p>;
+        return <p className="info">Loading your profile...</p>;
     }
 
     return (
@@ -69,7 +69,7 @@ export default function Profile() {
                         <button className="button" onClick={() => navigate("/editprofile", { state: { profilePic } })}>Edit</button >
                     </>
                 ) : (
-                    <h2>Not signed in</h2>
+                    <h2 className="info">Not signed in</h2>
                 )}
             </div>
         </div >
