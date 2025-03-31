@@ -17,6 +17,7 @@ export default function EditProfile({ initialProfilePic }) {
     const [profilePic, setProfilePic] = useState(location.state?.initialProfilePic || "../images/default_pfp.jpg");
 
     const [userInfo, setUserInfo] = useState(null);
+    const [newPassword, updatePassword] = useState("");
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -51,6 +52,26 @@ export default function EditProfile({ initialProfilePic }) {
         fetchUserInfo();
     }, []);
 
+    const handlePasswordChange = async () => {
+        if (!newPassword) {
+            alert("Please enter a new password.");
+            return;
+        }
+
+        const user = auth.currentUser;
+        if (user) {
+            try {
+                await updatePassword(user, newPassword);
+                alert("Password updated successfully!");
+            } catch (error) {
+                console.error("Error updating password:", error);
+                alert(error.message);
+            }
+        } else {
+            alert("No user signed in.");
+        }
+    };
+
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -63,7 +84,7 @@ export default function EditProfile({ initialProfilePic }) {
     if (!userInfo) {
         return <p>Loading your profile...</p>;
     }
-    
+
     return (
         <div className="profile-container">
             <PageHeader title='Edit Profile' />
@@ -82,7 +103,16 @@ export default function EditProfile({ initialProfilePic }) {
                 {(userInfo !== "No User") ? (
                     <>
                         <p className="info"><strong>Username:</strong> {userInfo.username}</p>
-                        <input type="password" placeholder="New Password" className="password-input" />
+                        <input
+                            type="password"
+                            placeholder="New Password"
+                            className="password-input"
+                            value={newPassword}
+                            onChange={(e) => updatePassword(e.target.value)}
+                        />
+                        <button className="button" onClick={handlePasswordChange}>
+                            Update Password
+                        </button>
                         <button className='button' onClick={() => navigate("/profile", { state: { profilePic } })}>
                             Submit
                         </button>
