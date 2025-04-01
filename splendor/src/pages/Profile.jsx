@@ -14,7 +14,7 @@ export default function Profile() {
 
     return (
         <div className="profile-container">
-            <PageHeader title='Profile'/>
+            <PageHeader title='Profile' home={true} rules={true}/>
             <div className="profile-card">
                 <img src={profilePic} className="profile-pic" />
                 <h2 className="info">Username</h2>

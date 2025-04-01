@@ -40,7 +40,7 @@ export default function MyApp() {
       <div className="App">
         <Home/>
         
-        <div className="page-header"><PageHeader title='Home'/></div>
+        <div className="page-header"><PageHeader title='Home' account = {true} home = {false} rules = {true} /></div>
           
         <div className="content-container">
           <div>

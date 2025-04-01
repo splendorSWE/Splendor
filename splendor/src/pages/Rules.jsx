@@ -5,7 +5,7 @@ import PageHeader from "../components/PageHeader";
 export default function Rules() {
   return (
     <>
-    <PageHeader />
+    <PageHeader title="Rules" home={true} account={true}/>
     <div className="rules-page">
       
       <main className="rules-content">

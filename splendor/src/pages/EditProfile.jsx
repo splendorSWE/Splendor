@@ -21,7 +21,7 @@ export default function EditProfile({ initialProfilePic }) {
 
     return (
         <div className="profile-container">
-            <PageHeader title='Edit Profile' />
+            <PageHeader title='Edit Profile' home = {true} rules = {true}/>
             <div className="profile-card">
                 <label htmlFor="profile-pic-input" style={{ cursor: "pointer" }}>
                     <img src={profilePic} alt="Profile" className="profile-pic" />

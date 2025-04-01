@@ -241,7 +241,7 @@ function NobleCard({ImagePath}) {
 export default function Gameboard() {
   return (
     <div>
-      <PageHeader title='Gameboard'/>
+      <PageHeader title='Gameboard' home={true} rules={true} account={true}/>
       <div class='main'>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div>

@@ -84,7 +84,7 @@ export default function AuthPage() {
 
   return (
     <>
-      <PageHeader title='Sign In/Sign Up' />
+      <PageHeader title='Sign In/Sign Up' home = {true} rules = {true}/>
 
       <div
         style={{
@@ -128,7 +128,7 @@ export default function AuthPage() {
           >
             <input
               type="email"
-              placeholder="username"
+              placeholder="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -156,7 +156,7 @@ export default function AuthPage() {
                 fontFamily: "YourCustomFont, serif",
               }}
             />
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {error && <p style={{ color: "white", fontSize: "35px" }}>{error}</p>}
             <button
               type="submit"
               style={{
