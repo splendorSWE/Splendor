@@ -1,4 +1,3 @@
-// Gameboard.jsx
 import React, { useState } from 'react';
 import './Gameboard.css';
 import PageHeader from '../components/PageHeader';
@@ -240,8 +239,8 @@ export default function Gameboard() {
 
   const makeMove = async (moveData) => {
     try {
-      console.log('Making move:', moveData); // Log the move
-      const response = await fetch('http://localhost:5000/game/move', {
+      console.log('Making move:', moveData);
+      const response = await fetch('http://127.0.0.1:5000/game/move', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(moveData)

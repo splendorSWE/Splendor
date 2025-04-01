@@ -12,15 +12,16 @@ from flask_socketio import SocketIO, emit
 app = Flask(__name__)
 CORS(app)
 
+# temporary game state to mimic what we have on the screen right now
 game_state = {
     "points": 10,
     "tokens": {
         "wild": 3,
-        "white": 1,
-        "blue": 2,
-        "red": 1,
-        "green": 2,
-        "yellow": 2
+        "white": 3,
+        "blue": 3,
+        "red": 3,
+        "green": 3,
+        "yellow": 3
     },
     "cards": {},
     "players":{}
@@ -31,30 +32,22 @@ def get_game_state():
     return jsonify(game_state)
 
 @app.route('/game/move', methods=['POST'])
-def make_move():
-    """
-    Process a game move. For example, an action like:
-    {
-        "action": "take_tokens",
-        "tokens": {"blue": 1, "red": 1}
-    }
-    """
+def make_move(player=None):
     data = request.get_json()
     action = data.get("action")
     
     if action == "take_tokens":
         tokens_requested = data.get("tokens")
-        # Simple validation: Check if there are enough tokens available
         for token, count in tokens_requested.items():
             available = game_state["tokens"].get(token, 0)
             if available < count:
                 return jsonify({"error": f"Not enough {token} tokens available"}), 400
-        # Subtract tokens from the bank (in a real game, update the player's collection too)
         for token, count in tokens_requested.items():
             game_state["tokens"][token] -= count
         return jsonify(game_state)
     
-    # Future actions (reserve card, purchase card, etc.) can be handled here.
+    # can either add other actions in different if statements or could create a seperate function for each type of move.
+    
     return jsonify({"error": "Invalid action"}), 400
 
 socketio = SocketIO(app, cors_allowed_origins="*")
