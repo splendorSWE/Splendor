@@ -76,7 +76,7 @@ export default function AuthPage() {
 
   return (
     <>
-      <PageHeader title='Sign In/Sign Up' home = {true} rules = {true}/>
+      <PageHeader title='Sign In/Sign Up' home = {true} rules = {true} profile={user}/>
 
       <div
         style={{
@@ -200,12 +200,12 @@ export default function AuthPage() {
               link='/'
               styling='dark-button'
             />}
-            <NavigationButton
+            {!user && <NavigationButton
               onClick={handleGuestSignIn}
               destination='Continue As Guest'
               link='/'
               styling='dark-button'
-            />
+            />}
           </div>
         </div>
       </div>

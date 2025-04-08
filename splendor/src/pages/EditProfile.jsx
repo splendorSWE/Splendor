@@ -11,7 +11,7 @@ import { ref, get, update } from "firebase/database";
 import { updatePassword, emailAuthProvider } from "../firebase";
 import { useAuthContext} from '../context/AuthContext';
 
-export default function EditProfile({ initialProfilePic }) {
+export default function EditProfile() {
     const navigate = useNavigate();
     const location = useLocation();
     const [profilePic, setProfilePic] = useState(location.state?.profilePic || "/images/default_pfp.jpg");

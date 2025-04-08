@@ -1,11 +1,13 @@
 import React from "react";
 import "./pageStyles/Rules.css";
 import PageHeader from "../components/PageHeader";
+import { useAuthContext } from "../context/AuthContext";
 
 export default function Rules() {
+  const user = useAuthContext();
   return (
     <>
-    <PageHeader title="Rules" home={true} account={true}/>
+    <PageHeader title="Rules" home={true} userauth={!user} profile={user}/>
     <div className="rules-page">
       
       <main className="rules-content">

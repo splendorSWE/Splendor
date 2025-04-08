@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useAuth, db, upload, auth} from "../firebase";
 import { ref, get } from "firebase/database";
 import { useAuthContext} from '../context/AuthContext';
+import { logout } from '../firebase';
 
 
 
@@ -63,12 +64,12 @@ export default function Profile() {
     
 
     if (!userInfo) {
-        return <p className="info">Loading your profile...</p>;
+        return <PageHeader title='Profile' home={true} rules={true} profile={false}/>
     }
 
     return (
         <div className="profile-container">
-            <PageHeader title='Profile' home={true} account={true}/>
+            <PageHeader title='Profile' home={true} rules={true} profile={false}/>
             <div className="profile-card">
                 <img src={profilePic} className="profile-pic" />
                 {(userInfo !== "No User") ? (
@@ -77,6 +78,7 @@ export default function Profile() {
                         <p className="info"><strong>Account Created:</strong> {userInfo.createdAt}</p>
                         <p className="info"><strong>Wins:</strong> {userInfo.wins}</p>
                         <button className="button" onClick={() => navigate("/editprofile", { state: { profilePic } })}>Edit</button >
+                        <NavigationButton destination="Sign Out" link="/user-auth" styling='button' onClick={logout}/>
                     </>
                 ) : (
                     <h2 className="info">Not signed in</h2>

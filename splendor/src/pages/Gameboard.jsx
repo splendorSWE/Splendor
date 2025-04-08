@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Gameboard.css';
 import PageHeader from '../components/PageHeader';
+import { useAuthContext } from '../context/AuthContext';
 
 function CollectionButton({ player }) {
   return (
@@ -294,7 +295,7 @@ export default function Gameboard() {
   const [imgViewCard, setImgViewCard] = useState("/Images/MainCards/Yellow 3.0.png")
   const [gameState, setGameState] = useState(null);
   const [error, setError] = useState('');
-
+  const {user} = useAuthContext;
   useEffect(() => {
     fetch('http://127.0.0.1:5000/game')
       .then((res) => res.json())
@@ -341,7 +342,7 @@ export default function Gameboard() {
 
   return (
     <div>
-      <PageHeader title='Gameboard' home={true} rules={true} account={true} />
+      <PageHeader title='Gameboard' home={true} rules={true} userauth={user} profile={!user} />
       <div class='main'>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <CardPopUp ImagePath={imgViewCard} viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} playable={playable} setReservable={setReservable} />

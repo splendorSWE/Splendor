@@ -4,10 +4,10 @@ import './pageStyles/Home.css'
 import PageHeader from "../components/PageHeader";
 import NavigationButton from "../components/NavigationButton";
 import { Link } from 'react-router-dom';
+import { useAuthContext } from '../context/AuthContext';
 {/* 
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import UserStats from "../components/UserStats";
 
 const socket = io("http://localhost:4000");
 */}
@@ -29,7 +29,7 @@ function GameChoiceButton({ title, selected, onClick }) {
 export default function Home() {
 
     const [selectedOption, setSelectedOption] = useState(null);
-
+    const {user} = useAuthContext()
     const handleSelect = (option) => {
         setSelectedOption(option);
         console.log('Selected option:', option);
@@ -62,7 +62,7 @@ export default function Home() {
     return(
         
         <div>
-            <div className="page-header"><PageHeader title='Home' home={false} rules={true} account={true}/></div>
+            <div className="page-header"><PageHeader title='Home' home={false} rules={true} userauth={!user} profile={user}/></div>
             <div className="home-container">
                 <div className='option-box'>
                     <h1 className='box-header'>
