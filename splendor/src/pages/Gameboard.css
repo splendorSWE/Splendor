@@ -62,6 +62,7 @@
     width: 25vh;
     height: auto;
     padding: 10vh;
+    z-index: 1000;
 }
 
 .card-pop-up-container {
@@ -85,11 +86,19 @@
     font-size: 7vh;
     color: white;
     align-self: flex-end; /* Aligns the button to the right */
-    cursor: pointer; /* Makes it clickable */
     margin-right: 2vh;
     padding: 1vh;
     cursor: pointer;
     z-index: 10000;
+}
+
+.pop-up-button-container {
+    display: flex;
+    flex-direction: row;
+    padding: 2vh;
+    margin-top: auto;
+    width: 40vh;
+    align-items: center;
 }
 
 .play-card-button {
@@ -101,6 +110,21 @@
     font-family: "Fondamento", cursive;
     margin-top: auto;
     margin-bottom: 3vh;
+    margin: 2vh;
     cursor: pointer;
+    z-index: 10000;
+}
+
+.disabled-button{
+    color: #27394D;
+    background-color: #434343;
+    width: auto;
+    padding: 2%;
+    font-size: 1.5vw;
+    font-family: "Fondamento", cursive;
+    margin-top: auto;
+    margin-bottom: 3vh;
+    margin: 2vh;
+    cursor: not-allowed;
     z-index: 10000;
 }

@@ -51,7 +51,7 @@ function Token({ ImagePath, number }) {
   );
 }
 
-function ReservedCard({ viewReserved, setViewReserved }) {
+function ReservedCard({ viewCard, setViewCard }) {
   return (
     <div style={{
       position: 'relative',
@@ -61,13 +61,14 @@ function ReservedCard({ viewReserved, setViewReserved }) {
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: '5px',
-      marginLeft: '40px'
+      marginLeft: '40px',
+      cursor: 'pointer'
     }}>
       <img
         src="/Images/Plain Cards/Reserved Card.png"
         alt="CollectionCard"
         style={{ width: '56.41px', height: '80px' }}
-        onClick={() => setViewReserved(!viewReserved)}
+        onClick={() => setViewCard(!viewCard)}
       />
       <span style={{
         position: 'absolute',
@@ -120,7 +121,7 @@ function CollectionCard({ ImagePath, number }) {
 
 
 
-function PlayerCollection({ Points, viewReserved, setViewReserved }) {
+function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
   return (
     <div style={{
       left: '20px',
@@ -154,7 +155,7 @@ function PlayerCollection({ Points, viewReserved, setViewReserved }) {
         flexDirection: 'row'
       }}>
         <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={1} />
-        <ReservedCard viewReserved={viewReserved} setViewReserved={setViewReserved} />
+        <ReservedCard viewCard={viewCard} setViewCard={setViewCard}/>
       </div>
       <div style={{
         display: 'flex',
@@ -219,12 +220,13 @@ function BoardTokens() {
   );
 }
 
-function DevelopmentCard({ ImagePath }) {
+function DevelopmentCard({ ImagePath, setViewCard, setImgViewCard }) {
   return (
     <img
       src={ImagePath}
       alt="Development Card"
       class='development-card'
+      onClick={() => { setViewCard(true); setImgViewCard(ImagePath) }}
     />
   )
 }
@@ -239,12 +241,12 @@ function NobleCard({ ImagePath }) {
   )
 }
 
-function ReservedCardPopUp({ ImagePath, viewReserved, setViewReserved }) {
+function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable }) {
   return (
-    viewReserved && (
+    viewCard && (
       <div className="card-pop-up-container">
         <div className="x-button" onClick={() => {
-          setViewReserved(false);
+          setViewCard(false);
         }}>
           X
         </div>
@@ -253,8 +255,16 @@ function ReservedCardPopUp({ ImagePath, viewReserved, setViewReserved }) {
           alt="Card Pop Up"
           className="card-pop-up"
         />
-        <div className="play-card-button" onClick={() => setViewReserved(false)}>
-          Play Card
+        <div className="pop-up-button-container">
+          <div className={!playable ? "disabled-button" : "play-card-button"}
+            disabled={!playable} onClick={() => setViewCard(false)}>
+            Play Card
+          </div>
+          {/* need to gray out if player already has a reserved card */}
+          <div className={!reservable ? "disabled-button" : "play-card-button"}
+            disabled={!reservable} onClick={() => {setViewCard(false); setReservable(false)}}>
+            Reserve Card
+          </div>
         </div>
       </div>
     )
@@ -263,42 +273,45 @@ function ReservedCardPopUp({ ImagePath, viewReserved, setViewReserved }) {
 
 
 export default function Gameboard() {
-  const [viewReserved, setViewReserved] = useState(false)
+  const [reservable, setReservable] = useState(true)
+  const [playable, setPlayable] = useState(true)
+  const [viewCard, setViewCard] = useState(false)
+  const [imgViewCard, setImgViewCard] = useState("/Images/MainCards/Yellow 3.0.png")
 
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} account={true} />
       <div class='main'>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <ReservedCardPopUp ImagePath={"/Images/MainCards/Yellow 3.0.png"} viewReserved={viewReserved} setViewReserved={setViewReserved} />
+          <CardPopUp ImagePath={imgViewCard} viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} playable={playable} setReservable={setReservable} />
           <div>
             <CollectionButton player={'Your'} />
             <CollectionButton player={"Opponent's"} />
-            <PlayerCollection Points={10} viewReserved={viewReserved} setViewReserved={setViewReserved} />
+            <PlayerCollection Points={10} viewCard={viewCard} setViewCard={setViewCard} />
           </div>
           <div>
             <BoardTokens />
           </div>
           <div class='cards'>
             <div class='cards-row'>
-              <DevelopmentCard ImagePath={"/Images/MainCards/Blue 3.0.png"} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Green 3.0.png"} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Red 3.0.png"} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/White 3.0.png"} />
+              <DevelopmentCard ImagePath={"/Images/MainCards/Blue 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+              <DevelopmentCard ImagePath={"/Images/MainCards/Green 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+              <DevelopmentCard ImagePath={"/Images/MainCards/Red 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+              <DevelopmentCard ImagePath={"/Images/MainCards/White 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
               <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
             </div>
             <div class='cards-row'>
-              <DevelopmentCard ImagePath={"/Images/MainCards/Blue 2.0.png"} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Green 2.0.png"} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Red 2.0.png"} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/White 2.0.png"} />
+              <DevelopmentCard ImagePath={"/Images/MainCards/Blue 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+              <DevelopmentCard ImagePath={"/Images/MainCards/Green 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+              <DevelopmentCard ImagePath={"/Images/MainCards/Red 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+              <DevelopmentCard ImagePath={"/Images/MainCards/White 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
               <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
             </div>
             <div class='cards-row'>
-              <DevelopmentCard ImagePath={"/Images/MainCards/Blue 1.0.png"} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"} />
+              <DevelopmentCard ImagePath={"/Images/MainCards/Blue 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+              <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+              <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+              <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
               <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
             </div>
           </div>
