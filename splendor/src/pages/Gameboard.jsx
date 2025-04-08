@@ -127,7 +127,7 @@ function CollectionCard({ ImagePath, number }) {
   );
 }
 
-function PlayerCollection({ Points }) {
+function PlayerCollection({ Points, tokens }) {
   return (
     <div
       style={{
@@ -160,27 +160,27 @@ function PlayerCollection({ Points }) {
         <span style={{ marginRight: '10px' }}>{Points}</span> Points
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={0} />
+        <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={tokens.wild} />
         <ReservedCard />
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Token ImagePath={"/Images/Tokens/White Token.png"} number={0} />
+        <Token ImagePath={"/Images/Tokens/White Token.png"} number={tokens.white} />
         <CollectionCard ImagePath={"/Images/Plain Cards/White Card.png"} number={1} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={0} />
+        <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={tokens.blue} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Blue Card.png"} number={1} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Token ImagePath={"/Images/Tokens/Red Token.png"} number={0} />
+        <Token ImagePath={"/Images/Tokens/Red Token.png"} number={tokens.red} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Red Card.png"} number={1} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Token ImagePath={"/Images/Tokens/Green Token.png"} number={0} />
+        <Token ImagePath={"/Images/Tokens/Green Token.png"} number={tokens.green} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Green Card.png"} number={1} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={0} />
+        <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={tokens.yellow} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Yellow Card.png"} number={1} />
       </div>
     </div>
@@ -247,6 +247,13 @@ export default function Gameboard() {
   const [gameState, setGameState] = useState(null);
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    fetch('http://127.0.0.1:5000/game')
+      .then((res) => res.json())
+      .then((data) => setGameState(data))
+      .catch((err) => console.error('Error fetching game state:', err));
+  }, []);
+
   const makeMove = async (moveData) => {
     try {
       console.log('Making move:', moveData);
@@ -292,7 +299,8 @@ export default function Gameboard() {
           <div>
             <CollectionButton player="Your" />
             <CollectionButton player="Opponent's" />
-            <PlayerCollection Points={10} />
+            <PlayerCollection Points={10} 
+            tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }} />
           </div>
           <div>
             <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
