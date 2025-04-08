@@ -61,8 +61,7 @@ export default function Home() {
     return(
         
         <div>
-            <div className="page-header"><PageHeader title='Home'/></div>
-            
+            <div className="page-header"><PageHeader title='Home' home={false} rules={true} account={true}/></div>
             <div className="home-container">
                 <div className='option-box'>
                     <h1 className='box-header'>
