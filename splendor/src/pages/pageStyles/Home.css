@@ -103,14 +103,9 @@
     color: #27394D;
 }
 
-.selection-button.selected {
-    background-color: black;
-    color: white;
-}
-
 .create-button:hover {
     background-color:#FFFFFF;
-    color: #F6D354;
+    color: #27394D;
 }
 
 .box-header {
@@ -120,7 +115,7 @@
 
 .game-code-input-box::placeholder {
     color: #cdcdcd;
-    opacity: 1; /* Ensures it's fully opaque */
+    opacity: 1;
 }
 
 .game-code-input-box::-webkit-outer-spin-button,
