@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Gameboard.css';
 import PageHeader from '../components/PageHeader';
 
@@ -187,7 +187,17 @@ function PlayerCollection({ Points }) {
   );
 }
 
-function BoardTokens({ handleTakeTokens }) {
+function BoardTokens({ gameState, handleTakeTokens }) {
+
+  const tokens = gameState ? gameState.tokens : {
+    wild: 0,
+    white: 0,
+    blue: 0,
+    red: 0,
+    green: 0,
+    yellow: 0,
+  };
+
   return (
     <div className="board-tokens-section">
       <button
@@ -203,12 +213,12 @@ function BoardTokens({ handleTakeTokens }) {
       >
         Select Tokens
       </button>
-      <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={3} />
-      <Token ImagePath={"/Images/Tokens/White Token.png"} number={3} />
-      <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={3} />
-      <Token ImagePath={"/Images/Tokens/Red Token.png"} number={3} />
-      <Token ImagePath={"/Images/Tokens/Green Token.png"} number={3} />
-      <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={3} />
+      <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={tokens.wild} />
+      <Token ImagePath={"/Images/Tokens/White Token.png"} number={tokens.white} />
+      <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={tokens.blue} />
+      <Token ImagePath={"/Images/Tokens/Red Token.png"} number={tokens.red} />
+      <Token ImagePath={"/Images/Tokens/Green Token.png"} number={tokens.green} />
+      <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={tokens.yellow} />
     </div>
   );
 }
@@ -285,7 +295,7 @@ export default function Gameboard() {
             <PlayerCollection Points={10} />
           </div>
           <div>
-            <BoardTokens handleTakeTokens={handleTakeTokens} />
+            <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
           </div>
           <div className="cards">
             <div className="cards-row">
@@ -315,3 +325,4 @@ export default function Gameboard() {
     </div>
   );
 }
+  
