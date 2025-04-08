@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './pageStyles/Home.css'
 import PageHeader from "../components/PageHeader";
 import NavigationButton from "../components/NavigationButton";
@@ -92,7 +93,6 @@ export default function Home() {
                     </Link>
                 </div>
             </div>
-            
-        </div>
+    </div>        
     )
 }
