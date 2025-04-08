@@ -1,6 +1,5 @@
-import React from 'react';
-import { useState } from 'react';
-import './Gameboard.css'
+import React, { useState, useEffect } from 'react';
+import './Gameboard.css';
 import PageHeader from '../components/PageHeader';
 
 function CollectionButton({ player }) {
@@ -16,7 +15,7 @@ function CollectionButton({ player }) {
     }} title={player}>
       {player} Collection
     </button>
-  )
+  );
 }
 
 function Token({ ImagePath, number }) {
@@ -103,6 +102,7 @@ function CollectionCard({ ImagePath, number }) {
         alt="CollectionCard"
         style={{ width: '56.41px', height: '80px' }}
       />
+
       <span style={{
         position: 'absolute',
         top: '50%',
@@ -120,33 +120,36 @@ function CollectionCard({ ImagePath, number }) {
 }
 
 
-
 function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
   return (
-    <div style={{
-      left: '20px',
-      width: '220px',
-      marginTop: '10px',
-      marginLeft: '10px',
-      height: '580px',
-      backgroundColor: '#E8E8E8',
-      boxShadow: '2px 0 5px rgba(0,0,0,0.2)',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center'
-    }}>
-      {/* Centered Points Label */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center', // Centers the text horizontally
-        alignItems: 'center', // Aligns items vertically
-        fontSize: '40px',
-        fontFamily: 'Fondamento, sans-serif',
+    <div
+      style={{
+        left: '20px',
+        width: '220px',
         marginTop: '10px',
-        fontWeight: '600',
-        width: '100%', // Makes sure centering works properly
-        textAlign: 'center'
-      }}>
+        marginLeft: '10px',
+        height: '580px',
+        backgroundColor: '#E8E8E8',
+        boxShadow: '2px 0 5px rgba(0,0,0,0.2)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}
+    >
+      {/* Centered Points Label */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          fontSize: '40px',
+          fontFamily: 'Fondamento, sans-serif',
+          marginTop: '10px',
+          fontWeight: '600',
+          width: '100%',
+          textAlign: 'center'
+        }}
+      >
         <span style={{ marginRight: '10px' }}>{Points}</span> Points
       </div>
 
@@ -192,30 +195,42 @@ function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
         <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={0} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Yellow Card.png"} number={1} />
       </div>
-
     </div>
   );
 }
 
-function BoardTokens() {
+function BoardTokens({ gameState, handleTakeTokens }) {
+
+  const tokens = gameState ? gameState.tokens : {
+    wild: 0,
+    white: 0,
+    blue: 0,
+    red: 0,
+    green: 0,
+    yellow: 0,
+  };
+
   return (
-    <div class='board-tokens-section'>
-      <button style={{
-        width: '150px',
-        height: '50px',
-        fontFamily: 'Inknut Antiqua, sans-serif',
-        fontWeight: '800',
-        lineHeight: '20px',
-        marginBottom: '15px'
-      }}>
+    <div className="board-tokens-section">
+      <button
+        style={{
+          width: '150px',
+          height: '50px',
+          fontFamily: 'Inknut Antiqua, sans-serif',
+          fontWeight: '800',
+          lineHeight: '20px',
+          marginBottom: '15px'
+        }}
+        onClick={handleTakeTokens}
+      >
         Select Tokens
       </button>
-      <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={3} />
-      <Token ImagePath={"/Images/Tokens/White Token.png"} number={1} />
-      <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={2} />
-      <Token ImagePath={"/Images/Tokens/Red Token.png"} number={1} />
-      <Token ImagePath={"/Images/Tokens/Green Token.png"} number={2} />
-      <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={2} />
+      <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={tokens.wild} />
+      <Token ImagePath={"/Images/Tokens/White Token.png"} number={tokens.white} />
+      <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={tokens.blue} />
+      <Token ImagePath={"/Images/Tokens/Red Token.png"} number={tokens.red} />
+      <Token ImagePath={"/Images/Tokens/Green Token.png"} number={tokens.green} />
+      <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={tokens.yellow} />
     </div>
   );
 }
@@ -277,6 +292,52 @@ export default function Gameboard() {
   const [playable, setPlayable] = useState(true)
   const [viewCard, setViewCard] = useState(false)
   const [imgViewCard, setImgViewCard] = useState("/Images/MainCards/Yellow 3.0.png")
+  const [gameState, setGameState] = useState(null);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:5000/game')
+      .then((res) => res.json())
+      .then((data) => setGameState(data))
+      .catch((err) => console.error('Error fetching game state:', err));
+  }, []);
+
+  const makeMove = async (moveData) => {
+    try {
+      console.log('Making move:', moveData);
+      const response = await fetch('http://127.0.0.1:5000/game/move', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(moveData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(errorData.error);
+        console.error('Error from server:', errorData.error);
+        return;
+      }
+      const updatedState = await response.json();
+      console.log('Updated game state:', updatedState);
+      setGameState(updatedState);
+      setError('');
+    } catch (err) {
+      console.error('Fetch error:', err);
+      setError('Error making move.');
+    }
+  };
+
+  const handleTakeTokens = () => {
+    console.log('Select Tokens button clicked');
+    const moveData = {
+      action: "take_tokens",
+      tokens: {
+        blue: 1,
+        red: 1
+      }
+    };
+    makeMove(moveData);
+  };
 
   return (
     <div>
@@ -287,10 +348,11 @@ export default function Gameboard() {
           <div>
             <CollectionButton player={'Your'} />
             <CollectionButton player={"Opponent's"} />
-            <PlayerCollection Points={10} viewCard={viewCard} setViewCard={setViewCard} />
+            <PlayerCollection Points={10} viewCard={viewCard} setViewCard={setViewCard}
+            tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
           </div>
           <div>
-            <BoardTokens />
+            <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
           </div>
           <div class='cards'>
             <div class='cards-row'>
@@ -320,5 +382,4 @@ export default function Gameboard() {
     </div>
   );
 }
-
-
+  
