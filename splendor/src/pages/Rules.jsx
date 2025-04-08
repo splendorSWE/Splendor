@@ -7,7 +7,7 @@ export default function Rules() {
   const user = useAuthContext();
   return (
     <>
-    <PageHeader title="Rules" home={true} userauth={!user} profile={user}/>
+    <PageHeader title="Rules" home={true} userauth={!user} profile={user || user.isAnonymous}/>
     <div className="rules-page">
       
       <main className="rules-content">

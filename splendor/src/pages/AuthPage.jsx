@@ -76,7 +76,7 @@ export default function AuthPage() {
 
   return (
     <>
-      <PageHeader title='Sign In/Sign Up' home = {true} rules = {true} profile={user}/>
+      <PageHeader title='Sign In/Sign Up' home = {true} rules = {true} profile={user?.isAnonymous}/>
 
       <div
         style={{

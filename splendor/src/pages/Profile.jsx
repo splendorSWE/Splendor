@@ -64,12 +64,12 @@ export default function Profile() {
     
 
     if (!userInfo) {
-        return <PageHeader title='Profile' home={true} rules={true} profile={false}/>
+        return <PageHeader title='Profile' home={true} rules={true} />
     }
 
     return (
         <div className="profile-container">
-            <PageHeader title='Profile' home={true} rules={true} profile={false}/>
+            <PageHeader title='Profile' home={true} rules={true} />
             <div className="profile-card">
                 <img src={profilePic} className="profile-pic" />
                 {(userInfo !== "No User") ? (
