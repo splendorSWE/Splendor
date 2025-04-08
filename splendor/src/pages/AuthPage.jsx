@@ -1,7 +1,6 @@
 // src/pages/AuthPage.jsx
 import { useState, useEffect } from "react";
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, signInAnonymously } from "firebase/auth";
-import { auth } from "../firebase";
+import { signup, login, logout, loginGuest, useAuth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { ref, set } from "firebase/database";
 import { db } from "../firebase";
@@ -22,19 +21,12 @@ export default function AuthPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const user = useAuth()
 
-  // handles auth state change.
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-    return () => unsubscribe();
-  }, []);
 
   const handleGuestSignIn = async () => {
     try {
-      await signInAnonymously(auth);
+      await loginGuest();
       navigate("/");
     } catch (error) {
       setError(error.message);
@@ -44,7 +36,7 @@ export default function AuthPage() {
 
   const handleSignOut = async () => {
     try {
-      await signOut(auth);
+      await logout();
     } catch (error) {
       console.error("Error signing out: ", error);
     }
@@ -57,11 +49,11 @@ export default function AuthPage() {
     try {
       // if set to login, call signin.
       if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password);
+        await login(email, password)
       }
       // if else (sign up), then create user.
       else {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const userCredential = await signup(email, password);
         const user = userCredential.user;
         const randomNumber = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
         const userName = "User" + randomNumber

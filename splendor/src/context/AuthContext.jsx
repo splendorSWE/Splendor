@@ -14,11 +14,6 @@ export const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
-      if (!currentUser) {
-        // TODO: Decide where we want to direct users when not logged in.
-        // Redirect to login page if not authenticated
-        // navigate("/user-auth");
-      }
     });
 
     return unsubscribe; // Clean up on unmount
@@ -31,4 +26,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuthContext = () => useContext(AuthContext);
