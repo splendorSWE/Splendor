@@ -1,0 +1,130 @@
+.home-container {
+    font-family: "Fondamento", sans-serif;
+    width: 100vw;
+    height: calc(100vh - 140px);
+    display: flex;
+    flex-direction: row;
+    margin-top: 100px;
+    margin-bottom: 40px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.option-box {
+    width: 40vw;
+    height: calc(80vh - 225px);
+    min-width: 400px;
+    min-height: 400px;
+    background-color: #E9E9E9;
+    margin-left: 40px;
+    margin-right: 40px;
+    font-family: Inknut Antiqua, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: none;
+    color: #27394D;
+}
+
+.button-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.game-choice-button {
+    height: 10vh;
+    width: 15vw;
+    min-width: 100px;
+    min-height: 75px;
+    background: #27394D;
+    color: #FFFFFF;
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-weight: 600;
+    font-size: 1.5em;
+    font-family: Inknut Antiqua, sans-serif;
+}
+
+.turn-timer {
+    font-size: 2em;
+    margin: 10px;
+}
+
+.create-button {
+    height: 10vh;
+    width: 25vw;
+    min-width: 200px;
+    min-height: 75px;
+    background: #F6D354;
+    color: #27394D;
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-weight: 600;
+    font-size: 1.5em;
+    font-family: Inknut Antiqua, sans-serif;
+    border: 2;
+    border-color: #F6D354;
+    margin-bottom: 10px;
+}
+
+.game-code-input-box {
+    height: 10vh;
+    width: calc(30vw + 25px);
+    min-width: 250px;
+    font-size: 30px;
+    font-family: Ponomar, sans-serif;
+    text-align: center;
+    border-radius: 5px;
+    background: #27394D;
+    color: #FFFFFF;
+    font-weight: 600;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+
+    border: none;
+    box-shadow: none;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.game-choice-button:hover {
+    background-color:#FFFFFF;
+    color: #27394D;
+}
+
+
+.game-choice-button.selected {
+    background-color: #a4acb5;
+    color: #27394D;
+}
+
+.selection-button.selected {
+    background-color: black;
+    color: white;
+}
+
+.create-button:hover {
+    background-color:#FFFFFF;
+    color: #F6D354;
+}
+
+.box-header {
+    font-size: 2.5em;
+    margin: 0;
+}
+
+.game-code-input-box::placeholder {
+    color: #cdcdcd;
+    opacity: 1; /* Ensures it's fully opaque */
+}
+
+.game-code-input-box::-webkit-outer-spin-button,
+.game-code-input-box::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
