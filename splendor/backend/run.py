@@ -23,6 +23,14 @@ game_state = {
         "green": 3,
         "yellow": 3
     },
+    "playerTokens": {
+        "wild": 0,
+        "white": 0,
+        "blue": 0,
+        "red": 0,
+        "green": 0,
+        "yellow": 0
+    },
     "cards": {},
     "players":{}
 }
@@ -38,17 +46,37 @@ def make_move(player=None):
     
     if action == "take_tokens":
         tokens_requested = data.get("tokens")
+
         for token, count in tokens_requested.items():
             available = game_state["tokens"].get(token, 0)
             if available < count:
                 return jsonify({"error": f"Not enough {token} tokens available"}), 400
+
         for token, count in tokens_requested.items():
             game_state["tokens"][token] -= count
+            game_state["playerTokens"][token] += count
         return jsonify(game_state)
     
-    # can either add other actions in different if statements or could create a seperate function for each type of move.
-    
     return jsonify({"error": "Invalid action"}), 400
+
+# @app.route('/game/move', methods=['POST'])
+# def make_move(player=None):
+#     data = request.get_json()
+#     action = data.get("action")
+    
+#     if action == "take_tokens":
+#         tokens_requested = data.get("tokens")
+#         for token, count in tokens_requested.items():
+#             available = game_state["tokens"].get(token, 0)
+#             if available < count:
+#                 return jsonify({"error": f"Not enough {token} tokens available"}), 400
+#         for token, count in tokens_requested.items():
+#             game_state["tokens"][token] -= count
+#         return jsonify(game_state)
+    
+#     # can either add other actions in different if statements or could create a seperate function for each type of move.
+    
+#     return jsonify({"error": "Invalid action"}), 400
 
 socketio = SocketIO(app, cors_allowed_origins="*")
 
