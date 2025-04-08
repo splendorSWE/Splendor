@@ -6,26 +6,29 @@ import { useLocation } from 'react-router-dom';
 import NavigationButton from '../components/NavigationButton';
 import PageHeader from '../components/PageHeader';
 import { useEffect, useState } from "react";
-import { auth } from "../firebase";
+import { useAuth, db, uploadPfP } from "../firebase";
 import { ref, get, update } from "firebase/database";
-import { db } from "../firebase";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
-import { updatePassword as firebaseUpdatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import { updatePassword, emailAuthProvider } from "../firebase";
+import { useAuthContext} from '../context/AuthContext';
 
 export default function EditProfile({ initialProfilePic }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const [profilePic, setProfilePic] = useState(location.state?.initialProfilePic || "../images/default_pfp.jpg");
+    const [profilePic, setProfilePic] = useState(location.state?.profilePic || "/images/default_pfp.jpg");
+    const [photo, setPhoto] = useState(null);
+    const [loading, setLoading] = useState(false);
+    
     const [userInfo, setUserInfo] = useState(null);
     const [newPassword, setNewPassword] = useState("");
     const [currentPassword, setCurrentPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [passwordError, setPasswordError] = useState("");
     const [passwordSuccess, setPasswordSuccess] = useState(false);
+    const { user } = useAuthContext();
 
     useEffect(() => {
         const fetchUserInfo = async () => {
-            const user = auth.currentUser;
+            
             if (user) {
                 if (user.isAnonymous) {
                     setUserInfo({
@@ -54,13 +57,18 @@ export default function EditProfile({ initialProfilePic }) {
         };
 
         fetchUserInfo();
-    }, []);
+    }, [user, loading]);
+    useEffect(() => {
+        if (user?.photoURL) {
+            setProfilePic(user.photoURL);
+        }
+    }, [user])
 
     async function handleUpdatePassword() {
         setPasswordError("");
         setPasswordSuccess(false);
         
-        const user = auth.currentUser;
+   
         
         if (!user || !user.email) {
             setPasswordError("No user signed in.");
@@ -79,16 +87,10 @@ export default function EditProfile({ initialProfilePic }) {
 
         try {
             // Create credential with current password
-            const credential = EmailAuthProvider.credential(
-                user.email, 
-                currentPassword
-            );
+            const credential = emailAuthProvider(user.email, currentPassword);
             
             // Reauthenticate user
-            await reauthenticateWithCredential(user, credential);
-            
-            // Now update password
-            await firebaseUpdatePassword(user, newPassword);
+            updatePassword(user, credential, newPassword)
             
             setPasswordSuccess(true);
             setNewPassword("");
@@ -117,6 +119,18 @@ export default function EditProfile({ initialProfilePic }) {
         return <p>Loading your profile...</p>;
     }
 
+    
+    
+        function handleProfilePicChange(e) {
+            if (e.target.files[0]) {
+                setPhoto(e.target.files[0])
+                setProfilePic(e.target.files[0])
+            }
+        }
+        function handleProfilePicClick() {
+            uploadPfP(photo, user, setLoading);
+        }
+
     return (
         <div className="profile-container">
             <PageHeader title='Edit Profile' home={true} rules={true}/>
@@ -129,8 +143,9 @@ export default function EditProfile({ initialProfilePic }) {
                     id="profile-pic-input"
                     accept="image/*"
                     style={{ display: "none" }}
-                    onChange={handleImageChange}
+                    onChange={handleProfilePicChange}
                 />
+                <button disabled={loading || !photo} onClick ={handleProfilePicClick}>Upload</button>
 
                 {(userInfo !== "No User") ? (
                     <>

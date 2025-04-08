@@ -6,20 +6,27 @@ import { useLocation } from 'react-router-dom';
 import NavigationButton from '../components/NavigationButton';
 import PageHeader from '../components/PageHeader';
 import { useEffect, useState } from "react";
-import { auth } from "../firebase";
+import { useAuth, db, upload, auth} from "../firebase";
 import { ref, get } from "firebase/database";
-import { db } from "../firebase";
+import { useAuthContext} from '../context/AuthContext';
+
+
 
 export default function Profile() {
     const navigate = useNavigate();
     const location = useLocation();
-    const profilePic = location.state?.profilePic || "/images/default_pfp.jpg";
+    const [profilePic, setProfilePic] = useState(location.state?.profilePic || "/images/default_pfp.jpg");
+    const [photo, setPhoto] = useState(null);
+    // const [loading, setLoading] = useState(false);
+    //const user = useAuth()
+    const { user, loading } = useAuthContext();
 
     const [userInfo, setUserInfo] = useState(null);
+    // const [currentUser, setCurrentUser] = useState(null)
 
     useEffect(() => {
         const fetchUserInfo = async () => {
-            const user = auth.currentUser;
+            
             if (user) {
                 if (user.isAnonymous) {
                     setUserInfo({
@@ -38,6 +45,8 @@ export default function Profile() {
                             createdAt: new Date(data.createdAt).toLocaleDateString(),
                             wins: data.wins,
                         });
+                        const profilePicURL = data.profilePic || user.photoURL || "/images/default_pfp.jpg";
+                    setProfilePic(profilePicURL);
                     } else {
                         console.log("No user data found!");
                     }
@@ -46,11 +55,12 @@ export default function Profile() {
                 setUserInfo("No User");
             }
         };
+        if (!loading && user) {
+            fetchUserInfo();
+        }
+    }, [user, loading]);
 
-        fetchUserInfo();
-    }, []);
-
-
+    
 
     if (!userInfo) {
         return <p className="info">Loading your profile...</p>;
