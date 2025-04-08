@@ -1,6 +1,5 @@
 import React from 'react';
 import { useEffect, useState } from "react";
-import UserStats from "./../components/UserStats";
 import PageHeader from "./../components/PageHeader";
 import NavigationButton from "./../components/NavigationButton";
 
@@ -15,7 +14,7 @@ export default function Home() {
 
     return(
         <div>
-            <div className="page-header"><PageHeader title='Home'/></div>
+            <div className="page-header"><PageHeader title='Home' account={true} /></div>
             
             <div className="content-container">
             <div>
@@ -34,13 +33,6 @@ export default function Home() {
                 state={{ profilePic}}/>
                 
                 
-            </div>
-            <div>
-                <button className='dark-button'
-                onClick={toggleUserStats}>
-                {showUserStats ? "Hide User Stats" : "Show User Stats"}
-                {showUserStats && <UserStats />}
-                </button>
             </div>
 
             </div>

@@ -58,7 +58,7 @@ export default function Profile() {
 
     return (
         <div className="profile-container">
-            <PageHeader title='Profile' />
+            <PageHeader title='Profile' home={true} account={true}/>
             <div className="profile-card">
                 <img src={profilePic} className="profile-pic" />
                 {(userInfo !== "No User") ? (

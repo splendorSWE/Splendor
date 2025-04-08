@@ -276,8 +276,8 @@ export default function Gameboard() {
 
   return (
     <div>
-      <PageHeader title="Gameboard" />
-      <div className="main">
+      <PageHeader title='Gameboard' home={true} rules={true} account={true}/>
+      <div class='main'>
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <div>
             <CollectionButton player="Your" />

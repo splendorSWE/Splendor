@@ -5,14 +5,15 @@ import "./componentStyles/PageHeader.css";
 
 
 
-export default function PageHeader({ title }) {
+export default function PageHeader({ title, home, account, rules }) {
     return (
     <div className="page-header">
         <div className="page-title">{title}</div> {/* Title in the center */}
         <div className="spacer"></div> {/* Flexible space to push title to center */}
         <div className="nav-buttons">
-          <NavigationButton destination="Home" link="/" styling='dark-button' />
-          <NavigationButton destination="Rules" link="/user-auth" styling='dark-button' />
+          {home && <NavigationButton destination="Home" link="/" styling='dark-button' />}
+          {rules && <NavigationButton destination="Rules" link="/rules" styling='dark-button' />}
+          {account && <NavigationButton destination="Account" link="/user-auth" styling='dark-button' />}
         </div>
       </div>
     );

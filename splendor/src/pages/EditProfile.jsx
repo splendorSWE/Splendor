@@ -7,18 +7,21 @@ import NavigationButton from '../components/NavigationButton';
 import PageHeader from '../components/PageHeader';
 import { useEffect, useState } from "react";
 import { auth } from "../firebase";
-import { ref, get } from "firebase/database";
+import { ref, get, update } from "firebase/database";
 import { db } from "../firebase";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import { updatePassword as firebaseUpdatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 
 export default function EditProfile({ initialProfilePic }) {
     const navigate = useNavigate();
     const location = useLocation();
-    // const initialProfilePic = location.state?.initialProfilePic || "../images/default_pfp.jpg";
     const [profilePic, setProfilePic] = useState(location.state?.initialProfilePic || "../images/default_pfp.jpg");
-
     const [userInfo, setUserInfo] = useState(null);
-    const [newPassword, updatePassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [currentPassword, setCurrentPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [passwordError, setPasswordError] = useState("");
+    const [passwordSuccess, setPasswordSuccess] = useState(false);
 
     useEffect(() => {
         const fetchUserInfo = async () => {
@@ -53,25 +56,54 @@ export default function EditProfile({ initialProfilePic }) {
         fetchUserInfo();
     }, []);
 
-    const handlePasswordChange = async () => {
-        if (!newPassword) {
-            alert("Please enter a new password.");
+    async function handleUpdatePassword() {
+        setPasswordError("");
+        setPasswordSuccess(false);
+        
+        const user = auth.currentUser;
+        
+        if (!user || !user.email) {
+            setPasswordError("No user signed in.");
             return;
         }
 
-        const user = auth.currentUser;
-        if (user) {
-            try {
-                await updatePassword(user, newPassword);
-                alert("Password updated successfully!");
-            } catch (error) {
-                console.error("Error updating password:", error);
-                alert(error.message);
-            }
-        } else {
-            alert("No user signed in.");
+        if (!currentPassword) {
+            setPasswordError("Please enter your current password.");
+            return;
         }
-    };
+
+        if (!newPassword || newPassword.length < 6) {
+            setPasswordError("Password must be at least 6 characters long.");
+            return;
+        }
+
+        try {
+            // Create credential with current password
+            const credential = EmailAuthProvider.credential(
+                user.email, 
+                currentPassword
+            );
+            
+            // Reauthenticate user
+            await reauthenticateWithCredential(user, credential);
+            
+            // Now update password
+            await firebaseUpdatePassword(user, newPassword);
+            
+            setPasswordSuccess(true);
+            setNewPassword("");
+            setCurrentPassword("");
+        } catch (error) {
+            console.error("Error updating password:", error);
+            if (error.code === "auth/wrong-password") {
+                setPasswordError("The current password you entered is incorrect.");
+            } else if (error.code === "auth/requires-recent-login") {
+                setPasswordError("Session expired. Please sign in again.");
+            } else {
+                setPasswordError(error.message);
+            }
+        }
+    }
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -81,14 +113,13 @@ export default function EditProfile({ initialProfilePic }) {
         }
     };
 
-
     if (!userInfo) {
         return <p>Loading your profile...</p>;
     }
 
     return (
         <div className="profile-container">
-            <PageHeader title='Edit Profile' />
+            <PageHeader title='Edit Profile' home={true} rules={true}/>
             <div className="profile-card">
                 <label htmlFor="profile-pic-input" style={{ cursor: "pointer" }}>
                     <img src={profilePic} alt="Profile" className="profile-pic" />
@@ -104,29 +135,45 @@ export default function EditProfile({ initialProfilePic }) {
                 {(userInfo !== "No User") ? (
                     <>
                         <p className="info"><strong>Username:</strong> {userInfo.username}</p>
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            placeholder="New Password"
-                            className="password-input"
-                            value={newPassword}
-                            onChange={(e) => updatePassword(e.target.value)}
-                        />
-                        <button
+                        
+                        <div className="password-update-section">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Current Password"
+                                className="password-input"
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)}
+                            />
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="New Password"
+                                className="password-input"
+                                value={newPassword}
+                                onChange={(e) => setNewPassword(e.target.value)}
+                            />
+                            <button
                                 type="button"
                                 className="view-password-btn"
                                 onClick={() => setShowPassword(!showPassword)}
-                            >{showPassword ? "hide" : "show"}</button>
-                        <button className="button" onClick={handlePasswordChange}>
-                            Update Password
-                        </button>
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+                            
+                            {passwordError && <p className="error-message">{passwordError}</p>}
+                            {passwordSuccess && <p className="success-message">Password updated successfully!</p>}
+                            
+                            <button className="button" onClick={handleUpdatePassword}>
+                                Update Password
+                            </button>
+                        </div>
+                        
                         <button className='button' onClick={() => navigate("/profile", { state: { profilePic } })}>
-                            Submit
+                            Back to Profile
                         </button>
                     </>
                 ) : (
                     <h2>Not signed in</h2>
                 )}
-
             </div>
         </div>
     )
