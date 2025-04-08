@@ -240,12 +240,10 @@ function NobleCard({ ImagePath }) {
 }
 
 function ReservedCardPopUp({ ImagePath, viewReserved, setViewReserved }) {
-  // No need for conditional rendering inside JSX, just check `viewReserved` to control visibility
   return (
     viewReserved && (
       <div className="card-pop-up-container">
         <div className="x-button" onClick={() => {
-          console.log("X Button Clicked"); // Debugging
           setViewReserved(false);
         }}>
           X
