@@ -160,23 +160,23 @@ function PlayerCollection({ Points }) {
         <span style={{ marginRight: '10px' }}>{Points}</span> Points
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={1} />
+        <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={0} />
         <ReservedCard />
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Token ImagePath={"/Images/Tokens/White Token.png"} number={1} />
+        <Token ImagePath={"/Images/Tokens/White Token.png"} number={0} />
         <CollectionCard ImagePath={"/Images/Plain Cards/White Card.png"} number={1} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={2} />
+        <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={0} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Blue Card.png"} number={1} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Token ImagePath={"/Images/Tokens/Red Token.png"} number={1} />
+        <Token ImagePath={"/Images/Tokens/Red Token.png"} number={0} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Red Card.png"} number={1} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-        <Token ImagePath={"/Images/Tokens/Green Token.png"} number={1} />
+        <Token ImagePath={"/Images/Tokens/Green Token.png"} number={0} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Green Card.png"} number={1} />
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
