@@ -64,27 +64,32 @@ export default function Home() {
             
             <div className="home-container">
                 <div className='option-box'>
-                    <div className='create-game-box'>
-                        <h1>
-                            Create Game
-                        </h1>
-                        <div className='button-row'>
-                            <GameChoiceButton title={"Public"}/>
-                            <GameChoiceButton title={"Private"}/>
-                        </div>
-                        
-                        <p className='turn-timer'>
-                            Turn Timer:
-                        </p>
-                        <Link to="/Gameboard">
-                            <button class='create-button'>
-                                Create Game
-                            </button>
-                        </Link>
+                    <h1 className='box-header'>
+                        Create Game
+                    </h1>
+                    <div className='button-row'>
+                        <GameChoiceButton title={"Public"}/>
+                        <GameChoiceButton title={"Private"}/>
                     </div>
+                    <p className='turn-timer'>
+                        Turn Timer:
+                    </p>
+                    <Link to="/Gameboard">
+                        <button class='create-button'>
+                            Create Game
+                        </button>
+                        </Link>
                 </div>
                 <div className='option-box'>
-                    Hi
+                    <h1 className='box-header'>
+                        Join Game
+                    </h1>
+                    <input class='game-code-input-box'type="number" placeholder="Enter code here"></input>
+                    <Link to="/Gameboard">
+                        <button class='create-button'>
+                            Join Game
+                        </button>
+                    </Link>
                 </div>
             </div>
             
