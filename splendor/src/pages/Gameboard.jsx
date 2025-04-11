@@ -110,14 +110,7 @@ function BoardTokens({ gameState, handleTakeTokens }) {
   return (
     <div className="board-tokens-section">
       <button
-        style={{
-          width: '150px',
-          height: '50px',
-          fontFamily: 'Inknut Antiqua, sans-serif',
-          fontWeight: '800',
-          lineHeight: '20px',
-          marginBottom: '15px'
-        }}
+        className='select-tokens-button'
         onClick={handleTakeTokens}
       >
         Select Tokens
@@ -240,39 +233,37 @@ export default function Gameboard() {
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
       <div class='main'>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <CardPopUp ImagePath={imgViewCard} viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} playable={playable} setReservable={setReservable} />
-          <div>
-            <CollectionButton player={'Your'} />
-            <CollectionButton player={"Opponent's"} />
-            <PlayerCollection Points={10} viewCard={viewCard} setViewCard={setViewCard}
-            tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
+        <CardPopUp ImagePath={imgViewCard} viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} playable={playable} setReservable={setReservable} />
+        <div>
+          <CollectionButton player={'Your'} />
+          <CollectionButton player={"Opponent's"} />
+          <PlayerCollection Points={10} viewCard={viewCard} setViewCard={setViewCard}
+          tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
+        </div>
+        <div>
+          <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
+        </div>
+        <div class='cards'>
+          <div class='cards-row'>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/Green 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/Red 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/White 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
           </div>
-          <div>
-            <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
+          <div class='cards-row'>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/Green 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/Red 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/White 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
           </div>
-          <div class='cards'>
-            <div class='cards-row'>
-              <DevelopmentCard ImagePath={"/Images/MainCards/Blue 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Green 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Red 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/White 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
-            </div>
-            <div class='cards-row'>
-              <DevelopmentCard ImagePath={"/Images/MainCards/Blue 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Green 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Red 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/White 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
-            </div>
-            <div class='cards-row'>
-              <DevelopmentCard ImagePath={"/Images/MainCards/Blue 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
-            </div>
+          <div class='cards-row'>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
           </div>
         </div>
       </div>
