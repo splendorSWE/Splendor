@@ -5,15 +5,9 @@ import { useAuthContext } from '../context/AuthContext';
 
 function CollectionButton({ player }) {
   return (
-    <button style={{
-      height: '60px',
-      width: '105px',
-      marginTop: '40px',
-      marginLeft: '10px',
-      fontFamily: 'Inknut Antiqua, sans-serif',
-      fontWeight: '800',
-      lineHeight: '20px'
-    }} title={player}>
+    <button 
+    className='collection-button' 
+    title={player}>
       {player} Collection
     </button>
   );
@@ -21,30 +15,13 @@ function CollectionButton({ player }) {
 
 function Token({ ImagePath, number }) {
   return (
-    <div style={{
-      position: 'relative',
-      width: '80px',
-      height: '80px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: '5px',
-    }}>
+    <div className='token-div'>
       <img
         src={ImagePath}
         alt="Token"
-        style={{ width: '80px', height: '80px' }}
+        className='token-img'
       />
-      <span style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        fontSize: '35px',
-        fontWeight: '900',
-        color: 'black',
-        fontFamily: 'Ponomar, sans-serif',
-      }}>
+      <span className='token-span'>
         {number}
       </span>
     </div>
@@ -53,33 +30,14 @@ function Token({ ImagePath, number }) {
 
 function ReservedCard({ viewCard, setViewCard }) {
   return (
-    <div style={{
-      position: 'relative',
-      width: '56.41px',
-      height: '80px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: '5px',
-      marginLeft: '40px',
-      cursor: 'pointer'
-    }}>
+    <div className='collection-card-div'>
       <img
         src="/Images/Plain Cards/Reserved Card.png"
         alt="CollectionCard"
-        style={{ width: '56.41px', height: '80px' }}
+        className='collection-card-img'
         onClick={() => setViewCard(!viewCard)}
       />
-      <span style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        fontSize: '20px',
-        fontWeight: '800',
-        color: 'White',
-        fontFamily: 'Ponomar, sans-serif',
-      }}>
+      <span className='reserved-card-span'>
         Res
       </span>
     </div>
@@ -88,32 +46,14 @@ function ReservedCard({ viewCard, setViewCard }) {
 
 function CollectionCard({ ImagePath, number }) {
   return (
-    <div style={{
-      position: 'relative',
-      width: '56.41px',
-      height: '80px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: '5px',
-      marginLeft: '40px'
-    }}>
+    <div className='collection-card-div'>
       <img
         src={ImagePath}
         alt="CollectionCard"
-        style={{ width: '56.41px', height: '80px' }}
+        className='collection-card-img'
       />
 
-      <span style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        fontSize: '35px',
-        fontWeight: '900',
-        color: 'black',
-        fontFamily: 'Ponomar, sans-serif',
-      }}>
+      <span className='collection-card-span'>
         {number}
       </span>
     </div>

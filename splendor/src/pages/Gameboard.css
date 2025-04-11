@@ -35,6 +35,80 @@
     align-items: center;
 }
 
+.collection-button {
+    height: 60px;
+    width: 105px;
+    margin-top: 40px;
+    margin-left: 10px;
+    font-family: Inknut Antiqua, sans-serif;
+    font-weight: 800;
+    line-height: 20px;
+}
+
+.token-div {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.token-img {
+    width: 80px;
+    height: 80px;
+}
+
+.token-span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 35px;
+    font-weight: 900;
+    color: black;
+    font-family: Ponomar, sans-serif;
+}
+
+.collection-card-div {
+    position: relative;
+    width: 56.41px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+    margin-left: 40px;
+}
+
+.collection-card-img {
+    width: 56.41px;
+    height: 80px;
+}
+
+.reserved-card-span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    font-weight: 800;
+    color: White;
+    font-family: Ponomar, sans-serif;
+}
+
+.collection-card-span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 35px;
+    font-weight: 900;
+    color: black;
+    font-Family: Ponomar, sans-serif;
+}
+
 /*
 .select-tokens-button {
     width: 150px;
