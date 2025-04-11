@@ -52,7 +52,6 @@ function CollectionCard({ ImagePath, number }) {
         alt="CollectionCard"
         className='collection-card-img'
       />
-
       <span className='collection-card-span'>
         {number}
       </span>
@@ -63,76 +62,33 @@ function CollectionCard({ ImagePath, number }) {
 
 function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
   return (
-    <div
-      style={{
-        left: '20px',
-        width: '220px',
-        marginTop: '10px',
-        marginLeft: '10px',
-        height: '580px',
-        backgroundColor: '#E8E8E8',
-        boxShadow: '2px 0 5px rgba(0,0,0,0.2)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-      }}
-    >
-      {/* Centered Points Label */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: '40px',
-          fontFamily: 'Fondamento, sans-serif',
-          marginTop: '10px',
-          fontWeight: '600',
-          width: '100%',
-          textAlign: 'center'
-        }}
-      >
-        <span style={{ marginRight: '10px' }}>{Points}</span> Points
+    <div className='player-collection-main-div'>
+
+      <div className='player-collection-header'>
+        <span className='player-collection-header-space'>{Points}</span> Points
       </div>
 
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}>
+      <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={1} />
         <ReservedCard viewCard={viewCard} setViewCard={setViewCard}/>
       </div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}>
+      <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/White Token.png"} number={1} />
         <CollectionCard ImagePath={"/Images/Plain Cards/White Card.png"} number={1} />
       </div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}>
+      <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={2} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Blue Card.png"} number={1} />
       </div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}>
+      <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Red Token.png"} number={1} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Red Card.png"} number={1} />
       </div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}>
+      <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Green Token.png"} number={1} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Green Card.png"} number={1} />
       </div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}>
+      <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={0} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Yellow Card.png"} number={1} />
       </div>
