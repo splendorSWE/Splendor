@@ -5,15 +5,9 @@ import { useAuthContext } from '../context/AuthContext';
 
 function CollectionButton({ player }) {
   return (
-    <button style={{
-      height: '60px',
-      width: '105px',
-      marginTop: '40px',
-      marginLeft: '10px',
-      fontFamily: 'Inknut Antiqua, sans-serif',
-      fontWeight: '800',
-      lineHeight: '20px'
-    }} title={player}>
+    <button 
+    className='collection-button' 
+    title={player}>
       {player} Collection
     </button>
   );
@@ -21,30 +15,13 @@ function CollectionButton({ player }) {
 
 function Token({ ImagePath, number }) {
   return (
-    <div style={{
-      position: 'relative',
-      width: '80px',
-      height: '80px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: '5px',
-    }}>
+    <div className='token-div'>
       <img
         src={ImagePath}
         alt="Token"
-        style={{ width: '80px', height: '80px' }}
+        className='token-img'
       />
-      <span style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        fontSize: '35px',
-        fontWeight: '900',
-        color: 'black',
-        fontFamily: 'Ponomar, sans-serif',
-      }}>
+      <span className='token-span'>
         {number}
       </span>
     </div>
@@ -53,33 +30,14 @@ function Token({ ImagePath, number }) {
 
 function ReservedCard({ viewCard, setViewCard }) {
   return (
-    <div style={{
-      position: 'relative',
-      width: '56.41px',
-      height: '80px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: '5px',
-      marginLeft: '40px',
-      cursor: 'pointer'
-    }}>
+    <div className='collection-card-div'>
       <img
         src="/Images/Plain Cards/Reserved Card.png"
         alt="CollectionCard"
-        style={{ width: '56.41px', height: '80px' }}
+        className='collection-card-img'
         onClick={() => setViewCard(!viewCard)}
       />
-      <span style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        fontSize: '20px',
-        fontWeight: '800',
-        color: 'White',
-        fontFamily: 'Ponomar, sans-serif',
-      }}>
+      <span className='reserved-card-span'>
         Res
       </span>
     </div>
@@ -88,32 +46,13 @@ function ReservedCard({ viewCard, setViewCard }) {
 
 function CollectionCard({ ImagePath, number }) {
   return (
-    <div style={{
-      position: 'relative',
-      width: '56.41px',
-      height: '80px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: '5px',
-      marginLeft: '40px'
-    }}>
+    <div className='collection-card-div'>
       <img
         src={ImagePath}
         alt="CollectionCard"
-        style={{ width: '56.41px', height: '80px' }}
+        className='collection-card-img'
       />
-
-      <span style={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        fontSize: '35px',
-        fontWeight: '900',
-        color: 'black',
-        fontFamily: 'Ponomar, sans-serif',
-      }}>
+      <span className='collection-card-span'>
         {number}
       </span>
     </div>
@@ -123,76 +62,33 @@ function CollectionCard({ ImagePath, number }) {
 
 function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
   return (
-    <div
-      style={{
-        left: '20px',
-        width: '220px',
-        marginTop: '10px',
-        marginLeft: '10px',
-        height: '580px',
-        backgroundColor: '#E8E8E8',
-        boxShadow: '2px 0 5px rgba(0,0,0,0.2)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-      }}
-    >
-      {/* Centered Points Label */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: '40px',
-          fontFamily: 'Fondamento, sans-serif',
-          marginTop: '10px',
-          fontWeight: '600',
-          width: '100%',
-          textAlign: 'center'
-        }}
-      >
-        <span style={{ marginRight: '10px' }}>{Points}</span> Points
+    <div className='player-collection-main-div'>
+
+      <div className='player-collection-header'>
+        <span className='player-collection-header-space'>{Points}</span> Points
       </div>
 
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}>
+      <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={1} />
         <ReservedCard viewCard={viewCard} setViewCard={setViewCard}/>
       </div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}>
+      <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/White Token.png"} number={1} />
         <CollectionCard ImagePath={"/Images/Plain Cards/White Card.png"} number={1} />
       </div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}>
+      <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={2} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Blue Card.png"} number={1} />
       </div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}>
+      <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Red Token.png"} number={1} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Red Card.png"} number={1} />
       </div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}>
+      <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Green Token.png"} number={1} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Green Card.png"} number={1} />
       </div>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row'
-      }}>
+      <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={0} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Yellow Card.png"} number={1} />
       </div>
@@ -214,14 +110,7 @@ function BoardTokens({ gameState, handleTakeTokens }) {
   return (
     <div className="board-tokens-section">
       <button
-        style={{
-          width: '150px',
-          height: '50px',
-          fontFamily: 'Inknut Antiqua, sans-serif',
-          fontWeight: '800',
-          lineHeight: '20px',
-          marginBottom: '15px'
-        }}
+        className='select-tokens-button'
         onClick={handleTakeTokens}
       >
         Select Tokens
@@ -344,39 +233,37 @@ export default function Gameboard() {
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
       <div class='main'>
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <CardPopUp ImagePath={imgViewCard} viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} playable={playable} setReservable={setReservable} />
-          <div>
-            <CollectionButton player={'Your'} />
-            <CollectionButton player={"Opponent's"} />
-            <PlayerCollection Points={10} viewCard={viewCard} setViewCard={setViewCard}
-            tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
+        <CardPopUp ImagePath={imgViewCard} viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} playable={playable} setReservable={setReservable} />
+        <div>
+          <CollectionButton player={'Your'} />
+          <CollectionButton player={"Opponent's"} />
+          <PlayerCollection Points={10} viewCard={viewCard} setViewCard={setViewCard}
+          tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
+        </div>
+        <div>
+          <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
+        </div>
+        <div class='cards'>
+          <div class='cards-row'>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/Green 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/Red 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/White 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
           </div>
-          <div>
-            <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
+          <div class='cards-row'>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/Green 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/Red 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/White 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
           </div>
-          <div class='cards'>
-            <div class='cards-row'>
-              <DevelopmentCard ImagePath={"/Images/MainCards/Blue 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Green 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Red 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/White 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
-            </div>
-            <div class='cards-row'>
-              <DevelopmentCard ImagePath={"/Images/MainCards/Blue 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Green 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Red 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/White 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
-            </div>
-            <div class='cards-row'>
-              <DevelopmentCard ImagePath={"/Images/MainCards/Blue 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-              <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
-            </div>
+          <div class='cards-row'>
+            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
           </div>
         </div>
       </div>
