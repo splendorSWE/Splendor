@@ -13,11 +13,11 @@ function CollectionButton({ player }) {
   );
 }
 
-function Token({ ImagePath, number }) {
+function Token({ color, number }) {
   return (
     <div className='token-div'>
       <img
-        src={ImagePath}
+        src={`/Images/Tokens/${color} Token.png`}
         alt="Token"
         className='token-img'
       />
@@ -69,27 +69,27 @@ function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
       </div>
 
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={1} />
+        <Token color={"Wild"} number={1} />
         <ReservedCard viewCard={viewCard} setViewCard={setViewCard}/>
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/White Token.png"} number={1} />
+        <Token color={"White"} number={1} />
         <CollectionCard ImagePath={"/Images/Plain Cards/White Card.png"} number={1} />
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={2} />
+        <Token color={"Blue"} number={2} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Blue Card.png"} number={1} />
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Red Token.png"} number={1} />
+        <Token color={"Red"} number={1} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Red Card.png"} number={1} />
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Green Token.png"} number={1} />
+        <Token color={"Green"} number={1} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Green Card.png"} number={1} />
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={0} />
+        <Token color={"Yellow"} number={0} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Yellow Card.png"} number={1} />
       </div>
     </div>
@@ -131,12 +131,12 @@ function BoardTokens({ gameState, handleTakeTokens }) {
           {selectTokenView ? 'Back' : 'Select Tokens'}
         </button>
 
-        <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={tokens.wild} />
-        <Token ImagePath={"/Images/Tokens/White Token.png"} number={tokens.white} />
-        <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={tokens.blue} />
-        <Token ImagePath={"/Images/Tokens/Red Token.png"} number={tokens.red} />
-        <Token ImagePath={"/Images/Tokens/Green Token.png"} number={tokens.green} />
-        <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={tokens.yellow} />
+        <Token color={"Wild"} number={tokens.wild}/>
+        <Token color={"White"} number={tokens.white} />
+        <Token color={"Blue"} number={tokens.blue} />
+        <Token color={"Red"} number={tokens.red} />
+        <Token color={"Green"} number={tokens.green} />
+        <Token color={"Yellow"} number={tokens.yellow} />
 
         <button
           className='confirm-tokens-button'
