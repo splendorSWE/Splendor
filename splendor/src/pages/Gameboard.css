@@ -33,6 +33,8 @@
     flex-direction: column;
     margin-left: 100px;
     align-items: center;
+    justify-content: center;
+    margin-top: 35px;
 }
 
 .collection-button {
@@ -151,13 +153,20 @@
     font-family: Inknut Antiqua, sans-serif;
     font-weight: 800;
     line-height: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+}
+
+.confirm-tokens-button {
+    width: 150px;
+    height: 50px;
+    font-family: Inknut Antiqua, sans-serif;
+    font-weight: 800;
+    line-height: 20px;
 }
 
 .main {
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: center;
     margin-top: 30px;
 }
@@ -236,3 +245,4 @@
     cursor: not-allowed;
     z-index: 10000;
 }
+

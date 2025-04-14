@@ -97,6 +97,19 @@ function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
 }
 
 function BoardTokens({ gameState, handleTakeTokens }) {
+  // State to track visibility of token selection UI
+  const [selectTokenView, setSelectTokenView] = useState(false);
+  //const [cofirmTokenSelectionView, setCofirmTokenSelectionView] = useState(false);
+
+  // Toggle the visibility of the token selector UI
+  const handleSelectTokenView = () => {
+    setSelectTokenView(!selectTokenView);
+    handleTakeTokens()
+  };
+
+  //const handlecofirmTokenSelectionView = () => {
+    //setCofirmTokenSelectionView(!selectCofirmTokenSelectionView);
+  //};
 
   const tokens = gameState ? gameState.tokens : {
     wild: 0,
@@ -108,20 +121,32 @@ function BoardTokens({ gameState, handleTakeTokens }) {
   };
 
   return (
-    <div className="board-tokens-section">
-      <button
-        className='select-tokens-button'
-        onClick={handleTakeTokens}
-      >
-        Select Tokens
-      </button>
-      <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={tokens.wild} />
-      <Token ImagePath={"/Images/Tokens/White Token.png"} number={tokens.white} />
-      <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={tokens.blue} />
-      <Token ImagePath={"/Images/Tokens/Red Token.png"} number={tokens.red} />
-      <Token ImagePath={"/Images/Tokens/Green Token.png"} number={tokens.green} />
-      <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={tokens.yellow} />
-    </div>
+    
+      <div className="board-tokens-section">
+        
+        <button
+          className='select-tokens-button'
+          onClick={() => setSelectTokenView(!selectTokenView)}
+        >
+          {selectTokenView ? 'Back' : 'Select Tokens'}
+        </button>
+
+        <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={tokens.wild} />
+        <Token ImagePath={"/Images/Tokens/White Token.png"} number={tokens.white} />
+        <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={tokens.blue} />
+        <Token ImagePath={"/Images/Tokens/Red Token.png"} number={tokens.red} />
+        <Token ImagePath={"/Images/Tokens/Green Token.png"} number={tokens.green} />
+        <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={tokens.yellow} />
+
+        <button
+          className='confirm-tokens-button'
+          onClick={() => handleSelectTokenView()}
+          style={{ visibility: selectTokenView ? 'visible' : 'hidden' }}
+        >
+          Confirm
+        </button>
+    
+      </div>
   );
 }
 
@@ -240,9 +265,9 @@ export default function Gameboard() {
           <PlayerCollection Points={10} viewCard={viewCard} setViewCard={setViewCard}
           tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
         </div>
-        <div>
-          <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
-        </div>
+        
+        <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
+        
         <div class='cards'>
           <div class='cards-row'>
             <DevelopmentCard ImagePath={"/Images/MainCards/Blue 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
