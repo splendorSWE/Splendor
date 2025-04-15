@@ -60,7 +60,7 @@ function CollectionCard({ ImagePath, number }) {
 }
 
 
-function PlayerCollection({ Points, tokens, viewCard, setViewCard, setReservable }) {
+function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard, setReservable }) {
   return (
     <div className='player-collection-main-div'>
 
@@ -74,23 +74,23 @@ function PlayerCollection({ Points, tokens, viewCard, setViewCard, setReservable
       </div>
       <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/White Token.png"} number={tokens.white} />
-        <CollectionCard ImagePath={"/Images/Plain Cards/White Card.png"} number={1} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/White Card.png"} number={playerCards.white} />
       </div>
       <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={tokens.blue} />
-        <CollectionCard ImagePath={"/Images/Plain Cards/Blue Card.png"} number={1} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/Blue Card.png"} number={playerCards.blue} />
       </div>
       <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Red Token.png"} number={tokens.red} />
-        <CollectionCard ImagePath={"/Images/Plain Cards/Red Card.png"} number={1} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/Red Card.png"} number={playerCards.red} />
       </div>
       <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Green Token.png"} number={tokens.green} />
-        <CollectionCard ImagePath={"/Images/Plain Cards/Green Card.png"} number={1} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/Green Card.png"} number={playerCards.green} />
       </div>
       <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={tokens.yellow} />
-        <CollectionCard ImagePath={"/Images/Plain Cards/Yellow Card.png"} number={1} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/Yellow Card.png"} number={playerCards.yellow} />
       </div>
     </div>
   );
@@ -235,6 +235,7 @@ export default function Gameboard() {
   const sampleCards = {
     "/Images/MainCards/Blue 1.0.png": {
       cardId: "card1",
+      cardColor: "blue",
       tokenPrice: { blue: 0, red: 1, white: 1, green: 1, yellow: 1, wild: 0 },
       points: 10
     }
@@ -263,7 +264,8 @@ export default function Gameboard() {
           <CollectionButton player={'Your'} />
           <CollectionButton player={"Opponent's"} />
           <PlayerCollection Points={gameState ? gameState.points : 0} viewCard={viewCard} setViewCard={setViewCard}
-          tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
+          tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
+          playerCards={gameState ? gameState.playerCards: { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
         </div>
         <div>
           <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />

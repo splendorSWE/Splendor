@@ -39,7 +39,14 @@ game_state = {
             "points": 3
         },
     },
-    "playerCards": []
+    "playerCards": {
+        "wild": 0,
+        "white": 0,
+        "blue": 0,
+        "red": 0,
+        "green": 0,
+        "yellow": 0
+    }
 }
 
 @app.route('/game', methods=['GET'])
@@ -72,20 +79,15 @@ def make_move(player=None):
         tokenPrice = card.get("tokenPrice")
         if not tokenPrice:
             return jsonify({"error": "Card token price is missing"}), 400
-
-        # Check if player has enough tokens to pay for the card
         for token, price in tokenPrice.items():
             if game_state["playerTokens"].get(token, 0) < price:
                 return jsonify({"error": f"Not enough {token} tokens to play this card"}), 400
-
-        # Deduct the token cost from player's tokens
         for token, price in tokenPrice.items():
             game_state["playerTokens"][token] -= price
 
-        # Add the card to the player's purchased cards
-        game_state["playerCards"].append(card.get("cardId"))
+        # game_state["playerCards"].append(card.get("cardId"))
+        game_state["playerCards"][card.get("cardColor")] += 1
         
-        # Increase player's points if the card awards points
         game_state["points"] += card.get("points", 0)
 
         return jsonify(game_state)
