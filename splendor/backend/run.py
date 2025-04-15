@@ -85,7 +85,6 @@ def make_move(player=None):
         for token, price in tokenPrice.items():
             game_state["playerTokens"][token] -= price
 
-        # game_state["playerCards"].append(card.get("cardId"))
         game_state["playerCards"][card.get("cardColor")] += 1
         
         game_state["points"] += card.get("points", 0)

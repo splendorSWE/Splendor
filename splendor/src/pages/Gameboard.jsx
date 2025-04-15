@@ -60,7 +60,7 @@ function CollectionCard({ ImagePath, number }) {
 }
 
 
-function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard, setReservable }) {
+function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard }) {
   return (
     <div className='player-collection-main-div'>
 
@@ -146,7 +146,7 @@ function NobleCard({ ImagePath }) {
   )
 }
 
-function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable, handlePlayCard }) {
+function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable, handlePlayCard, addReserveToken }) {
   return (
     viewCard && (
       <div className="card-pop-up-container">
@@ -167,6 +167,7 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, set
                onClick={() => {
                  setViewCard(false);
                  setReservable(false);
+                 if (reservable) addReserveToken();
                }}>
             Reserve Card
           </div>
@@ -255,11 +256,20 @@ export default function Gameboard() {
     setViewCard(false);
   };
 
+  const addReserveToken = () => {
+    console.log("Adding wild token");
+    const moveData = {
+      action: "take_tokens",
+      tokens: { wild: 1}
+    }
+    makeMove(moveData);
+  };
+
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
       <div class='main'>
-        <CardPopUp ImagePath={imgViewCard} viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} playable={playable} setReservable={setReservable} handlePlayCard={handlePlayCard}/>
+        <CardPopUp ImagePath={imgViewCard} viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} playable={playable} setReservable={setReservable} handlePlayCard={handlePlayCard} addReserveToken={addReserveToken}/>
         <div>
           <CollectionButton player={'Your'} />
           <CollectionButton player={"Opponent's"} />
