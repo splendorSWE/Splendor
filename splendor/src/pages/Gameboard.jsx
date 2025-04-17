@@ -99,17 +99,25 @@ function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
 function BoardTokens({ gameState, handleTakeTokens }) {
   // State to track visibility of token selection UI
   const [selectTokenView, setSelectTokenView] = useState(false);
-  //const [cofirmTokenSelectionView, setCofirmTokenSelectionView] = useState(false);
+
+  const [selectedChoice, setSelectedChoice] = useState(null);
 
   // Toggle the visibility of the token selector UI
   const handleSelectTokenView = () => {
-    setSelectTokenView(!selectTokenView);
-    handleTakeTokens()
+    setSelectTokenView(false);  // Hide the token selection view
+    setSelectedChoice(null);     // Reset the selected choice to inactive
+    handleTakeTokens();         // Assuming you still want this
   };
 
-  //const handlecofirmTokenSelectionView = () => {
-    //setCofirmTokenSelectionView(!selectCofirmTokenSelectionView);
-  //};
+  const handleSelect2TokenView = () => {
+    setSelectedChoice("2");   // Select "2" option
+    handleTakeTokens();        // Assuming you still want this
+  };
+
+  const handleSelect3TokenView = () => {
+    setSelectedChoice("3");   // Select "3" option
+    handleTakeTokens();        // Assuming you still want this
+  };
 
   const tokens = gameState ? gameState.tokens : {
     wild: 0,
@@ -121,34 +129,75 @@ function BoardTokens({ gameState, handleTakeTokens }) {
   };
 
   return (
-    
-      <div className="board-tokens-section">
-        
+    <div className="board-tokens-section">
+      
+      <button
+  className='select-tokens-button'
+  onClick={() => {
+    const toggled = !selectTokenView;
+    setSelectTokenView(toggled);
+    if (!toggled) {
+      setSelectedChoice(null); // Reset when closing
+      handleTakeTokens();      // Confirm action
+    } else {
+      setSelectedChoice(null); // Reset when opening too!
+    }
+  }}
+>
+  {selectTokenView ? 'Back' : 'Select Tokens'}
+</button>
+
+      <div className='selection-choice-row'>
         <button
-          className='select-tokens-button'
-          onClick={() => setSelectTokenView(!selectTokenView)}
+          className={`select-tokens-choice-button ${
+            !selectTokenView    // If token view is not visible, make both inactive
+            ? 'inactive-choice' 
+            : selectedChoice === "2"  // If "2" is selected, keep it active
+            ? 'active-choice' 
+            : 'inactive-choice'  // Otherwise, keep it inactive
+          }`}
+          onClick={handleSelect2TokenView}
+          disabled={!selectTokenView}  // Disable the button when token view is not visible
+          title="Take two of the same token, only allowed if at least 4 are available"
         >
-          {selectTokenView ? 'Back' : 'Select Tokens'}
+          Choose 2
         </button>
 
-        <Token color={"Wild"} number={tokens.wild}/>
-        <Token color={"White"} number={tokens.white} />
-        <Token color={"Blue"} number={tokens.blue} />
-        <Token color={"Red"} number={tokens.red} />
-        <Token color={"Green"} number={tokens.green} />
-        <Token color={"Yellow"} number={tokens.yellow} />
-
         <button
-          className='confirm-tokens-button'
-          onClick={() => handleSelectTokenView()}
-          style={{ visibility: selectTokenView ? 'visible' : 'hidden' }}
+          className={`select-tokens-choice-button ${
+            !selectTokenView    // If token view is not visible, make both inactive
+            ? 'inactive-choice' 
+            : selectedChoice === "3"  // If "3" is selected, keep it active
+            ? 'active-choice' 
+            : 'inactive-choice'  // Otherwise, keep it inactive
+          }`}
+          onClick={handleSelect3TokenView}
+          disabled={!selectTokenView}  // Disable the button when token view is not visible
+          title="Take 3 different tokens"
         >
-          Confirm
+          Choose 3
         </button>
-    
       </div>
+
+      <Token color={"Wild"} number={tokens.wild}/>
+      <Token color={"White"} number={tokens.white} />
+      <Token color={"Blue"} number={tokens.blue} />
+      <Token color={"Red"} number={tokens.red} />
+      <Token color={"Green"} number={tokens.green} />
+      <Token color={"Yellow"} number={tokens.yellow} />
+
+      <button
+        className='confirm-tokens-button'
+        onClick={handleSelectTokenView}  // Hit back or confirm, resetting the state
+        style={{ visibility: selectTokenView ? 'visible' : 'hidden' }}
+      >
+        Confirm
+      </button>
+    
+    </div>
   );
 }
+
 
 function DevelopmentCard({ ImagePath, setViewCard, setImgViewCard }) {
   return (

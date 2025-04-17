@@ -13,7 +13,6 @@
 }
 
 .cards-row {
-    margin-left: 20px;
     margin-top: 20px;
     flex-direction: row;
     align-items: center;
@@ -28,13 +27,13 @@
 }
 
 .board-tokens-section {
-    width: 150px;
+    width: 300px;
     display: flex;
     flex-direction: column;
-    margin-left: 100px;
     align-items: center;
     justify-content: center;
     margin-top: 35px;
+    margin-left: 20px;
 }
 
 .collection-button {
@@ -164,6 +163,31 @@
     line-height: 20px;
 }
 
+.select-tokens-choice-button {
+    width: 100px;
+    height: 50px;
+    margin: 5px;
+    color: #27394D;
+    background-color: #FEDB5F;
+}
+
+
+.selection-choice-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.inactive-choice {
+    opacity: 0.6;
+  }
+
+.active-choice {
+    border: 2px solid #27394D;
+  }
+  
+
 .main {
     display: flex;
     flex-direction: row;
@@ -245,4 +269,6 @@
     cursor: not-allowed;
     z-index: 10000;
 }
+
+
 
