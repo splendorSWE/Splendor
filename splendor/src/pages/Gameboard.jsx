@@ -3,12 +3,13 @@ import './Gameboard.css';
 import Card from '../components/CardComponents/Card';
 import PageHeader from '../components/PageHeader';
 import { useAuthContext } from '../context/AuthContext';
+import GetPath from '../components/CardComponents/GetPath';
 
 function CollectionButton({ player }) {
   return (
-    <button 
-    className='collection-button' 
-    title={player}>
+    <button
+      className='collection-button'
+      title={player}>
       {player} Collection
     </button>
   );
@@ -71,7 +72,7 @@ function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
 
       <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={1} />
-        <ReservedCard viewCard={viewCard} setViewCard={setViewCard}/>
+        <ReservedCard viewCard={viewCard} setViewCard={setViewCard} />
       </div>
       <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/White Token.png"} number={1} />
@@ -168,7 +169,7 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, set
           </div>
           {/* need to gray out if player already has a reserved card */}
           <div className={!reservable ? "disabled-button" : "play-card-button"}
-            disabled={!reservable} onClick={() => {setViewCard(false); setReservable(false)}}>
+            disabled={!reservable} onClick={() => { setViewCard(false); setReservable(false) }}>
             Reserve Card
           </div>
         </div>
@@ -185,7 +186,7 @@ export default function Gameboard() {
   const [imgViewCard, setImgViewCard] = useState("/Images/MainCards/Yellow 3.0.png")
   const [gameState, setGameState] = useState(null);
   const [error, setError] = useState('');
-  const {user} = useAuthContext();
+  const { user } = useAuthContext();
   useEffect(() => {
     fetch('http://127.0.0.1:5000/game')
       .then((res) => res.json())
@@ -239,7 +240,7 @@ export default function Gameboard() {
           <CollectionButton player={'Your'} />
           <CollectionButton player={"Opponent's"} />
           <PlayerCollection Points={10} viewCard={viewCard} setViewCard={setViewCard}
-          tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
+            tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }} />
         </div>
         <div>
           <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
@@ -260,7 +261,21 @@ export default function Gameboard() {
             <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
           </div>
           <div class='cards-row'>
-            <Card level={1} color={"blue"} redPrice={1} greenPrice={1} bluePrice={0} yellowPrice={1} whitePrice={1} points={0}></Card>
+            <Card level={1} color={"blue"} redPrice={1} greenPrice={1} bluePrice={0} yellowPrice={1} whitePrice={1} points={0} onClick={() =>
+              setViewCard(true) ||
+              setImgViewCard(
+                GetPath({
+                  level: 1,
+                  color: "blue",
+                  redPrice: 1,
+                  greenPrice: 1,
+                  bluePrice: 0,
+                  yellowPrice: 1,
+                  whitePrice: 1,
+                  points: 0,
+                })
+              )
+            }></Card>
             <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
             <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
             <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
@@ -271,4 +286,3 @@ export default function Gameboard() {
     </div>
   );
 }
-  
