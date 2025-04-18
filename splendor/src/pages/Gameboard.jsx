@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Gameboard.css';
+import Card from '../components/CardComponents/Card';
 import PageHeader from '../components/PageHeader';
 import { useAuthContext } from '../context/AuthContext';
 
@@ -259,7 +260,7 @@ export default function Gameboard() {
             <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
           </div>
           <div class='cards-row'>
-            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+            <Card level={1} color={"blue"} redPrice={1} greenPrice={1} bluePrice={0} yellowPrice={1} whitePrice={1} points={0}></Card>
             <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
             <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
             <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
