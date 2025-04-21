@@ -4,6 +4,8 @@ import Card from '../components/CardComponents/Card';
 import PageHeader from '../components/PageHeader';
 import { useAuthContext } from '../context/AuthContext';
 import GetPath from '../components/CardComponents/GetPath';
+import { initialDeck1, initialDeck2, initialDeck3, shuffle } from "../components/CardComponents/Deck";
+import DeckManager from '../components/CardComponents/DeckManager';
 
 function CollectionButton({ player }) {
   return (
@@ -231,6 +233,10 @@ export default function Gameboard() {
     makeMove(moveData);
   };
 
+  const shuffledDeck1 = shuffle(initialDeck1);
+  const shuffledDeck2 = shuffle(initialDeck2);
+  const shuffledDeck3 = shuffle(initialDeck3);
+
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
@@ -261,7 +267,7 @@ export default function Gameboard() {
             <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
           </div>
           <div class='cards-row'>
-            <Card level={1} color={"blue"} redPrice={1} greenPrice={1} bluePrice={0} yellowPrice={1} whitePrice={1} points={0} onClick={() =>
+            {/* <Card level={1} color={"blue"} redPrice={1} greenPrice={1} bluePrice={0} yellowPrice={1} whitePrice={1} points={0} onClick={() =>
               setViewCard(true) ||
               setImgViewCard(
                 GetPath({
@@ -275,7 +281,8 @@ export default function Gameboard() {
                   points: 0,
                 })
               )
-            }></Card>
+            }></Card> */}
+            <DeckManager initialDeck={shuffledDeck1}/>;
             <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
             <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
             <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />

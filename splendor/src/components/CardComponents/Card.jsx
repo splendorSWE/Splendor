@@ -1,6 +1,6 @@
 import GetPath from "./GetPath"
 
-export default function Card({ level, color, redPrice, greenPrice, bluePrice, yellowPrice, whitePrice, points, onClick }) {
+export default function Card({ id, level, color, redPrice, greenPrice, bluePrice, yellowPrice, whitePrice, points, onClick }) {
     const imageSrc = GetPath({ level, color, redPrice, greenPrice, bluePrice, yellowPrice, whitePrice, points })
     
     return (
