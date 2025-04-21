@@ -10,6 +10,17 @@ const initialDeck1 = [
         whitePrice: 1,
         points: 0,
     },
+    {
+        id: "Blue 1.1",
+        level: 1,
+        color: "blue",
+        redPrice: 2,
+        greenPrice: 1,
+        bluePrice: 0,
+        yellowPrice: 1,
+        whitePrice: 1,
+        points: 0,
+    },
     // Add more cards here...
 ];
 
