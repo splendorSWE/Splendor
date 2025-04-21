@@ -1,6 +1,6 @@
 const initialDeck1 = [
     {
-        id: "1blue1",
+        id: "Blue 1.0",
         level: 1,
         color: "blue",
         redPrice: 1,
@@ -15,7 +15,7 @@ const initialDeck1 = [
 
 const initialDeck2 = [
     {
-        id: "2blue1",
+        id: "Blue 2.0",
         level: 2,
         color: "blue",
         redPrice: 1,
@@ -30,7 +30,7 @@ const initialDeck2 = [
 
 const initialDeck3 = [
     {
-        id: "3blue1",
+        id: "Blue 3.0",
         level: 3,
         color: "blue",
         redPrice: 1,
