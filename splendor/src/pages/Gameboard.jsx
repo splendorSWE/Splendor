@@ -74,7 +74,7 @@ function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard }
 
       <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={tokens.wild} />
-        <ReservedCard viewCard={viewCard} setViewCard={setViewCard}/>
+        <ReservedCard viewCard={viewCard} setViewCard={setViewCard} />
       </div>
       <div className='player-collection-row'>
         <Token ImagePath={"/Images/Tokens/White Token.png"} number={tokens.white} />
@@ -129,17 +129,6 @@ function BoardTokens({ gameState, handleTakeTokens }) {
   );
 }
 
-function DevelopmentCard({ ImagePath, setViewCard, setImgViewCard }) {
-  return (
-    <img
-      src={ImagePath}
-      alt="Development Card"
-      class='development-card'
-      onClick={() => { setViewCard(true); setImgViewCard(ImagePath) }}
-    />
-  )
-}
-
 function NobleCard({ ImagePath }) {
   return (
     <img
@@ -173,13 +162,13 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, set
             Play Card
           </div>
           <div className={!reservable ? "disabled-button" : "play-card-button"}
-              disabled={!reservable}
-               onClick={() => {
-                 setViewCard(false);
-                 setReservable(false);
-                 playCard();
-                 if (reservable) addReserveToken();
-               }}>
+            disabled={!reservable}
+            onClick={() => {
+              setViewCard(false);
+              setReservable(false);
+              playCard();
+              if (reservable) addReserveToken();
+            }}>
             Reserve Card
           </div>
         </div>
@@ -276,6 +265,7 @@ export default function Gameboard() {
     setDeck3(newDeck);
     setViewCard(false);
     setSelectedCard(null);
+  }
 
   const sampleCards = {
     "/Images/MainCards/Blue 1.0.png": {
@@ -304,7 +294,7 @@ export default function Gameboard() {
     console.log("Adding wild token");
     const moveData = {
       action: "take_tokens",
-      tokens: { wild: 1}
+      tokens: { wild: 1 }
     }
     makeMove(moveData);
 
@@ -321,44 +311,48 @@ export default function Gameboard() {
           reservable={reservable}
           playable={playable}
           setReservable={setReservable}
-          handlePlayCard={handlePlayCard} 
+          handlePlayCard={handlePlayCard}
           addReserveToken={addReserveToken}
-          playCard={ 
+          playCard={
             selectedDeck === 1 ? playCard1 :
-            selectedDeck === 2 ? playCard2 :
-            playCard3
+              selectedDeck === 2 ? playCard2 :
+                playCard3
           }
         />
         <div>
           <CollectionButton player={'Your'} />
           <CollectionButton player={"Opponent's"} />
-          <PlayerCollection Points={gameState ? gameState.points : 0} viewCard={viewCard} setViewCard={setViewCard}
-            tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }} />
-            playerCards={gameState ? gameState.playerCards: { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
+          <PlayerCollection
+            Points={gameState ? gameState.points : 0}
+            viewCard={viewCard}
+            setViewCard={setViewCard}
+            tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
+            playerCards={gameState ? gameState.playerCards : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
+          />
         </div>
         <div>
           <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
         </div>
         <div class='cards'>
           <div class='cards-row'>
-          <DeckManager deck={deck3} onClick={(card) => {
+            <DeckManager deck={deck3} onClick={(card) => {
               setSelectedCard(card);
               setImgViewCard(GetPath(card.id));
               setViewCard(true);
               setSelectedDeck(3)
               setDeck3(deck3)
             }} />
-            
+
           </div>
           <div class='cards-row'>
-          <DeckManager deck={deck2} onClick={(card) => {
+            <DeckManager deck={deck2} onClick={(card) => {
               setSelectedCard(card);
               setImgViewCard(GetPath(card.id));
               setViewCard(true);
               setSelectedDeck(2)
               setDeck2(deck2)
             }} />
-            
+
           </div>
           <div class='cards-row'>
             <DeckManager deck={deck1} onClick={(card) => {
@@ -369,13 +363,14 @@ export default function Gameboard() {
               setDeck1(deck1)
             }} />
           </div>
-          </div>
-          <div class='cards'>
+        </div>
+        <div class='cards'>
           <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
           <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
           <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
-          </div>
+        </div>
       </div>
     </div>
   );
 }
+
