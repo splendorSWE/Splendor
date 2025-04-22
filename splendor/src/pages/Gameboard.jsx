@@ -270,8 +270,7 @@ function Select2Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
           number={number}
           onClick={() => handleTokenClick(color, number)}  // Handle the selection change
           isSelected={selectedTokens[color] === 2}  // Is this token selected?
-          isDisabled={number < 2}  // Disable selection if less than 2 tokens available
-        />
+          isDisabled={number < 2 && !selectedTokens[color]}        />
       ))}
 
       <button 
@@ -344,8 +343,8 @@ function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
           number={number}
           onClick={() => handleTokenClick(color, number)}
           isSelected={selectedTokens[color] === 1}
-          isDisabled={number < 1}
-        />
+          isDisabled={number < 1 && !selectedTokens[color]}
+          />
       ))}
 
       <button
