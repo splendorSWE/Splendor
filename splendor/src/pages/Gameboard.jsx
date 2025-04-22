@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './Gameboard.css';
+import Card from '../components/CardComponents/Card';
 import PageHeader from '../components/PageHeader';
 import { useAuthContext } from '../context/AuthContext';
+import GetPath from '../components/CardComponents/GetPath';
+import { initialDeck1, initialDeck2, initialDeck3, shuffle } from "../components/CardComponents/Deck";
+import DeckManager from '../components/CardComponents/DeckManager';
 
 function CollectionButton({ player }) {
   return (
-    <button 
-    className='collection-button' 
-    title={player}>
+    <button
+      className='collection-button'
+      title={player}>
       {player} Collection
     </button>
   );
@@ -146,7 +150,8 @@ function NobleCard({ ImagePath }) {
   )
 }
 
-function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable, handlePlayCard, addReserveToken }) {
+
+function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable, handlePlayCard, addReserveToken, playCard }) {
   return (
     viewCard && (
       <div className="card-pop-up-container">
@@ -160,13 +165,19 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, set
         />
         <div className="pop-up-button-container">
           <div className={!playable ? "disabled-button" : "play-card-button"}
-               onClick={() => playable && handlePlayCard()}>
+            disabled={!playable} onClick={() => {
+              setViewCard(false);
+              if (playable) playCard();
+              playable && handlePlayCard()
+            }}>
             Play Card
           </div>
           <div className={!reservable ? "disabled-button" : "play-card-button"}
+              disabled={!reservable}
                onClick={() => {
                  setViewCard(false);
                  setReservable(false);
+                 playCard();
                  if (reservable) addReserveToken();
                }}>
             Reserve Card
@@ -183,10 +194,16 @@ export default function Gameboard() {
   // const [points, setPoints] = useState(0);
   const [playable, setPlayable] = useState(true)
   const [viewCard, setViewCard] = useState(false)
-  const [imgViewCard, setImgViewCard] = useState("/Images/MainCards/Yellow 3.0.png")
+  const [imgViewCard, setImgViewCard] = useState(null)
+  const [selectedCard, setSelectedCard] = useState(null);
   const [gameState, setGameState] = useState(null);
   const [error, setError] = useState('');
-  const {user} = useAuthContext();
+  const { user } = useAuthContext();
+  const [deck1, setDeck1] = useState(shuffle(initialDeck1))
+  const [deck2, setDeck2] = useState(shuffle(initialDeck2))
+  const [deck3, setDeck3] = useState(shuffle(initialDeck3))
+  const [selectedDeck, setSelectedDeck] = useState(1)
+
   useEffect(() => {
     fetch('http://127.0.0.1:5000/game')
       .then((res) => res.json())
@@ -233,6 +250,33 @@ export default function Gameboard() {
     makeMove(moveData);
   };
 
+
+  const playCard1 = () => {
+    console.log('selectedDeck:', selectedDeck);
+    if (!selectedCard) return;
+    const newDeck = deck1.filter((card) => card.id !== selectedCard.id);
+    setDeck1(newDeck);
+    setViewCard(false);
+    setSelectedCard(null);
+  };
+
+  const playCard2 = () => {
+    console.log('selectedDeck:', selectedDeck);
+    if (!selectedCard) return;
+    const newDeck = deck2.filter((card) => card.id !== selectedCard.id);
+    setDeck2(newDeck);
+    setViewCard(false);
+    setSelectedCard(null);
+  };
+
+  const playCard3 = () => {
+    console.log('selectedDeck:', selectedDeck);
+    if (!selectedCard) return;
+    const newDeck = deck3.filter((card) => card.id !== selectedCard.id);
+    setDeck3(newDeck);
+    setViewCard(false);
+    setSelectedCard(null);
+
   const sampleCards = {
     "/Images/MainCards/Blue 1.0.png": {
       cardId: "card1",
@@ -263,48 +307,75 @@ export default function Gameboard() {
       tokens: { wild: 1}
     }
     makeMove(moveData);
+
   };
 
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
       <div class='main'>
-        <CardPopUp ImagePath={imgViewCard} viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} playable={playable} setReservable={setReservable} handlePlayCard={handlePlayCard} addReserveToken={addReserveToken}/>
+        <CardPopUp
+          ImagePath={imgViewCard}
+          viewCard={viewCard}
+          setViewCard={setViewCard}
+          reservable={reservable}
+          playable={playable}
+          setReservable={setReservable}
+          handlePlayCard={handlePlayCard} 
+          addReserveToken={addReserveToken}
+          playCard={ 
+            selectedDeck === 1 ? playCard1 :
+            selectedDeck === 2 ? playCard2 :
+            playCard3
+          }
+        />
         <div>
           <CollectionButton player={'Your'} />
           <CollectionButton player={"Opponent's"} />
           <PlayerCollection Points={gameState ? gameState.points : 0} viewCard={viewCard} setViewCard={setViewCard}
-          tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
-          playerCards={gameState ? gameState.playerCards: { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
+            tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }} />
+            playerCards={gameState ? gameState.playerCards: { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
         </div>
         <div>
           <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
         </div>
         <div class='cards'>
           <div class='cards-row'>
-            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/Green 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/Red 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/White 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
+          <DeckManager deck={deck3} onClick={(card) => {
+              setSelectedCard(card);
+              setImgViewCard(GetPath(card.id));
+              setViewCard(true);
+              setSelectedDeck(3)
+              setDeck3(deck3)
+            }} />
+            
           </div>
           <div class='cards-row'>
-            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/Green 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/Red 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/White 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
+          <DeckManager deck={deck2} onClick={(card) => {
+              setSelectedCard(card);
+              setImgViewCard(GetPath(card.id));
+              setViewCard(true);
+              setSelectedDeck(2)
+              setDeck2(deck2)
+            }} />
+            
           </div>
           <div class='cards-row'>
-            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
+            <DeckManager deck={deck1} onClick={(card) => {
+              setSelectedCard(card);
+              setImgViewCard(GetPath(card.id));
+              setViewCard(true);
+              setSelectedDeck(1)
+              setDeck1(deck1)
+            }} />
           </div>
-        </div>
+          </div>
+          <div class='cards'>
+          <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
+          <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
+          <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
+          </div>
       </div>
     </div>
   );
 }
-  
