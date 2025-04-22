@@ -267,25 +267,7 @@ export default function Gameboard() {
             <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
           </div>
           <div class='cards-row'>
-            {/* <Card level={1} color={"blue"} redPrice={1} greenPrice={1} bluePrice={0} yellowPrice={1} whitePrice={1} points={0} onClick={() =>
-              setViewCard(true) ||
-              setImgViewCard(
-                GetPath({
-                  level: 1,
-                  color: "blue",
-                  redPrice: 1,
-                  greenPrice: 1,
-                  bluePrice: 0,
-                  yellowPrice: 1,
-                  whitePrice: 1,
-                  points: 0,
-                })
-              )
-            }></Card> */}
-            <DeckManager initialDeck={shuffledDeck1}/>;
-            {/* <DevelopmentCard ImagePath={"/Images/MainCards/Green 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/Red 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/White 1.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} /> */}
+            <DeckManager initialDeck={shuffledDeck1} onClick={(card) => { setViewCard(true); setImgViewCard(GetPath(card)) }}/>;
             <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
           </div>
         </div>
