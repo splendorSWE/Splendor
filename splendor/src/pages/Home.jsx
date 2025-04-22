@@ -1,39 +1,74 @@
-import React, { useState } from 'react';
+import { useEffect, useState, useRef } from "react";
 
 import './pageStyles/Home.css'
 import PageHeader from "../components/PageHeader";
-import NavigationButton from "../components/NavigationButton";
-import { Link } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
-{/* 
-import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import socket from '../socket/socket';
+import { useNavigate } from 'react-router-dom';
+ 
 
-const socket = io("http://localhost:4000");
-*/}
+
+// import { io } from "socket.io-client";
+
+// const socket = io("http://localhost:4000");
 
 function GameChoiceButton({ title, selected, onClick }) {
     return (
-        <button
-            className={`game-choice-button ${selected ? "selected" : ""}`}
-            onClick={onClick}
-        >
-            {title}
-        </button>
+      <button
+        className={`game-choice-button ${selected ? "selected" : ""}`}
+        onClick={onClick}
+      >
+        {title}
+      </button>
     );
-}
-
-  let selectedButton = null;
+  }
 
 
 export default function Home() {
 
     const [selectedOption, setSelectedOption] = useState(null);
     const {user} = useAuthContext()
+    const username =
+  user && !user.isAnonymous
+    ? user.username || user.displayName || user.email?.split("@")[0]
+    : `Guest-${Math.floor(Math.random() * 1000)}`;
+    const displayName =
+  user?.username || user?.displayName || user?.email?.split("@")[0] || `Guest-${Math.floor(Math.random() * 1000)}`;
+  const usernameRef = useRef(displayName);
+
+    const navigate = useNavigate();
+    const [joinCode, setJoinCode] = useState("");
     const handleSelect = (option) => {
         setSelectedOption(option);
         console.log('Selected option:', option);
     };
+
+    useEffect(() => {
+        socket.onAny((event, ...args) => {
+          console.log(`[SOCKET DEBUG] Event: ${event}`, args);
+        });
+      
+        return () => {
+          socket.offAny(); // Clean up when component unmounts
+        };
+      }, []);
+
+    useEffect(() => {
+        socket.on("lobby_joined", (data) => {
+          console.log("✅ Joined lobby:", data.lobbyCode);
+          navigate("/lobby", { state: { lobbyCode: data.lobbyCode } });
+        });
+      
+        socket.on("error", (data) => {
+          console.error("Socket error:", data.message);
+          alert(data.message || "Join failed.");
+        });
+      
+        return () => {
+          socket.off("lobby_joined");
+          socket.off("error");
+        };
+      }, []);
     
     {
         /* 
@@ -57,6 +92,71 @@ export default function Home() {
 
         */}
 
+        
+
+        const handleCreateLobby = () => {
+            if (!selectedOption) return;
+        
+            const isPrivate = selectedOption === "Private";
+           
+
+            const code = isPrivate ? generateNumericCode(6) : undefined;
+            console.log("Creating lobby with:", selectedOption);
+            socket.emit("create_lobby", {
+                username: usernameRef.current,
+                type: selectedOption,
+                lobbyCode: code,
+              });
+        
+              socket.once("lobby_created", (data) => {
+                const finalLobbyCode = data.lobbyCode;
+            
+                // ✅ Navigate to lobby
+                navigate("/lobby", {
+                  state: {
+                    lobbyCode: finalLobbyCode,
+                    username: usernameRef.current,
+                  },
+                });
+              });
+            };
+        
+
+        const handleJoinLobby = () => {
+
+          
+            if (!joinCode || joinCode.length < 4) {
+              alert("Please enter a valid lobby code.");
+              return;
+            }
+          
+            console.log("Joining lobby with code:", joinCode);
+          
+            socket.emit("join_lobby", {
+                username: usernameRef.current,
+                type: selectedOption,
+                lobbyCode: joinCode,
+              });
+
+              socket.once("lobby_joined", (data) => {
+                const finalLobbyCode = data.lobbyCode;
+            
+                navigate("/lobby", {
+                  state: {
+                    lobbyCode: finalLobbyCode,
+                    username: usernameRef.current,
+                  },
+                });
+              });
+            
+              socket.once("error", (data) => {
+                alert(data.message || "Failed to join lobby.");
+              });
+            };
+        
+          const generateNumericCode = (length) => {
+            return Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');
+          };
     
     
     return(
@@ -69,36 +169,29 @@ export default function Home() {
                         Create Game
                     </h1>
                     <div className='button-row'>
-                        <GameChoiceButton
-                            title="Public"
-                            selected={selectedOption === "Public"}
-                            onClick={() => handleSelect("Public")}
-                        />
-                        <GameChoiceButton
-                            title="Private"
-                            selected={selectedOption === "Private"}
-                            onClick={() => handleSelect("Private")}
-                        />
+                    {/* <GameChoiceButton title="Public" selected={selectedOption === "Public"} onClick={() => handleSelect("Public")} /> */}
+                    <GameChoiceButton title="Private" selected={selectedOption === "Private"} onClick={() => handleSelect("Private")} />
                     </div>
                     <p className='turn-timer'>
                         Turn Timer:
                     </p>
-                    <Link to="/Gameboard">
-                        <button className='create-button'>
-                            Create Game
-                        </button>
-                    </Link>
+                    <button className='create-button' onClick={handleCreateLobby}>
+                        Create Game
+                    </button>
+
                 </div>
                 <div className='option-box'>
-                    <h1 className='box-header'>
+                    <h1 className='box-header'>Join Game</h1>
+                    <input
+                        className='game-code-input-box'
+                        type="text"
+                        placeholder="Enter code here"
+                        value={joinCode}
+                        onChange={(e) => setJoinCode(e.target.value)}
+                    />
+                    <button className='create-button' onClick={handleJoinLobby}>
                         Join Game
-                    </h1>
-                    <input className='game-code-input-box'type="number" placeholder="Enter code here"></input>
-                    <Link to="/Gameboard">
-                        <button className='create-button'>
-                            Join Game
-                        </button>
-                    </Link>
+                    </button>
                 </div>
             </div>
     </div>        
