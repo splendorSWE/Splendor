@@ -298,17 +298,23 @@ export default function Gameboard() {
         </div>
         <div class='cards'>
           <div class='cards-row'>
-            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/Green 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/Red 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/White 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+          <DeckManager deck={deck3} onClick={(card) => {
+              setSelectedCard(card);
+              setImgViewCard(GetPath(card.id));
+              setViewCard(true);
+              setSelectedDeck(3)
+              setDeck3(deck3)
+            }} />
             
           </div>
           <div class='cards-row'>
-            <DevelopmentCard ImagePath={"/Images/MainCards/Blue 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/Green 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/Red 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <DevelopmentCard ImagePath={"/Images/MainCards/White 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
+          <DeckManager deck={deck2} onClick={(card) => {
+              setSelectedCard(card);
+              setImgViewCard(GetPath(card.id));
+              setViewCard(true);
+              setSelectedDeck(2)
+              setDeck2(deck2)
+            }} />
             
           </div>
           <div class='cards-row'>
