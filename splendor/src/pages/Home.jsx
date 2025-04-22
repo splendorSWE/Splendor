@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import './pageStyles/Home.css'
 import PageHeader from "../components/PageHeader";
@@ -32,6 +32,9 @@ export default function Home() {
   user && !user.isAnonymous
     ? user.username || user.displayName || user.email?.split("@")[0]
     : `Guest-${Math.floor(Math.random() * 1000)}`;
+    const displayName =
+  user?.username || user?.displayName || user?.email?.split("@")[0] || `Guest-${Math.floor(Math.random() * 1000)}`;
+  const usernameRef = useRef(displayName);
 
     const navigate = useNavigate();
     const [joinCode, setJoinCode] = useState("");
@@ -100,19 +103,26 @@ export default function Home() {
             const code = isPrivate ? generateNumericCode(6) : undefined;
             console.log("Creating lobby with:", selectedOption);
             socket.emit("create_lobby", {
-              username,
-              type: selectedOption,
-              lobbyCode: code,
-            });
+                username: usernameRef.current,
+                type: selectedOption,
+                lobbyCode: code,
+              });
         
-            socket.once("lobby_created", (data) => {
-              const lobbyCode = data.lobbyCode;
-              navigate("/lobby", { state: { lobbyCode } });
-            });
-          };
+              socket.once("lobby_created", (data) => {
+                const finalLobbyCode = data.lobbyCode;
+            
+                // ✅ Navigate to lobby
+                navigate("/lobby", {
+                  state: {
+                    lobbyCode: finalLobbyCode,
+                    username: usernameRef.current,
+                  },
+                });
+              });
+            };
         
 
-          const handleJoinLobby = () => {
+        const handleJoinLobby = () => {
 
           
             if (!joinCode || joinCode.length < 4) {
@@ -123,15 +133,26 @@ export default function Home() {
             console.log("Joining lobby with code:", joinCode);
           
             socket.emit("join_lobby", {
-              username,
-              lobbyCode: joinCode,
-            });
-
-            socket.once("lobby_joined", (data) => {
-                const lobbyCode = data.lobbyCode;
-                navigate("/lobby", { state: { lobbyCode } });
+                username: usernameRef.current,
+                type: selectedOption,
+                lobbyCode: joinCode,
               });
-          };
+
+              socket.once("lobby_joined", (data) => {
+                const finalLobbyCode = data.lobbyCode;
+            
+                navigate("/lobby", {
+                  state: {
+                    lobbyCode: finalLobbyCode,
+                    username: usernameRef.current,
+                  },
+                });
+              });
+            
+              socket.once("error", (data) => {
+                alert(data.message || "Failed to join lobby.");
+              });
+            };
         
           const generateNumericCode = (length) => {
             return Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');

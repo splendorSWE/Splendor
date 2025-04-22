@@ -3,16 +3,29 @@ import { useLocation, useNavigate } from "react-router-dom";
 import socket from "../socket/socket";
 import PageHeader from "../components/PageHeader";
 import "./pageStyles/Home.css";
+import { useAuthContext } from "../context/AuthContext";
 
 
 
 export default function LobbyRoom() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuthContext();
+  const displayName = location.state?.username;
   const lobbyCode = location.state?.lobbyCode;
   const [players, setPlayers] = useState([]);
   const [statusMessage, setStatusMessage] = useState("");
+  const [hasReceivedLobbyInfo, setHasReceivedLobbyInfo] = useState(false);
+  const [isValidLobbyMember, setIsValidLobbyMember] = useState(true);
 
+ 
+  useEffect(() => {
+    if (!isValidLobbyMember) {
+      navigate("/", { replace: true });
+    }
+  }, [isValidLobbyMember]);
+
+  
   useEffect(() => {
     if (!lobbyCode) {
       setStatusMessage("Lobby code not found. Redirecting...");
@@ -24,11 +37,20 @@ export default function LobbyRoom() {
     console.log("📤 Requesting lobby_info for:", lobbyCode);
     socket.emit("get_lobby_info", { lobbyCode });
   }, [lobbyCode]);
-  
+  useEffect(() => {
+    if (hasReceivedLobbyInfo && !isValidLobbyMember) {
+      console.warn("⚠️ User not in lobby — redirecting");
+      navigate("/", { replace: true });
+    }
+  }, [hasReceivedLobbyInfo, isValidLobbyMember]);
   useEffect(() => {
     socket.on("lobby_info", (data) => {
       console.log("📥 Received lobby_info:", data.players);
       setPlayers(data.players || []);
+      setHasReceivedLobbyInfo(true);
+
+      const isInLobby = data.players?.includes(displayName);
+      setIsValidLobbyMember(isInLobby);
     });
   
     socket.on("lobby_joined", (data) => {
@@ -51,6 +73,19 @@ export default function LobbyRoom() {
       socket.off("game_started");
     };
   }, []);
+  useEffect(() => {
+    const handleUnload = () => {
+      socket.emit("leave_lobby");
+    };
+  
+    // ✅ Only register leave for actual tab close / reload
+    window.addEventListener("beforeunload", handleUnload);
+  
+    // ❌ Don't call leave() here
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, []);
   
   
   const handleStartGame = () => {
@@ -63,8 +98,8 @@ export default function LobbyRoom() {
       <div className="page-header">
         <PageHeader
           title={`Lobby: ${lobbyCode}`}
-          home={true}
-          rules={true}
+          home={false}
+          rules={false}
         />
       </div>
 
@@ -81,10 +116,19 @@ export default function LobbyRoom() {
           <button className="create-button" onClick={handleStartGame}>
             Start Game
           </button>
-          
+          <button
+            className="create-button"
+            onClick={() => {
+              socket.emit("leave_lobby");
+
+              
+              navigate("/");
+            }}
+          >
+            Leave Lobby
+          </button>
         </div>
       </div>
-
       {statusMessage && <p className="status-message">{statusMessage}</p>}
     </div>
   );
