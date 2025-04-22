@@ -13,13 +13,14 @@ function CollectionButton({ player }) {
   );
 }
 
-function Token({ color, number }) {
+function Token({ color, number, onClick, isSelected }) {
   return (
-    <div className='token-div'>
+    <div className='token-div' onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
       <img
         src={`/Images/Tokens/${color} Token.png`}
-        alt="Token"
+        alt={`${color} Token`}
         className='token-img'
+        style={{ opacity: isSelected ? 0.5 : 1, transition: 'opacity 0.2s' }}
       />
       <span className='token-span'>
         {number}
@@ -97,103 +98,162 @@ function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
 }
 
 function BoardTokens({ gameState, handleTakeTokens }) {
-  // State to track visibility of token selection UI
-  const [selectTokenView, setSelectTokenView] = useState(false);
+  const [view, setView] = useState("default");
 
-  const [selectedChoice, setSelectedChoice] = useState(null);
-
-  // Toggle the visibility of the token selector UI
-  const handleSelectTokenView = () => {
-    setSelectTokenView(false);  // Hide the token selection view
-    setSelectedChoice(null);     // Reset the selected choice to inactive
-    handleTakeTokens();         // Assuming you still want this
+  const tokens = gameState?.tokens || {
+    wild: 5,
+    white: 5,
+    blue: 5,
+    red: 3,
+    green: 5,
+    yellow: 5,
   };
 
-  const handleSelect2TokenView = () => {
-    setSelectedChoice("2");   // Select "2" option
-    handleTakeTokens();        // Assuming you still want this
-  };
+  switch (view) {
+    case "select":
+      return <SelectTokenView tokens={tokens} setView={setView} />;
+    case "select2":
+      return <Select2Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens}/>;
+    case "select3":
+      return <Select3Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens}/>;
+    default:
+      return <DefaultTokenView tokens={tokens} setView={setView} />;
+  }
+}
 
-  const handleSelect3TokenView = () => {
-    setSelectedChoice("3");   // Select "3" option
-    handleTakeTokens();        // Assuming you still want this
-  };
-
-  const tokens = gameState ? gameState.tokens : {
-    wild: 0,
-    white: 0,
-    blue: 0,
-    red: 0,
-    green: 0,
-    yellow: 0,
-  };
-
+function DefaultTokenView({ tokens, setView }) {
   return (
     <div className="board-tokens-section">
-      
-      <button
-  className='select-tokens-button'
-  onClick={() => {
-    const toggled = !selectTokenView;
-    setSelectTokenView(toggled);
-    if (!toggled) {
-      setSelectedChoice(null); // Reset when closing
-      handleTakeTokens();      // Confirm action
-    } else {
-      setSelectedChoice(null); // Reset when opening too!
-    }
-  }}
->
-  {selectTokenView ? 'Back' : 'Select Tokens'}
-</button>
+      <button className='select-tokens-button' onClick={() => setView("select")}>
+        Select Tokens
+      </button>
 
       <div className='selection-choice-row'>
-        <button
-          className={`select-tokens-choice-button ${
-            !selectTokenView    // If token view is not visible, make both inactive
-            ? 'inactive-choice' 
-            : selectedChoice === "2"  // If "2" is selected, keep it active
-            ? 'active-choice' 
-            : 'inactive-choice'  // Otherwise, keep it inactive
-          }`}
-          onClick={handleSelect2TokenView}
-          disabled={!selectTokenView}  // Disable the button when token view is not visible
-          title="Take two of the same token, only allowed if at least 4 are available"
-        >
+        <button className="select-tokens-choice-button inactive-choice" disabled>
           Choose 2
         </button>
-
-        <button
-          className={`select-tokens-choice-button ${
-            !selectTokenView    // If token view is not visible, make both inactive
-            ? 'inactive-choice' 
-            : selectedChoice === "3"  // If "3" is selected, keep it active
-            ? 'active-choice' 
-            : 'inactive-choice'  // Otherwise, keep it inactive
-          }`}
-          onClick={handleSelect3TokenView}
-          disabled={!selectTokenView}  // Disable the button when token view is not visible
-          title="Take 3 different tokens"
-        >
+        <button className="select-tokens-choice-button inactive-choice" disabled>
           Choose 3
         </button>
       </div>
 
-      <Token color={"Wild"} number={tokens.wild}/>
-      <Token color={"White"} number={tokens.white} />
-      <Token color={"Blue"} number={tokens.blue} />
-      <Token color={"Red"} number={tokens.red} />
-      <Token color={"Green"} number={tokens.green} />
-      <Token color={"Yellow"} number={tokens.yellow} />
+      {Object.entries(tokens).map(([color, number]) => (
+        <Token key={color} color={color} number={number} />
+      ))}
 
-      <button
-        className='confirm-tokens-button'
-        onClick={handleSelectTokenView}  // Hit back or confirm, resetting the state
-        style={{ visibility: selectTokenView ? 'visible' : 'hidden' }}
+      <button className='confirm-tokens-button' style={{ visibility: 'hidden' }}>
+        Confirm
+      </button>
+    </div>
+  );
+}
+
+function SelectTokenView({ tokens, setView }) {
+  return (
+    <div className="board-tokens-section">
+      <button className='select-tokens-button' onClick={() => setView("default")}>
+        Back
+      </button>
+
+      <div className='selection-choice-row'>
+        <button className="select-tokens-choice-button" onClick={() => setView("select2")}>
+          Choose 2
+        </button>
+        <button className="select-tokens-choice-button" onClick={() => setView("select3")}>
+          Choose 3
+        </button>
+      </div>
+
+      {Object.entries(tokens).map(([color, number]) => (
+        <Token key={color} color={color} number={number} />
+      ))}
+
+      <button className='confirm-tokens-button' disabled={true}>
+        Confirm
+      </button>
+    </div>
+  );
+}
+
+function Select2Tokens({ tokens, setView, handleTakeTokens}) {
+  const [selectedTokens, setSelectedTokens] = useState({});
+
+  const isValidSelection = () => {
+    const values = Object.values(selectedTokens);
+    const total = values.reduce((a, b) => a + b, 0);
+    return total === 2 && values.some(val => val === 2);
+  };
+  
+  return (
+    <div className="board-tokens-section">
+      <button className='select-tokens-button' onClick={() => setView("default")}>
+        Back
+      </button>
+
+      <div className='selection-choice-row'>
+        <button className="select-tokens-choice-button active-choice" onClick={() => setView("select2")}>
+          Choose 2
+        </button>
+        <button className="select-tokens-choice-button" onClick={() => setView("select3")}>
+          Choose 3
+        </button>
+      </div>
+
+      {Object.entries(tokens).map(([color, number]) => (
+        <Token
+          key={color}
+          color={color}
+          number={number - (selectedTokens[color] || 0)}
+          onClick={() => {
+            // Only allow if at least 4 available AND none selected yet
+            if (number >= 4 && Object.keys(selectedTokens).length === 0) {
+              setSelectedTokens({ [color]: 2 });
+            } else if (selectedTokens[color]) {
+              // Clicking again deselects
+              setSelectedTokens({});
+            }
+          }}
+          isSelected={selectedTokens[color] > 0}
+        />
+      ))}
+
+      <button 
+      className='confirm-tokens-button' 
+      onClick={() => {
+        handleTakeTokens(selectedTokens);
+        setView("default");
+      }} 
+      disabled={!isValidSelection}
       >
         Confirm
       </button>
-    
+    </div>
+  );
+}
+
+function Select3Tokens({ tokens, setView, handleTakeTokens}) {
+  return (
+    <div className="board-tokens-section">
+      <button className='select-tokens-button' onClick={() => setView("default")}>
+        Back
+      </button>
+
+      <div className='selection-choice-row'>
+        <button className="select-tokens-choice-button" onClick={() => setView("select2")}>
+          Choose 2
+        </button>
+        <button className="select-tokens-choice-button active-choice" onClick={() => setView("select3")}>
+          Choose 3
+        </button>
+      </div>
+
+      {Object.entries(tokens).map(([color, number]) => (
+        <Token key={color} color={color} number={number} />
+      ))}
+
+      <button className='confirm-tokens-button' onClick={() => setView("default")} style={{ visibility: 'visible' }}>
+        Confirm
+      </button>
     </div>
   );
 }
