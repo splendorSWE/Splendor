@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import AuthPage from './pages/AuthPage.jsx';
 import Rules from './pages/Rules.jsx'
+import LobbyRoom from './pages/LobbyRoom.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -23,9 +24,10 @@ root.render(
             <Route path="/rules" element={<Rules />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/editprofile" element={<EditProfile />} />
+            <Route path="/lobby" element={<LobbyRoom />} />
           </Routes>
         </AuthProvider>
-      </BrowserRouter>   
+      </BrowserRouter>
   </React.StrictMode>
 );
 
