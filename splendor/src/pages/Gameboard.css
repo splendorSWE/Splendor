@@ -17,6 +17,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    min-width: 850px;
 }
 .cards {
     display: flex;
@@ -182,10 +183,9 @@
     align-items: center;
 }
 
-
-  .dimmed-choice {
+.dimmed-choice {
     opacity: 0.5;
-  }
+}
   
 
 .main {
