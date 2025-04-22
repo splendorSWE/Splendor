@@ -149,7 +149,7 @@ function BoardTokens({ gameState, handleTakeTokens }) {
     case "select2":
       return <Select2Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate}/>;
     case "select3":
-      return <Select3Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens}/>;
+      return <Select3Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate}/>;
     default:
       return <DefaultTokenView tokens={tokens} setView={setView} />;
   }
@@ -283,42 +283,47 @@ function Select2Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
   );
 }
 
-
-
-
-
-
-
-function Select3Tokens({ tokens, setView, handleTakeTokens }) {
+function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate }) {
   const [selectedTokens, setSelectedTokens] = useState({});
-  
-  const handleTokenClick = (color) => {
-    setSelectedTokens((prev) => {
-      // If the token is already selected, deselect it by removing it
-      if (prev[color]) {
-        const updatedSelection = { ...prev };
-        delete updatedSelection[color];  // Deselect the token
-        return updatedSelection;
-      }
-      // Otherwise, select the token
-      if (Object.keys(prev).length < 3) {  // Allow selection if less than 3 tokens are selected
-        return { ...prev, [color]: 1 };
-      }
-      return prev;  // Don't allow more than 3 selections
-    });
-  };
 
   const isValidSelection = () => {
-    return Object.keys(selectedTokens).length === 3;
+    const total = Object.values(selectedTokens).reduce((a, b) => a + b, 0);
+    return total === 3;
+  };
+
+  const handleTokenClick = (color, number) => {
+    setSelectedTokens((prev) => {
+      const updatedTokens = { ...tokens };
+
+      // Deselect if already selected
+      if (prev[color] === 1) {
+        updatedTokens[color] += 1;
+        handleTokenUpdate(updatedTokens);
+
+        const { [color]: _, ...rest } = prev;
+        return rest;
+      }
+
+      // Do nothing if already selected 3 tokens
+      if (Object.keys(prev).length >= 3) {
+        return prev;
+      }
+
+      // Select new token
+      updatedTokens[color] -= 1;
+      handleTokenUpdate(updatedTokens);
+
+      return { ...prev, [color]: 1 };
+    });
   };
 
   return (
     <div className="board-tokens-section">
-      <button className='select-tokens-button' onClick={() => setView("default")}>
+      <button className="select-tokens-button" onClick={() => setView("default")}>
         Back
       </button>
 
-      <div className='selection-choice-row'>
+      <div className="selection-choice-row">
         <button className="select-tokens-choice-button" onClick={() => setView("select2")}>
           Choose 2
         </button>
@@ -332,18 +337,18 @@ function Select3Tokens({ tokens, setView, handleTakeTokens }) {
           key={color}
           color={color}
           number={number}
-          onClick={() => handleTokenClick(color)}  // Handle the selection or deselection
-          isSelected={selectedTokens[color] === 1}  // Is this token selected?
-          isDisabled={number <= 0}  // Disable tokens with 0 quantity
+          onClick={() => handleTokenClick(color, number)}
+          isSelected={selectedTokens[color] === 1}
+          isDisabled={number < 1}
         />
       ))}
 
-      <button 
-        className='confirm-tokens-button' 
+      <button
+        className="confirm-tokens-button"
         onClick={() => {
           handleTakeTokens(selectedTokens);
           setView("default");
-        }} 
+        }}
         disabled={!isValidSelection()}
       >
         Confirm
