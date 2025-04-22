@@ -29,7 +29,8 @@ function Token({ color, number, onClick, isSelected, isDisabled }) {
     >
       <div
         style={{
-          border: isSelected ? '4px solid black' : 'none',
+          border: isSelected ? '4px solid rgb(194, 194, 194)' : 'none',
+          boxShadow: isSelected ? '0 0 20px #27394D' : 'none',
           position: 'absolute',  // To make sure the border doesn't affect layout
           top: 0,
           left: 0,
@@ -135,7 +136,7 @@ function BoardTokens({ gameState, handleTakeTokens }) {
     blue: 5,
     red: 3,
     green: 5,
-    yellow: 5,
+    yellow: 0,
   };
 
   switch (view) {
@@ -264,7 +265,29 @@ function Select2Tokens({ tokens, setView, handleTakeTokens }) {
 
 
 
-function Select3Tokens({ tokens, setView, handleTakeTokens}) {
+function Select3Tokens({ tokens, setView, handleTakeTokens }) {
+  const [selectedTokens, setSelectedTokens] = useState({});
+  
+  const handleTokenClick = (color) => {
+    setSelectedTokens((prev) => {
+      // If the token is already selected, deselect it by removing it
+      if (prev[color]) {
+        const updatedSelection = { ...prev };
+        delete updatedSelection[color];  // Deselect the token
+        return updatedSelection;
+      }
+      // Otherwise, select the token
+      if (Object.keys(prev).length < 3) {  // Allow selection if less than 3 tokens are selected
+        return { ...prev, [color]: 1 };
+      }
+      return prev;  // Don't allow more than 3 selections
+    });
+  };
+
+  const isValidSelection = () => {
+    return Object.keys(selectedTokens).length === 3;
+  };
+
   return (
     <div className="board-tokens-section">
       <button className='select-tokens-button' onClick={() => setView("default")}>
@@ -281,15 +304,30 @@ function Select3Tokens({ tokens, setView, handleTakeTokens}) {
       </div>
 
       {Object.entries(tokens).map(([color, number]) => (
-        <Token key={color} color={color} number={number} />
+        <Token
+          key={color}
+          color={color}
+          number={number}
+          onClick={() => handleTokenClick(color)}  // Handle the selection or deselection
+          isSelected={selectedTokens[color] === 1}  // Is this token selected?
+          isDisabled={number <= 0}  // Disable tokens with 0 quantity
+        />
       ))}
 
-      <button className='confirm-tokens-button' onClick={() => setView("default")} style={{ visibility: 'visible' }}>
+      <button 
+        className='confirm-tokens-button' 
+        onClick={() => {
+          handleTakeTokens(selectedTokens);
+          setView("default");
+        }} 
+        disabled={!isValidSelection()}
+      >
         Confirm
       </button>
     </div>
   );
 }
+
 
 
 function DevelopmentCard({ ImagePath, setViewCard, setImgViewCard }) {
