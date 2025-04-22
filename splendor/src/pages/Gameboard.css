@@ -169,6 +169,7 @@
     margin: 5px;
     color: #27394D;
     background-color: #FEDB5F;
+    border: 2px solid #27394D;
 }
 
 
@@ -184,7 +185,7 @@
   }
 
 .active-choice {
-    border: 2px solid #27394D;
+    border: 1px solid #27394D;
   }
   
 
