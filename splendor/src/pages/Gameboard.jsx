@@ -281,10 +281,9 @@ export default function Gameboard() {
           playable={playable}
           setReservable={setReservable}
           playCard={ 
-            playCard1
-            // selectedDeck === 1 ? playCard1 :
-            // selectedDeck === 2 ? playCard2 :
-            // playCard3
+            selectedDeck === 1 ? playCard1 :
+            selectedDeck === 2 ? playCard2 :
+            playCard3
           }
         />
         <div>
