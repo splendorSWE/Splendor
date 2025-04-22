@@ -14,7 +14,7 @@ CORS(app)
 
 # temporary game state to mimic what we have on the screen right now
 game_state = {
-    "points": 10,
+    "points": 0,
     "tokens": {
         "wild": 3,
         "white": 3,
@@ -31,8 +31,22 @@ game_state = {
         "green": 0,
         "yellow": 0
     },
-    "cards": {},
-    "players":{}
+    "cards": {
+        "card1": {
+            "cardId": "card1",
+            "ImagePath": "/Images/MainCards/Blue 3.0.png",
+            "tokenPrice": { "blue": 2, "red": 1, "white": 0, "green": 0, "yellow": 0, "wild": 0 },
+            "points": 3
+        },
+    },
+    "playerCards": {
+        "wild": 0,
+        "white": 0,
+        "blue": 0,
+        "red": 0,
+        "green": 0,
+        "yellow": 0
+    }
 }
 
 @app.route('/game', methods=['GET'])
@@ -55,6 +69,26 @@ def make_move(player=None):
         for token, count in tokens_requested.items():
             game_state["tokens"][token] -= count
             game_state["playerTokens"][token] += count
+        return jsonify(game_state)
+
+    elif action == "play_card":
+        card = data.get("card")
+        if not card:
+            return jsonify({"error": "No card provided"}), 400
+
+        tokenPrice = card.get("tokenPrice")
+        if not tokenPrice:
+            return jsonify({"error": "Card token price is missing"}), 400
+        for token, price in tokenPrice.items():
+            if game_state["playerTokens"].get(token, 0) < price:
+                return jsonify({"error": f"Not enough {token} tokens to play this card"}), 400
+        for token, price in tokenPrice.items():
+            game_state["playerTokens"][token] -= price
+
+        game_state["playerCards"][card.get("cardColor")] += 1
+        
+        game_state["points"] += card.get("points", 0)
+
         return jsonify(game_state)
     
     return jsonify({"error": "Invalid action"}), 400

@@ -60,7 +60,7 @@ function CollectionCard({ ImagePath, number }) {
 }
 
 
-function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
+function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard }) {
   return (
     <div className='player-collection-main-div'>
 
@@ -69,28 +69,28 @@ function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
       </div>
 
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={1} />
+        <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={tokens.wild} />
         <ReservedCard viewCard={viewCard} setViewCard={setViewCard}/>
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/White Token.png"} number={1} />
-        <CollectionCard ImagePath={"/Images/Plain Cards/White Card.png"} number={1} />
+        <Token ImagePath={"/Images/Tokens/White Token.png"} number={tokens.white} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/White Card.png"} number={playerCards.white} />
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={2} />
-        <CollectionCard ImagePath={"/Images/Plain Cards/Blue Card.png"} number={1} />
+        <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={tokens.blue} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/Blue Card.png"} number={playerCards.blue} />
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Red Token.png"} number={1} />
-        <CollectionCard ImagePath={"/Images/Plain Cards/Red Card.png"} number={1} />
+        <Token ImagePath={"/Images/Tokens/Red Token.png"} number={tokens.red} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/Red Card.png"} number={playerCards.red} />
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Green Token.png"} number={1} />
-        <CollectionCard ImagePath={"/Images/Plain Cards/Green Card.png"} number={1} />
+        <Token ImagePath={"/Images/Tokens/Green Token.png"} number={tokens.green} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/Green Card.png"} number={playerCards.green} />
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={0} />
-        <CollectionCard ImagePath={"/Images/Plain Cards/Yellow Card.png"} number={1} />
+        <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={tokens.yellow} />
+        <CollectionCard ImagePath={"/Images/Plain Cards/Yellow Card.png"} number={playerCards.yellow} />
       </div>
     </div>
   );
@@ -146,13 +146,11 @@ function NobleCard({ ImagePath }) {
   )
 }
 
-function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable }) {
+function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable, handlePlayCard, addReserveToken }) {
   return (
     viewCard && (
       <div className="card-pop-up-container">
-        <div className="x-button" onClick={() => {
-          setViewCard(false);
-        }}>
+        <div className="x-button" onClick={() => setViewCard(false)}>
           X
         </div>
         <img
@@ -162,12 +160,15 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, set
         />
         <div className="pop-up-button-container">
           <div className={!playable ? "disabled-button" : "play-card-button"}
-            disabled={!playable} onClick={() => setViewCard(false)}>
+               onClick={() => playable && handlePlayCard()}>
             Play Card
           </div>
-          {/* need to gray out if player already has a reserved card */}
           <div className={!reservable ? "disabled-button" : "play-card-button"}
-            disabled={!reservable} onClick={() => {setViewCard(false); setReservable(false)}}>
+               onClick={() => {
+                 setViewCard(false);
+                 setReservable(false);
+                 if (reservable) addReserveToken();
+               }}>
             Reserve Card
           </div>
         </div>
@@ -179,6 +180,7 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, set
 
 export default function Gameboard() {
   const [reservable, setReservable] = useState(true)
+  // const [points, setPoints] = useState(0);
   const [playable, setPlayable] = useState(true)
   const [viewCard, setViewCard] = useState(false)
   const [imgViewCard, setImgViewCard] = useState("/Images/MainCards/Yellow 3.0.png")
@@ -222,10 +224,44 @@ export default function Gameboard() {
     const moveData = {
       action: "take_tokens",
       tokens: {
-        blue: 1,
-        red: 1
+        green: 1,
+        red: 1,
+        yellow: 1,
+        white: 1
       }
     };
+    makeMove(moveData);
+  };
+
+  const sampleCards = {
+    "/Images/MainCards/Blue 1.0.png": {
+      cardId: "card1",
+      cardColor: "blue",
+      tokenPrice: { blue: 0, red: 1, white: 1, green: 1, yellow: 1, wild: 0 },
+      points: 10
+    }
+  };
+
+  const handlePlayCard = () => {
+    const card = sampleCards[imgViewCard];
+    if (!card) {
+      console.error("Card details not found");
+      return;
+    }
+    const moveData = {
+      action: "play_card",
+      card: card
+    };
+    makeMove(moveData);
+    setViewCard(false);
+  };
+
+  const addReserveToken = () => {
+    console.log("Adding wild token");
+    const moveData = {
+      action: "take_tokens",
+      tokens: { wild: 1}
+    }
     makeMove(moveData);
   };
 
@@ -233,12 +269,13 @@ export default function Gameboard() {
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
       <div class='main'>
-        <CardPopUp ImagePath={imgViewCard} viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} playable={playable} setReservable={setReservable} />
+        <CardPopUp ImagePath={imgViewCard} viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} playable={playable} setReservable={setReservable} handlePlayCard={handlePlayCard} addReserveToken={addReserveToken}/>
         <div>
           <CollectionButton player={'Your'} />
           <CollectionButton player={"Opponent's"} />
-          <PlayerCollection Points={10} viewCard={viewCard} setViewCard={setViewCard}
-          tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
+          <PlayerCollection Points={gameState ? gameState.points : 0} viewCard={viewCard} setViewCard={setViewCard}
+          tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
+          playerCards={gameState ? gameState.playerCards: { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}/>
         </div>
         <div>
           <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
