@@ -13,11 +13,11 @@
 }
 
 .cards-row {
-    /* margin-left: 20px; */
     margin-top: 20px;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    min-width: 850px;
 }
 .cards {
     display: flex;
@@ -28,11 +28,13 @@
 }
 
 .board-tokens-section {
-    width: 150px;
+    width: 300px;
     display: flex;
     flex-direction: column;
-    margin-left: 100px;
     align-items: center;
+    justify-content: center;
+    margin-top: 35px;
+    margin-left: 20px;
 }
 
 .collection-button {
@@ -151,13 +153,44 @@
     font-family: Inknut Antiqua, sans-serif;
     font-weight: 800;
     line-height: 20px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
+
+.confirm-tokens-button {
+    width: 150px;
+    height: 50px;
+    font-family: Inknut Antiqua, sans-serif;
+    font-weight: 800;
+    line-height: 20px;
+}
+
+.select-tokens-choice-button {
+    width: 100px;
+    height: 50px;
+    margin: 5px;
+    color: #27394D;
+    background-color: #FEDB5F;
+    border: 2px solid #27394D;
+    font-family: Inknut Antiqua, sans-serif;
+    font-weight: 800;
+}
+
+
+.selection-choice-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.dimmed-choice {
+    opacity: 0.5;
+}
+  
 
 .main {
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: center;
     margin-top: 30px;
 }
@@ -236,3 +269,6 @@
     cursor: not-allowed;
     z-index: 10000;
 }
+
+
+

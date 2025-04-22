@@ -17,13 +17,42 @@ function CollectionButton({ player }) {
   );
 }
 
-function Token({ ImagePath, number }) {
+function Token({ color, number, onClick, isSelected, isDisabled }) {
   return (
-    <div className='token-div'>
+    <div
+      className='token-div'
+      onClick={isDisabled ? undefined : onClick}
+      style={{
+        cursor: isDisabled ? 'not-allowed' : 'pointer',
+        position: 'relative',  // Ensure that border and image stay in sync
+        borderRadius: '50%',
+        boxSizing: 'border-box',
+        opacity: isDisabled ? 0.3 : 1,  // Lower opacity for disabled tokens
+        transition: 'border 0.2s, opacity 0.2s',
+      }}
+    >
+      <div
+        style={{
+          border: isSelected ? '4px solid rgb(194, 194, 194)' : 'none',
+          boxShadow: isSelected ? '0 0 20px #27394D' : 'none',
+          position: 'absolute',  // To make sure the border doesn't affect layout
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          borderRadius: '50%',
+          pointerEvents: 'none',  // Prevent the border div from interfering with clicks
+        }}
+      />
       <img
-        src={ImagePath}
-        alt="Token"
+        src={`/Images/Tokens/${color} Token.png`}
+        alt={`${color} Token`}
         className='token-img'
+        style={{
+          width: '100%',
+          height: '100%',
+          borderRadius: '50%',
+        }}
       />
       <span className='token-span'>
         {number}
@@ -31,6 +60,8 @@ function Token({ ImagePath, number }) {
     </div>
   );
 }
+
+
 
 function ReservedCard({ viewCard, setViewCard }) {
   return (
@@ -63,8 +94,8 @@ function CollectionCard({ ImagePath, number }) {
   );
 }
 
-
 function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard }) {
+
   return (
     <div className='player-collection-main-div'>
 
@@ -73,27 +104,27 @@ function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard }
       </div>
 
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={tokens.wild} />
-        <ReservedCard viewCard={viewCard} setViewCard={setViewCard} />
+        <Token color={"Wild"} number={tokens.wild} />
+        <ReservedCard viewCard={viewCard} setViewCard={setViewCard}/>
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/White Token.png"} number={tokens.white} />
+        <Token color={"White"} number={tokens.white} />
         <CollectionCard ImagePath={"/Images/Plain Cards/White Card.png"} number={playerCards.white} />
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={tokens.blue} />
+        <Token color={"Blue"} number={tokens.blue} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Blue Card.png"} number={playerCards.blue} />
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Red Token.png"} number={tokens.red} />
+        <Token color={"Red"} number={tokens.red} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Red Card.png"} number={playerCards.red} />
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Green Token.png"} number={tokens.green} />
+        <Token color={"Green"} number={tokens.green} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Green Card.png"} number={playerCards.green} />
       </div>
       <div className='player-collection-row'>
-        <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={tokens.yellow} />
+        <Token color={"Yellow"} number={tokens.yellow} />
         <CollectionCard ImagePath={"/Images/Plain Cards/Yellow Card.png"} number={playerCards.yellow} />
       </div>
     </div>
@@ -101,30 +132,232 @@ function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard }
 }
 
 function BoardTokens({ gameState, handleTakeTokens }) {
+  const [view, setView] = useState("default");
 
-  const tokens = gameState ? gameState.tokens : {
-    wild: 0,
-    white: 0,
-    blue: 0,
-    red: 0,
-    green: 0,
+  const [tokens, setTokens] = useState(gameState?.tokens || {
+    wild: 7,
+    white: 5,
+    blue: 5,
+    red: 3,
+    green: 5,
     yellow: 0,
+  });
+
+  const handleTokenUpdate = (updatedTokens) => {
+    setTokens(updatedTokens); // Update the tokens state
+  };
+
+  switch (view) {
+    case "select":
+      return <SelectTokenView tokens={tokens} setView={setView} />;
+    case "select2":
+      return <Select2Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate}/>;
+    case "select3":
+      return <Select3Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate}/>;
+    default:
+      return <DefaultTokenView tokens={tokens} setView={setView} />;
+  }
+}
+
+function DefaultTokenView({ tokens, setView }) {
+  return (
+    <div className="board-tokens-section">
+      <button className='select-tokens-button' onClick={() => setView("select")}>
+        Select Tokens
+      </button>
+
+      <div className='selection-choice-row'>
+        <button className="select-tokens-choice-button inactive-choice" disabled>
+          Choose 2
+        </button>
+        <button className="select-tokens-choice-button inactive-choice" disabled>
+          Choose 3
+        </button>
+      </div>
+
+      {Object.entries(tokens).map(([color, number]) => (
+        <Token key={color} color={color} number={number} />
+      ))}
+
+      <button className='confirm-tokens-button' style={{ visibility: 'hidden' }}>
+        Confirm
+      </button>
+    </div>
+  );
+}
+
+function SelectTokenView({ tokens, setView }) {
+  return (
+    <div className="board-tokens-section">
+      <button className='select-tokens-button' onClick={() => setView("default")}>
+        Back
+      </button>
+
+      <div className='selection-choice-row'>
+        <button className="select-tokens-choice-button" onClick={() => setView("select2")}>
+          Choose 2
+        </button>
+        <button className="select-tokens-choice-button" onClick={() => setView("select3")}>
+          Choose 3
+        </button>
+      </div>
+
+      {Object.entries(tokens).map(([color, number]) => (
+        <Token key={color} color={color} number={number} />
+      ))}
+
+      <button className='confirm-tokens-button' disabled={true}>
+        Confirm
+      </button>
+    </div>
+  );
+}
+
+function Select2Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate }) {
+  const [selectedTokens, setSelectedTokens] = useState({});
+
+  const isValidSelection = () => {
+    const values = Object.values(selectedTokens);
+    const total = values.reduce((a, b) => a + b, 0);
+    return total === 2 && values.some(val => val === 2);
+  };
+
+  const handleTokenClick = (color, number) => {
+    setSelectedTokens((prev) => {
+      const updatedTokens = { ...tokens };
+      const previouslySelectedColor = Object.keys(prev)[0];
+  
+      // If clicking the same token again, unselect it
+      if (previouslySelectedColor === color) {
+        updatedTokens[color] += 2; // Restore 2 tokens
+        handleTokenUpdate(updatedTokens);
+        return {}; // Clear selection
+      }
+  
+      // Switching to a new token
+      if (previouslySelectedColor) {
+        updatedTokens[previouslySelectedColor] += 2; // Restore old selection
+      }
+  
+      updatedTokens[color] -= 2; // Subtract from new selection
+      handleTokenUpdate(updatedTokens);
+      return { [color]: 2 };
+    });
   };
 
   return (
     <div className="board-tokens-section">
-      <button
-        className='select-tokens-button'
-        onClick={handleTakeTokens}
-      >
-        Select Tokens
+      <button className='select-tokens-button' onClick={() => setView("default")}>
+        Back
       </button>
-      <Token ImagePath={"/Images/Tokens/Wild Token.png"} number={tokens.wild} />
-      <Token ImagePath={"/Images/Tokens/White Token.png"} number={tokens.white} />
-      <Token ImagePath={"/Images/Tokens/Blue Token.png"} number={tokens.blue} />
-      <Token ImagePath={"/Images/Tokens/Red Token.png"} number={tokens.red} />
-      <Token ImagePath={"/Images/Tokens/Green Token.png"} number={tokens.green} />
-      <Token ImagePath={"/Images/Tokens/Yellow Token.png"} number={tokens.yellow} />
+
+      <div className='selection-choice-row'>
+        <button className="select-tokens-choice-button active-choice" onClick={() => setView("select2")}>
+          Choose 2
+        </button>
+        <button
+          className="select-tokens-choice-button dimmed-choice"
+          onClick={() => setView("select3")}
+        >
+          Choose 3
+        </button>
+      </div>
+
+      {Object.entries(tokens).map(([color, number]) => (
+        <Token
+          key={color}
+          color={color}
+          number={number}
+          onClick={() => handleTokenClick(color, number)}  // Handle the selection change
+          isSelected={selectedTokens[color] === 2}  // Is this token selected?
+          isDisabled={number < 2}  // Disable selection if less than 2 tokens available
+        />
+      ))}
+
+      <button 
+        className='confirm-tokens-button' 
+        onClick={() => {
+          handleTakeTokens(selectedTokens);
+          setView("default");
+        }} 
+        disabled={!isValidSelection()}
+      >
+        Confirm
+      </button>
+    </div>
+  );
+}
+
+function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate }) {
+  const [selectedTokens, setSelectedTokens] = useState({});
+
+  const isValidSelection = () => {
+    const total = Object.values(selectedTokens).reduce((a, b) => a + b, 0);
+    return total === 3;
+  };
+
+  const handleTokenClick = (color, number) => {
+    setSelectedTokens((prev) => {
+      const updatedTokens = { ...tokens };
+
+      if (prev[color] === 1) {
+        updatedTokens[color] += 1;
+        handleTokenUpdate(updatedTokens);
+
+        const { [color]: _, ...rest } = prev;
+        return rest;
+      }
+
+      if (Object.keys(prev).length >= 3) {
+        return prev;
+      }
+
+      updatedTokens[color] -= 1;
+      handleTokenUpdate(updatedTokens);
+
+      return { ...prev, [color]: 1 };
+    });
+  };
+
+  return (
+    <div className="board-tokens-section">
+      <button className="select-tokens-button" onClick={() => setView("default")}>
+        Back
+      </button>
+
+      <div className='selection-choice-row'>
+        <button
+          className="select-tokens-choice-button dimmed-choice"
+          onClick={() => setView("select2")}
+        >
+          Choose 2
+        </button>
+        <button className="select-tokens-choice-button active-choice" onClick={() => setView("select3")}>
+          Choose 3
+        </button>
+      </div>
+
+      {Object.entries(tokens).map(([color, number]) => (
+        <Token
+          key={color}
+          color={color}
+          number={number}
+          onClick={() => handleTokenClick(color, number)}
+          isSelected={selectedTokens[color] === 1}
+          isDisabled={number < 1}
+        />
+      ))}
+
+      <button
+        className="confirm-tokens-button"
+        onClick={() => {
+          handleTakeTokens(selectedTokens);
+          setView("default");
+        }}
+        disabled={!isValidSelection()}
+      >
+        Confirm
+      </button>
     </div>
   );
 }
@@ -330,9 +563,9 @@ export default function Gameboard() {
             playerCards={gameState ? gameState.playerCards : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
           />
         </div>
-        <div>
-          <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
-        </div>
+        
+        <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
+        
         <div class='cards'>
           <div class='cards-row'>
             <DeckManager deck={deck3} onClick={(card) => {
