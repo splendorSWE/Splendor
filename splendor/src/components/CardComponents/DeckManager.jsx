@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import Card from "./Card";
 
-export default function DeckManager({ initialDeck, onClick }) {
-    const [deck, setDeck] = useState(initialDeck);
+export default function DeckManager({ deck, onClick }) {
 
-    const replaceCard = (id) => {
-        const newDeck = deck.filter(c => c.id !== id);
-        setDeck(newDeck);
-        onClick?.(id);
-    };
+    // const replaceCard = (id) => {
+    //     const newDeck = deck.filter(c => c.id !== id);
+    //     setDeck(newDeck);
+    //     onClick?.(id);
+    // };
 
     return (
         <div>
@@ -16,7 +15,7 @@ export default function DeckManager({ initialDeck, onClick }) {
                 <Card
                     key={card.id}
                     {...card}
-                    onClick={() => replaceCard(card.id)}
+                    onClick={() => onClick(card)}
                 />
             ))}
         </div>

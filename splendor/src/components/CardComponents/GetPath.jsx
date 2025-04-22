@@ -1,3 +1,3 @@
-export default function GetPath ( id ){
-    return `./Images/MainCards/${id}.png`;
+export default function GetPath ( card ){
+    return `./Images/MainCards/${card}.png`;
 }

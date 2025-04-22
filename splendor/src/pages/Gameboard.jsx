@@ -150,7 +150,7 @@ function NobleCard({ ImagePath }) {
   )
 }
 
-function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable }) {
+function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable, playCard }) {
   return (
     viewCard && (
       <div className="card-pop-up-container">
@@ -166,12 +166,15 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, set
         />
         <div className="pop-up-button-container">
           <div className={!playable ? "disabled-button" : "play-card-button"}
-            disabled={!playable} onClick={() => setViewCard(false)}>
+            disabled={!playable} onClick={() => {
+              setViewCard(false);
+              if (playable) playCard();
+            }}>
             Play Card
           </div>
           {/* need to gray out if player already has a reserved card */}
           <div className={!reservable ? "disabled-button" : "play-card-button"}
-            disabled={!reservable} onClick={() => { setViewCard(false); setReservable(false) }}>
+            disabled={!reservable} onClick={() => { setViewCard(false); setReservable(false); playCard(); }}>
             Reserve Card
           </div>
         </div>
@@ -185,10 +188,16 @@ export default function Gameboard() {
   const [reservable, setReservable] = useState(true)
   const [playable, setPlayable] = useState(true)
   const [viewCard, setViewCard] = useState(false)
-  const [imgViewCard, setImgViewCard] = useState("/Images/MainCards/Yellow 3.0.png")
+  const [imgViewCard, setImgViewCard] = useState(null)
+  const [selectedCard, setSelectedCard] = useState(null);
   const [gameState, setGameState] = useState(null);
   const [error, setError] = useState('');
   const { user } = useAuthContext();
+  const [deck1, setDeck1] = useState(shuffle(initialDeck1))
+  const [deck2, setDeck2] = useState(shuffle(initialDeck2))
+  const [deck3, setDeck3] = useState(shuffle(initialDeck3))
+  const [selectedDeck, setSelectedDeck] = useState(1)
+
   useEffect(() => {
     fetch('http://127.0.0.1:5000/game')
       .then((res) => res.json())
@@ -233,15 +242,51 @@ export default function Gameboard() {
     makeMove(moveData);
   };
 
-  const shuffledDeck1 = shuffle(initialDeck1);
-  const shuffledDeck2 = shuffle(initialDeck2);
-  const shuffledDeck3 = shuffle(initialDeck3);
+  const playCard1 = () => {
+    console.log('selectedDeck:', selectedDeck);
+    if (!selectedCard) return;
+    const newDeck = deck1.filter((card) => card.id !== selectedCard.id);
+    setDeck1(newDeck);
+    setViewCard(false);
+    setSelectedCard(null);
+  };
+
+  const playCard2 = () => {
+    console.log('selectedDeck:', selectedDeck);
+    if (!selectedCard) return;
+    const newDeck = deck2.filter((card) => card.id !== selectedCard.id);
+    setDeck2(newDeck);
+    setViewCard(false);
+    setSelectedCard(null);
+  };
+
+  const playCard3 = () => {
+    console.log('selectedDeck:', selectedDeck);
+    if (!selectedCard) return;
+    const newDeck = deck3.filter((card) => card.id !== selectedCard.id);
+    setDeck3(newDeck);
+    setViewCard(false);
+    setSelectedCard(null);
+  };
 
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
       <div class='main'>
-        <CardPopUp ImagePath={imgViewCard} viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} playable={playable} setReservable={setReservable} />
+        <CardPopUp
+          ImagePath={imgViewCard}
+          viewCard={viewCard}
+          setViewCard={setViewCard}
+          reservable={reservable}
+          playable={playable}
+          setReservable={setReservable}
+          playCard={ 
+            playCard1
+            // selectedDeck === 1 ? playCard1 :
+            // selectedDeck === 2 ? playCard2 :
+            // playCard3
+          }
+        />
         <div>
           <CollectionButton player={'Your'} />
           <CollectionButton player={"Opponent's"} />
@@ -257,20 +302,30 @@ export default function Gameboard() {
             <DevelopmentCard ImagePath={"/Images/MainCards/Green 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
             <DevelopmentCard ImagePath={"/Images/MainCards/Red 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
             <DevelopmentCard ImagePath={"/Images/MainCards/White 3.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
+            
           </div>
           <div class='cards-row'>
             <DevelopmentCard ImagePath={"/Images/MainCards/Blue 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
             <DevelopmentCard ImagePath={"/Images/MainCards/Green 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
             <DevelopmentCard ImagePath={"/Images/MainCards/Red 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
             <DevelopmentCard ImagePath={"/Images/MainCards/White 2.0.png"} setViewCard={setViewCard} setImgViewCard={setImgViewCard} />
-            <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
+            
           </div>
           <div class='cards-row'>
-            <DeckManager initialDeck={shuffledDeck1} onClick={(card) => { setViewCard(true); setImgViewCard(GetPath(card)) }}/>;
-            <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
+            <DeckManager deck={deck1} onClick={(card) => {
+              setSelectedCard(card);
+              setImgViewCard(GetPath(card.id));
+              setViewCard(true);
+              setSelectedDeck(1)
+              setDeck1(deck1)
+            }} />
           </div>
-        </div>
+          </div>
+          <div class='cards'>
+          <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
+          <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
+          <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
+          </div>
       </div>
     </div>
   );
