@@ -17,7 +17,9 @@ export default function LobbyRoom() {
   const [statusMessage, setStatusMessage] = useState("");
   const [hasReceivedLobbyInfo, setHasReceivedLobbyInfo] = useState(false);
   const [isValidLobbyMember, setIsValidLobbyMember] = useState(true);
-
+  const [isReady, setIsReady] = useState(false);
+  const [readyPlayers, setReadyPlayers] = useState([]);
+  
  
   useEffect(() => {
     if (!isValidLobbyMember) {
@@ -37,6 +39,7 @@ export default function LobbyRoom() {
     console.log("📤 Requesting lobby_info for:", lobbyCode);
     socket.emit("get_lobby_info", { lobbyCode });
   }, [lobbyCode]);
+  
   useEffect(() => {
     if (hasReceivedLobbyInfo && !isValidLobbyMember) {
       console.warn("⚠️ User not in lobby — redirecting");
@@ -48,7 +51,7 @@ export default function LobbyRoom() {
       console.log("📥 Received lobby_info:", data.players);
       setPlayers(data.players || []);
       setHasReceivedLobbyInfo(true);
-
+  
       const isInLobby = data.players?.includes(displayName);
       setIsValidLobbyMember(isInLobby);
     });
@@ -57,7 +60,15 @@ export default function LobbyRoom() {
       console.log("✅ Successfully joined lobby:", data.lobbyCode);
     });
   
+    socket.on("ready_status", (data) => {
+      console.log("🔄 Ready players:", data.readyPlayers);
+      setReadyPlayers(data.readyPlayers || []);
+    });
+  
     socket.on("game_started", (data) => {
+      console.log("🎮 Game is starting!");
+      localStorage.removeItem("lobbyCode");
+      localStorage.removeItem("lobbyUsername");
       navigate("/Gameboard", { state: { lobbyCode: data.lobbyCode } });
     });
   
@@ -69,10 +80,12 @@ export default function LobbyRoom() {
     return () => {
       socket.off("lobby_info");
       socket.off("lobby_joined");
-      socket.off("error");
+      socket.off("ready_status");
       socket.off("game_started");
+      socket.off("error");
     };
   }, []);
+  
   useEffect(() => {
     const handleUnload = () => {
       socket.emit("leave_lobby");
@@ -90,6 +103,7 @@ export default function LobbyRoom() {
   
   const handleStartGame = () => {
     socket.emit("start_game", { lobbyCode });
+    navigate("/gameboard")
     // TODO: setup game start
   };
 
@@ -113,9 +127,42 @@ export default function LobbyRoom() {
           </ul>
           <p className="turn-timer">Lobby Code: {lobbyCode}</p>
           {/* TODO: link gameboard and implement game start */}
-          <button className="create-button" onClick={handleStartGame}>
-            Start Game
-          </button>
+          {/* <button
+            className="create-button"
+            disabled={isReady}
+            onClick={() => {
+              const nextState = !isReady;
+              setIsReady(nextState);
+            
+              if (nextState) {
+                console.log("📤 Sending ready_up", lobbyCode); // ✅ this should appear
+                socket.emit("ready_up", { lobbyCode });
+              } else {
+                console.log("📤 Sending unready", lobbyCode);
+                socket.emit("unready", { lobbyCode });
+              }
+            }}
+            
+          >
+            {isReady ? "Waiting..." : "Ready Up"}
+        </button> */}
+        <button
+          className="create-button"
+          onClick={() => {
+            const nextState = !isReady;
+            setIsReady(nextState);
+
+            if (nextState) {
+              socket.emit("ready_up", { lobbyCode });
+            } else {
+              socket.emit("unready", { lobbyCode });
+            }
+          }}
+        >
+            {isReady ? "Unready" : "Ready Up"}
+        </button>
+
+
           <button
             className="create-button"
             onClick={() => {

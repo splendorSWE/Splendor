@@ -14,6 +14,7 @@ socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
 # Store lobby state
 lobbies = {}  # lobby_code -> [usernames]
 user_lobby_map = {}
+ready_players = {}  # lobby_code -> set of ready usernames
 
 # --- Utility ---
 def generate_lobby_code(length=5):
@@ -103,6 +104,55 @@ def handle_join_lobby(data):
     emit("lobby_info", {"players": lobbies[lobby_code]}, room=lobby_code)
     emit("lobby_info", {"players": lobbies[lobby_code]}, to=request.sid)
     emit("lobby_joined", {"lobbyCode": lobby_code}, to=request.sid)
+
+@socketio.on("unready")
+def handle_unready(data):
+    sid = request.sid
+    lobby_code = data.get("lobbyCode", "").upper()
+    username = user_lobby_map.get(sid + "_name")
+
+    if not lobby_code or lobby_code not in lobbies or not username:
+        print("🚫 Invalid unready request.")
+        return
+
+    # Ensure ready set exists
+    if lobby_code in ready_players and username in ready_players[lobby_code]:
+        ready_players[lobby_code].remove(username)
+        print(f"⛔ {username} un-readied in lobby {lobby_code}")
+
+    # Emit updated list to everyone
+    emit("ready_status", {
+        "readyPlayers": list(ready_players.get(lobby_code, [])),
+        "totalPlayers": lobbies[lobby_code],
+    }, room=lobby_code)
+
+@socketio.on("ready_up")
+def handle_ready_up(data):
+    sid = request.sid
+    lobby_code = data.get("lobbyCode", "").upper()
+    username = user_lobby_map.get(sid + "_name")
+
+    print("🎯 received ready_up:", data)  # ✅ this MUST print if it's working
+
+    if not lobby_code or lobby_code not in lobbies or not username:
+        print("🚫 Invalid ready_up request.")
+        return
+
+    # Initialize if not already
+    if lobby_code not in ready_players:
+        ready_players[lobby_code] = set()
+
+    ready_players[lobby_code].add(username)
+
+    emit("ready_status", {
+        "readyPlayers": list(ready_players[lobby_code]),
+        "totalPlayers": lobbies[lobby_code],
+    }, room=lobby_code)
+
+    if set(lobbies[lobby_code]) == ready_players[lobby_code]:
+        emit("game_started", {"lobbyCode": lobby_code}, room=lobby_code)
+        del ready_players[lobby_code]
+
 
 @socketio.on("leave_lobby")
 def handle_leave_lobby():
