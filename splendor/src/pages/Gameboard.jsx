@@ -90,7 +90,6 @@ function CollectionCard({ ImagePath, number }) {
   );
 }
 
-
 function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
   return (
     <div className='player-collection-main-div'>
@@ -240,8 +239,6 @@ function Select2Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
       return { [color]: 2 };
     });
   };
-  
-  
 
   return (
     <div className="board-tokens-section">
@@ -253,7 +250,10 @@ function Select2Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
         <button className="select-tokens-choice-button active-choice" onClick={() => setView("select2")}>
           Choose 2
         </button>
-        <button className="select-tokens-choice-button" onClick={() => setView("select3")}>
+        <button
+          className="select-tokens-choice-button dimmed-choice"
+          onClick={() => setView("select3")}
+        >
           Choose 3
         </button>
       </div>
@@ -295,7 +295,6 @@ function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
     setSelectedTokens((prev) => {
       const updatedTokens = { ...tokens };
 
-      // Deselect if already selected
       if (prev[color] === 1) {
         updatedTokens[color] += 1;
         handleTokenUpdate(updatedTokens);
@@ -304,12 +303,10 @@ function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
         return rest;
       }
 
-      // Do nothing if already selected 3 tokens
       if (Object.keys(prev).length >= 3) {
         return prev;
       }
 
-      // Select new token
       updatedTokens[color] -= 1;
       handleTokenUpdate(updatedTokens);
 
@@ -323,8 +320,11 @@ function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
         Back
       </button>
 
-      <div className="selection-choice-row">
-        <button className="select-tokens-choice-button" onClick={() => setView("select2")}>
+      <div className='selection-choice-row'>
+        <button
+          className="select-tokens-choice-button dimmed-choice"
+          onClick={() => setView("select2")}
+        >
           Choose 2
         </button>
         <button className="select-tokens-choice-button active-choice" onClick={() => setView("select3")}>

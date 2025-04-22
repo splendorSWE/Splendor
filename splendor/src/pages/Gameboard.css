@@ -182,12 +182,9 @@
     align-items: center;
 }
 
-.inactive-choice {
-    opacity: 0.6;
-  }
 
-.active-choice {
-    border: 1px solid #27394D;
+  .dimmed-choice {
+    opacity: 0.5;
   }
   
 
