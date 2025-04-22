@@ -130,20 +130,24 @@ function PlayerCollection({ Points, viewCard, setViewCard, setReservable }) {
 function BoardTokens({ gameState, handleTakeTokens }) {
   const [view, setView] = useState("default");
 
-  const tokens = gameState?.tokens || {
+  const [tokens, setTokens] = useState(gameState?.tokens || {
     wild: 7,
     white: 5,
     blue: 5,
     red: 3,
     green: 5,
     yellow: 0,
+  });
+
+  const handleTokenUpdate = (updatedTokens) => {
+    setTokens(updatedTokens); // Update the tokens state
   };
 
   switch (view) {
     case "select":
       return <SelectTokenView tokens={tokens} setView={setView} />;
     case "select2":
-      return <Select2Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens}/>;
+      return <Select2Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate}/>;
     case "select3":
       return <Select3Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens}/>;
     default:
@@ -205,7 +209,7 @@ function SelectTokenView({ tokens, setView }) {
   );
 }
 
-function Select2Tokens({ tokens, setView, handleTakeTokens }) {
+function Select2Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate }) {
   const [selectedTokens, setSelectedTokens] = useState({});
 
   const isValidSelection = () => {
@@ -214,14 +218,30 @@ function Select2Tokens({ tokens, setView, handleTakeTokens }) {
     return total === 2 && values.some(val => val === 2);
   };
 
-  // Handle token click and update selection
-  const handleTokenClick = (color) => {
+  const handleTokenClick = (color, number) => {
     setSelectedTokens((prev) => {
-      // Deselect the previous token by removing it from selectedTokens
-      const updatedSelection = { [color]: 2 }; // Select the new token
-      return updatedSelection; // Only one token can be selected at a time
+      const updatedTokens = { ...tokens };
+      const previouslySelectedColor = Object.keys(prev)[0];
+  
+      // If clicking the same token again, unselect it
+      if (previouslySelectedColor === color) {
+        updatedTokens[color] += 2; // Restore 2 tokens
+        handleTokenUpdate(updatedTokens);
+        return {}; // Clear selection
+      }
+  
+      // Switching to a new token
+      if (previouslySelectedColor) {
+        updatedTokens[previouslySelectedColor] += 2; // Restore old selection
+      }
+  
+      updatedTokens[color] -= 2; // Subtract from new selection
+      handleTokenUpdate(updatedTokens);
+      return { [color]: 2 };
     });
   };
+  
+  
 
   return (
     <div className="board-tokens-section">
@@ -243,9 +263,9 @@ function Select2Tokens({ tokens, setView, handleTakeTokens }) {
           key={color}
           color={color}
           number={number}
-          onClick={() => handleTokenClick(color)}  // Handle the selection change
+          onClick={() => handleTokenClick(color, number)}  // Handle the selection change
           isSelected={selectedTokens[color] === 2}  // Is this token selected?
-          isDisabled={number < 4}
+          isDisabled={number < 2}  // Disable selection if less than 2 tokens available
         />
       ))}
 
@@ -262,6 +282,10 @@ function Select2Tokens({ tokens, setView, handleTakeTokens }) {
     </div>
   );
 }
+
+
+
+
 
 
 
