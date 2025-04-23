@@ -257,7 +257,10 @@ function Select2Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
         </button>
         <button
           className="select-tokens-choice-button dimmed-choice"
-          onClick={() => setView("select3")}
+          onClick={() => {
+            handleTakeTokens(selectedTokens)
+            setView("select3");
+          }}
         >
           Choose 3
         </button>
@@ -457,16 +460,11 @@ export default function Gameboard() {
     }
   };
 
-  const handleTakeTokens = () => {
-    console.log('Select Tokens button clicked');
+  const handleTakeTokens = (selectedTokens) => {
+    console.log('Selected Tokens:', selectedTokens);
     const moveData = {
       action: "take_tokens",
-      tokens: {
-        green: 1,
-        red: 1,
-        yellow: 1,
-        white: 1
-      }
+      tokens: selectedTokens
     };
     makeMove(moveData);
   };
