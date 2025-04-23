@@ -167,10 +167,10 @@ function DefaultTokenView({ tokens, setView }) {
       </button>
 
       <div className='selection-choice-row'>
-        <button className="select-tokens-choice-button inactive-choice" disabled>
+        <button className="select-tokens-choice-button dimmed-choice" disabled>
           Choose 2
         </button>
-        <button className="select-tokens-choice-button inactive-choice" disabled>
+        <button className="select-tokens-choice-button dimmed-choice" disabled>
           Choose 3
         </button>
       </div>
