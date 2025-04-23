@@ -23,7 +23,6 @@ describe('Token Selection Components', () => {
     mockHandleTokenUpdate = jest.fn();
   });
 
-  // ----------- SELECT 2 TOKENS TESTS -----------------
   describe('Select2Tokens', () => {
     test('allows selecting exactly 2 of the same token', () => {
       render(
@@ -37,7 +36,7 @@ describe('Token Selection Components', () => {
 
       const whiteToken = screen.getByAltText('white Token');
 
-      fireEvent.click(whiteToken); // Select white token
+      fireEvent.click(whiteToken);
       fireEvent.click(screen.getByText('Confirm'));
 
       expect(mockHandleTakeTokens).toHaveBeenCalledWith({ white: 2 });
@@ -65,7 +64,6 @@ describe('Token Selection Components', () => {
     });
   });
 
-  // ----------- SELECT 3 TOKENS TESTS -----------------
   describe('Select3Tokens', () => {
     test('allows selecting 3 different tokens', () => {
       render(
@@ -118,14 +116,13 @@ describe('Token Selection Components', () => {
         />
       );
 
-      // Click 4 different tokens
       fireEvent.click(screen.getByAltText('white Token'));
       fireEvent.click(screen.getByAltText('blue Token'));
       fireEvent.click(screen.getByAltText('red Token'));
       fireEvent.click(screen.getByAltText('green Token'));
 
       const confirmButton = screen.getByText('Confirm');
-      expect(confirmButton).not.toBeDisabled(); // Still only first 3 should count
+      expect(confirmButton).not.toBeDisabled();
 
       fireEvent.click(confirmButton);
       expect(mockHandleTakeTokens).toHaveBeenCalledWith({
