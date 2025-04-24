@@ -74,11 +74,15 @@ export default function Profile() {
                 <img src={profilePic} className="profile-pic" />
                 {(userInfo !== "No User") ? (
                     <>
-                        <p className="info"><strong>Username:</strong> {userInfo.username}</p>
-                        <p className="info"><strong>Account Created:</strong> {userInfo.createdAt}</p>
-                        <p className="info"><strong>Wins:</strong> {userInfo.wins}</p>
+                    <div className='info'>
+                        <p><strong>Username:</strong> {userInfo.username}</p>
+                        <p><strong>Account Created:</strong> {userInfo.createdAt}</p>
+                        <p><strong>Wins:</strong> {userInfo.wins}</p>
+                    </div>
+                    <div className='buttons'>
                         <button className="button" onClick={() => navigate("/editprofile", { state: { profilePic } })}>Edit</button >
                         <NavigationButton destination="Sign Out" link="/user-auth" styling='button' onClick={logout}/>
+                    </div>
                     </>
                 ) : (
                     <h2 className="info">Not signed in</h2>

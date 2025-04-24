@@ -68,8 +68,6 @@ export default function EditProfile() {
         setPasswordError("");
         setPasswordSuccess(false);
         
-   
-        
         if (!user || !user.email) {
             setPasswordError("No user signed in.");
             return;
@@ -119,8 +117,6 @@ export default function EditProfile() {
         return <p>Loading your profile...</p>;
     }
 
-    
-    
         function handleProfilePicChange(e) {
             if (e.target.files[0]) {
                 setPhoto(e.target.files[0])
@@ -173,6 +169,8 @@ export default function EditProfile() {
                             >
                                 {showPassword ? "Hide" : "Show"}
                             </button>
+
+                            <div className="password-error-section">
                             
                             {passwordError && <p className="error-message">{passwordError}</p>}
                             {passwordSuccess && <p className="success-message">Password updated successfully!</p>}
@@ -180,11 +178,11 @@ export default function EditProfile() {
                             <button className="button" onClick={handleUpdatePassword}>
                                 Update Password
                             </button>
+                            <button className='button' onClick={() => navigate("/profile", { state: { profilePic } })}>
+                                Back to Profile
+                            </button>
+                            </div>
                         </div>
-                        
-                        <button className='button' onClick={() => navigate("/profile", { state: { profilePic } })}>
-                            Back to Profile
-                        </button>
                     </>
                 ) : (
                     <h2>Not signed in</h2>

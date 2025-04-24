@@ -1,77 +1,123 @@
 .home {
-    position: fixed;
-    width: 6vw;
-    height: 6vw;
-    border-radius: 50%;
-    color: #27394D;
-    background-color: white;
-    border: none;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    margin: 3vh;
-    font-family: "Fondamento", cursive;
-    flex-direction: column;
-    left: 2vh;
-    bottom: 2vh;
+  position: fixed;
+  width: 6vw;
+  height: 6vw;
+  border-radius: 50%;
+  color: #27394D;
+  background-color: white;
+  border: none;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 3vh;
+  font-family: "Fondamento", cursive;
+  flex-direction: column;
+  left: 2vh;
+  bottom: 2vh;
 }
 
 .home:hover {
-    background-color: #27394D;
-    /* colors switch on hover */
-    color: white;
+  background-color: #27394D;
+  color: white;
 }
 
 .profile-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    /* Full viewport height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 30px;
+  align-items: center;
+  height: 100vh;
 }
 
 .profile-card {
-    display: flex;
-    flex-direction: column;
-    width: 30vw;
-    height: 80vh;
-    background: #27394D;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  width: 30vw;
+  height: 80vh;
+  background: #27394D;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  align-items: center;
+  min-width: 300px;
+  justify-content: center;
+  margin-top: 30px;
+  min-height: 100px;
 }
 
 .profile-pic {
-    width: 15vw;
-    height: 15vw;
-    border-radius: 50%;
-    object-fit: cover;
+  width: 13vw;
+  height: 13vw;
+  border-radius: 50%;
+  object-fit: cover;
+  min-width: 100px;
+  min-height: 100px;
 }
 
 .info {
-    margin: 1vh;
-    font-size: 2vw;
-    color: white;
-    font-family: "Fondamento", cursive;
+  margin: 1vh;
+  font-size: max(12px, min(2vw, 4vh));
+  color: white;
+  font-family: "Fondamento", cursive;
 }
 
 .button {
-    color: #27394D;
-    background-color: #FEDB5F;
-    border-radius: 0%;
-    width: auto;
-    font-size: 1.5vw;
-    font-family: "Fondamento", cursive;
-    margin-top: 3vh;
+  color: #27394D;
+  background-color: #FEDB5F;
+  border-radius: 0%;
+  width: auto;
+  font-size: max(12px, min(2vw, 4vh));
+  font-family: "Fondamento", cursive;
+  margin-top: 1vh;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  border-radius: 50%;
+}
+
+.password-update-section {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 35vh;
+}
+
+.password-error-section {
+  display: flex;
+  flex-direction: column;
+  min-height: 40px;
+  justify-content: space-between;
 }
 
 .password-input {
-    width: 20vw;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+  width: 20vw;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.error-message {
+  color: #ff4444;
+  margin: 5px 0;
+  font-size: 0.9em;
+}
+
+.success-message {
+  color: #00C851;
+  margin: 5px 0;
+  font-size: 1.1em;
+}
+
+.view-password-btn {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+  align-self: flex-start;
+  border-radius: 4px;
 }
