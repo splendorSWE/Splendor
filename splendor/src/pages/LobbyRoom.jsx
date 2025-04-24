@@ -126,26 +126,6 @@ export default function LobbyRoom() {
             ))}
           </ul>
           <p className="turn-timer">Lobby Code: {lobbyCode}</p>
-          {/* TODO: link gameboard and implement game start */}
-          {/* <button
-            className="create-button"
-            disabled={isReady}
-            onClick={() => {
-              const nextState = !isReady;
-              setIsReady(nextState);
-            
-              if (nextState) {
-                console.log("📤 Sending ready_up", lobbyCode); // ✅ this should appear
-                socket.emit("ready_up", { lobbyCode });
-              } else {
-                console.log("📤 Sending unready", lobbyCode);
-                socket.emit("unready", { lobbyCode });
-              }
-            }}
-            
-          >
-            {isReady ? "Waiting..." : "Ready Up"}
-        </button> */}
         <button
           className="create-button"
           onClick={() => {
