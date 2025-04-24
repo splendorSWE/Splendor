@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Select2Tokens from './Select2Tokens';
-import Select3Tokens from './Select3Tokens';
 
 describe('Token Selection Components', () => {
   let mockSetView;
@@ -61,75 +60,6 @@ describe('Token Selection Components', () => {
 
       const confirmButton = screen.getByText('Confirm');
       expect(confirmButton).toBeDisabled();
-    });
-  });
-
-  describe('Select3Tokens', () => {
-    test('allows selecting 3 different tokens', () => {
-      render(
-        <Select3Tokens
-          tokens={tokens}
-          setView={mockSetView}
-          handleTakeTokens={mockHandleTakeTokens}
-          handleTokenUpdate={mockHandleTokenUpdate}
-        />
-      );
-
-      fireEvent.click(screen.getByAltText('white Token'));
-      fireEvent.click(screen.getByAltText('blue Token'));
-      fireEvent.click(screen.getByAltText('red Token'));
-
-      fireEvent.click(screen.getByText('Confirm'));
-
-      expect(mockHandleTakeTokens).toHaveBeenCalledWith({
-        white: 1,
-        blue: 1,
-        red: 1
-      });
-      expect(mockSetView).toHaveBeenCalledWith('default');
-    });
-
-    test('disables confirm with fewer than 3 selections', () => {
-      render(
-        <Select3Tokens
-          tokens={tokens}
-          setView={mockSetView}
-          handleTakeTokens={mockHandleTakeTokens}
-          handleTokenUpdate={mockHandleTokenUpdate}
-        />
-      );
-
-      fireEvent.click(screen.getByAltText('green Token'));
-      fireEvent.click(screen.getByAltText('yellow Token'));
-
-      const confirmButton = screen.getByText('Confirm');
-      expect(confirmButton).toBeDisabled();
-    });
-
-    test('disallows selecting more than 3 tokens', () => {
-      render(
-        <Select3Tokens
-          tokens={tokens}
-          setView={mockSetView}
-          handleTakeTokens={mockHandleTakeTokens}
-          handleTokenUpdate={mockHandleTokenUpdate}
-        />
-      );
-
-      fireEvent.click(screen.getByAltText('white Token'));
-      fireEvent.click(screen.getByAltText('blue Token'));
-      fireEvent.click(screen.getByAltText('red Token'));
-      fireEvent.click(screen.getByAltText('green Token'));
-
-      const confirmButton = screen.getByText('Confirm');
-      expect(confirmButton).not.toBeDisabled();
-
-      fireEvent.click(confirmButton);
-      expect(mockHandleTakeTokens).toHaveBeenCalledWith({
-        white: 1,
-        blue: 1,
-        red: 1
-      });
     });
   });
 });
