@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/react": "^16.3.0",
     "cra-template": "1.2.0",
     "flask": "^0.2.10",
     "react": "^19.0.0",
@@ -38,6 +37,7 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
     "react-router-dom": "^7.5.2"
   }
 }

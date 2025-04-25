@@ -5,7 +5,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Select2Tokens from '../../src/pages/Gameboard'; // update the path if needed
+import Select2Tokens from '../components/Select2Tokens.jsx';
 
 describe('Select2Tokens Component', () => {
   const mockSetView = jest.fn();
