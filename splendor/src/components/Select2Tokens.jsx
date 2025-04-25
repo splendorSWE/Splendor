@@ -3,6 +3,7 @@ import Token from './Token';
 
 export default function Select2Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate }) {
   const [selectedTokens, setSelectedTokens] = useState({});
+  const [localTokens, setLocalTokens] = useState(tokens);
 
   const isValidSelection = () => {
     const values = Object.values(selectedTokens);
@@ -12,12 +13,13 @@ export default function Select2Tokens({ tokens, setView, handleTakeTokens, handl
 
   const handleTokenClick = (color) => {
     setSelectedTokens((prevSelected) => {
-      const updatedTokens = { ...tokens };
+      const updatedTokens = { ...localTokens };
   
       const previouslySelectedColor = Object.keys(prevSelected)[0];
   
       if (previouslySelectedColor === color) {
         updatedTokens[color] += 2;
+        setLocalTokens(updatedTokens);
         handleTokenUpdate(updatedTokens);
         return {};
       }
@@ -27,11 +29,12 @@ export default function Select2Tokens({ tokens, setView, handleTakeTokens, handl
       }
   
       updatedTokens[color] -= 2;
+      setLocalTokens(updatedTokens);
       handleTokenUpdate(updatedTokens);
   
       return { [color]: 2 };
     });
-  };  
+  };    
   
 
   return (
