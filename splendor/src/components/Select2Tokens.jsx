@@ -10,26 +10,29 @@ export default function Select2Tokens({ tokens, setView, handleTakeTokens, handl
     return total === 2 && values.some(val => val === 2);
   };
 
-  const handleTokenClick = (color, number) => {
-    setSelectedTokens((prev) => {
+  const handleTokenClick = (color) => {
+    setSelectedTokens((prevSelected) => {
       const updatedTokens = { ...tokens };
-      const previouslySelectedColor = Object.keys(prev)[0];
-
+  
+      const previouslySelectedColor = Object.keys(prevSelected)[0];
+  
       if (previouslySelectedColor === color) {
         updatedTokens[color] += 2;
         handleTokenUpdate(updatedTokens);
         return {};
       }
-
+  
       if (previouslySelectedColor) {
         updatedTokens[previouslySelectedColor] += 2;
       }
-
+  
       updatedTokens[color] -= 2;
       handleTokenUpdate(updatedTokens);
+  
       return { [color]: 2 };
     });
-  };
+  };  
+  
 
   return (
     <div className="board-tokens-section">
