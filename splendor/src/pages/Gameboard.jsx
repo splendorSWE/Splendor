@@ -137,7 +137,7 @@ function BoardTokens({ gameState, handleTakeTokens }) {
   const [tokens, setTokens] = useState(gameState?.tokens || {
     wild: 7,
     white: 5,
-    blue: 5,
+    blue: 1,
     red: 3,
     green: 5,
     yellow: 0,
@@ -167,10 +167,10 @@ function DefaultTokenView({ tokens, setView }) {
       </button>
 
       <div className='selection-choice-row'>
-        <button className="select-tokens-choice-button inactive-choice" disabled>
+        <button className="select-tokens-choice-button dimmed-choice" disabled>
           Choose 2
         </button>
-        <button className="select-tokens-choice-button inactive-choice" disabled>
+        <button className="select-tokens-choice-button dimmed-choice" disabled>
           Choose 3
         </button>
       </div>
@@ -271,9 +271,9 @@ function Select2Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
           key={color}
           color={color}
           number={number}
-          onClick={() => handleTokenClick(color, number)}  // Handle the selection change
-          isSelected={selectedTokens[color] === 2}  // Is this token selected?
-          isDisabled={number < 2 && !selectedTokens[color]}        />
+          onClick={() => handleTokenClick(color, number)} 
+          isSelected={selectedTokens[color] === 2}  
+          isDisabled={number < 4 && !selectedTokens[color]}/>
       ))}
 
       <button 
