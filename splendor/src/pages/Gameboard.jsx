@@ -112,7 +112,7 @@ function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard, 
 
       <div className='player-collection-row'>
         <Token color={"Wild"} number={tokens.wild} />
-        <ReservedCard viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} setSelectedCard={setSelectedCard} reservedCard={reservedCard} selectedCard={selectedCard}/>
+        <ReservedCard viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} setSelectedCard={setSelectedCard} reservedCard={reservedCard} selectedCard={selectedCard} />
       </div>
       <div className='player-collection-row'>
         <Token color={"White"} number={tokens.white} />
@@ -382,7 +382,7 @@ function NobleCard({ ImagePath }) {
 }
 
 
-function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable, handlePlayCard, addReserveToken, playCard, handleReserveCard }) {
+function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable, handlePlayCard, addReserveToken, playCard, handleReserveCard, reservedCard, selectedCard }) {
 
   console.log(ImagePath)
   return (
@@ -403,6 +403,9 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, set
               if (playable) {
                 playCard();
                 handlePlayCard();
+              }
+              if (selectedCard == reservedCard) {
+                setReservable(true)
               }
             }}>
             Play Card
@@ -581,6 +584,8 @@ export default function Gameboard() {
                 playCard3
           }
           handleReserveCard={handleReserveCard}
+          reservedCard={reservedCard}
+          selectedCard={selectedCard}
         />
         <div>
           <CollectionButton player={'Your'} />
