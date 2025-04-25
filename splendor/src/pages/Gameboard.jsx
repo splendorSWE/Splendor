@@ -309,7 +309,7 @@ export default function Gameboard() {
   const [selectedDeck, setSelectedDeck] = useState(1)
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/game')
+    fetch('http://localhost:4000/game')
       .then((res) => res.json())
       .then((data) => setGameState(data))
       .catch((err) => console.error('Error fetching game state:', err));
@@ -318,7 +318,7 @@ export default function Gameboard() {
   const makeMove = async (moveData) => {
     try {
       console.log('Making move:', moveData);
-      const response = await fetch('http://127.0.0.1:5000/game/move', {
+      const response = await fetch('http://localhost:4000/game/move', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(moveData)
