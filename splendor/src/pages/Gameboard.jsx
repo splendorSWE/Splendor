@@ -63,14 +63,21 @@ function Token({ color, number, onClick, isSelected, isDisabled }) {
 
 
 
-function ReservedCard({ viewCard, setViewCard }) {
-  return (
+function ReservedCard({ viewCard, setViewCard, reservable, reservedCard, setSelectedCard, selectedCard }) {
+  return !reservable && (
     <div className='collection-card-div'>
       <img
         src="/Images/Plain Cards/Reserved Card.png"
         alt="CollectionCard"
         className='collection-card-img'
-        onClick={() => setViewCard(!viewCard)}
+        onClick={() => {
+          if (reservedCard) {
+            setViewCard(true);
+            setSelectedCard(reservedCard);
+            console.log(GetPath(reservedCard.id))
+            console.log(selectedCard)
+          }
+        }}
       />
       <span className='reserved-card-span'>
         Res
@@ -94,7 +101,7 @@ function CollectionCard({ ImagePath, number }) {
   );
 }
 
-function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard }) {
+function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard, reservable, reservedCard, setSelectedCard, selectedCard }) {
 
   return (
     <div className='player-collection-main-div'>
@@ -105,7 +112,7 @@ function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard }
 
       <div className='player-collection-row'>
         <Token color={"Wild"} number={tokens.wild} />
-        <ReservedCard viewCard={viewCard} setViewCard={setViewCard}/>
+        <ReservedCard viewCard={viewCard} setViewCard={setViewCard} reservable={reservable} setSelectedCard={setSelectedCard} reservedCard={reservedCard} selectedCard={selectedCard}/>
       </div>
       <div className='player-collection-row'>
         <Token color={"White"} number={tokens.white} />
@@ -151,9 +158,9 @@ function BoardTokens({ gameState, handleTakeTokens }) {
     case "select":
       return <SelectTokenView tokens={tokens} setView={setView} />;
     case "select2":
-      return <Select2Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate}/>;
+      return <Select2Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate} />;
     case "select3":
-      return <Select3Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate}/>;
+      return <Select3Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate} />;
     default:
       return <DefaultTokenView tokens={tokens} setView={setView} />;
   }
@@ -226,19 +233,19 @@ function Select2Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
     setSelectedTokens((prev) => {
       const updatedTokens = { ...tokens };
       const previouslySelectedColor = Object.keys(prev)[0];
-  
+
       // If clicking the same token again, unselect it
       if (previouslySelectedColor === color) {
         updatedTokens[color] += 2; // Restore 2 tokens
         handleTokenUpdate(updatedTokens);
         return {}; // Clear selection
       }
-  
+
       // Switching to a new token
       if (previouslySelectedColor) {
         updatedTokens[previouslySelectedColor] += 2; // Restore old selection
       }
-  
+
       updatedTokens[color] -= 2; // Subtract from new selection
       handleTokenUpdate(updatedTokens);
       return { [color]: 2 };
@@ -271,17 +278,17 @@ function Select2Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
           key={color}
           color={color}
           number={number}
-          onClick={() => handleTokenClick(color, number)} 
-          isSelected={selectedTokens[color] === 2}  
-          isDisabled={number < 4 && !selectedTokens[color]}/>
+          onClick={() => handleTokenClick(color, number)}
+          isSelected={selectedTokens[color] === 2}
+          isDisabled={number < 4 && !selectedTokens[color]} />
       ))}
 
-      <button 
-        className='confirm-tokens-button' 
+      <button
+        className='confirm-tokens-button'
         onClick={() => {
           handleTakeTokens(selectedTokens);
           setView("default");
-        }} 
+        }}
         disabled={!isValidSelection()}
       >
         Confirm
@@ -347,7 +354,7 @@ function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
           onClick={() => handleTokenClick(color, number)}
           isSelected={selectedTokens[color] === 1}
           isDisabled={number < 1 && !selectedTokens[color]}
-          />
+        />
       ))}
 
       <button
@@ -369,13 +376,15 @@ function NobleCard({ ImagePath }) {
     <img
       src={ImagePath}
       alt="Noble Card"
-      class='noble-card'
+      className='noble-card'
     />
   )
 }
 
 
-function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable, handlePlayCard, addReserveToken, playCard }) {
+function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable, handlePlayCard, addReserveToken, playCard, handleReserveCard }) {
+
+  console.log(ImagePath)
   return (
     viewCard && (
       <div className="card-pop-up-container">
@@ -391,8 +400,10 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, set
           <div className={!playable ? "disabled-button" : "play-card-button"}
             disabled={!playable} onClick={() => {
               setViewCard(false);
-              if (playable) playCard();
-              playable && handlePlayCard()
+              if (playable) {
+                playCard();
+                handlePlayCard();
+              }
             }}>
             Play Card
           </div>
@@ -402,7 +413,10 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, set
               setViewCard(false);
               setReservable(false);
               playCard();
-              if (reservable) addReserveToken();
+              if (reservable) {
+                addReserveToken();
+                handleReserveCard();
+              }
             }}>
             Reserve Card
           </div>
@@ -416,9 +430,9 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, set
 export default function Gameboard() {
   const [reservable, setReservable] = useState(true)
   // const [points, setPoints] = useState(0);
+  const [reservedCard, setReservedCard] = useState(null)
   const [playable, setPlayable] = useState(true)
   const [viewCard, setViewCard] = useState(false)
-  const [imgViewCard, setImgViewCard] = useState(null)
   const [selectedCard, setSelectedCard] = useState(null);
   const [gameState, setGameState] = useState(null);
   const [error, setError] = useState('');
@@ -502,12 +516,12 @@ export default function Gameboard() {
       cardId: "card1",
       cardColor: "blue",
       tokenPrice: { blue: 0, red: 1, white: 1, green: 1, yellow: 1, wild: 0 },
-      points: 10
+      points: 0
     }
   };
 
   const handlePlayCard = () => {
-    const card = sampleCards[imgViewCard];
+    const card = sampleCards[GetPath(selectedCard.id)];
     if (!card) {
       console.error("Card details not found");
       return;
@@ -518,6 +532,23 @@ export default function Gameboard() {
     };
     makeMove(moveData);
     setViewCard(false);
+  };
+
+  const handleReserveCard = () => {
+    console.log("Reserving card");
+    const card = [...deck1, ...deck2, ...deck3].find(card => card.id === selectedCard.id);
+    if (!card) {
+      console.error("Card details not found");
+      return;
+    }
+    // const moveData = {
+    //   action: "reserve_card",
+    //   card: card
+    // };
+    // makeMove(moveData);
+    setViewCard(false);
+    setReservedCard(selectedCard);
+    addReserveToken()
   };
 
   const addReserveToken = () => {
@@ -535,7 +566,7 @@ export default function Gameboard() {
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
       <div class='main'>
         <CardPopUp
-          ImagePath={imgViewCard}
+          ImagePath={selectedCard ? GetPath(selectedCard.id) : null}
           viewCard={viewCard}
           setViewCard={setViewCard}
           reservable={reservable}
@@ -543,11 +574,13 @@ export default function Gameboard() {
           setReservable={setReservable}
           handlePlayCard={handlePlayCard}
           addReserveToken={addReserveToken}
+          setReservedCard={setReservedCard}
           playCard={
             selectedDeck === 1 ? playCard1 :
               selectedDeck === 2 ? playCard2 :
                 playCard3
           }
+          handleReserveCard={handleReserveCard}
         />
         <div>
           <CollectionButton player={'Your'} />
@@ -558,16 +591,20 @@ export default function Gameboard() {
             setViewCard={setViewCard}
             tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
             playerCards={gameState ? gameState.playerCards : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
+            reservable={reservable}
+            setReservedCard={setReservedCard}
+            reservedCard={reservedCard}
+            setSelectedCard={setSelectedCard}
+            selectedCard={selectedCard}
           />
         </div>
-        
+
         <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
-        
+
         <div class='cards'>
           <div class='cards-row'>
             <DeckManager deck={deck3} onClick={(card) => {
               setSelectedCard(card);
-              setImgViewCard(GetPath(card.id));
               setViewCard(true);
               setSelectedDeck(3)
               setDeck3(deck3)
@@ -577,7 +614,6 @@ export default function Gameboard() {
           <div class='cards-row'>
             <DeckManager deck={deck2} onClick={(card) => {
               setSelectedCard(card);
-              setImgViewCard(GetPath(card.id));
               setViewCard(true);
               setSelectedDeck(2)
               setDeck2(deck2)
@@ -587,7 +623,6 @@ export default function Gameboard() {
           <div class='cards-row'>
             <DeckManager deck={deck1} onClick={(card) => {
               setSelectedCard(card);
-              setImgViewCard(GetPath(card.id));
               setViewCard(true);
               setSelectedDeck(1)
               setDeck1(deck1)
