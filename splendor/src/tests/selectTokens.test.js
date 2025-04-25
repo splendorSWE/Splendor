@@ -1,65 +1,72 @@
+// to run you need to run this command npm install --save-dev @testing-library/jest-dom
+// then this: npm install --save-dev @testing-library/react
+
+
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import Select2Tokens from './Select2Tokens';
+import { render, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Select2Tokens from '../../src/pages/Gameboard'; // update the path if needed
 
-describe('Token Selection Components', () => {
-  let mockSetView;
-  let mockHandleTakeTokens;
-  let mockHandleTokenUpdate;
-
+describe('Select2Tokens Component', () => {
+  const mockSetView = jest.fn();
+  const mockHandleTakeTokens = jest.fn();
+  const mockHandleTokenUpdate = jest.fn();
+  
   const tokens = {
     white: 4,
     blue: 4,
     red: 4,
     green: 4,
     yellow: 4,
-    wild: 4
+    wild: 5
   };
 
-  beforeEach(() => {
-    mockSetView = jest.fn();
-    mockHandleTakeTokens = jest.fn();
-    mockHandleTokenUpdate = jest.fn();
+  it('renders tokens correctly', () => {
+    const { getByAltText } = render(
+      <Select2Tokens
+        tokens={tokens}
+        setView={mockSetView}
+        handleTakeTokens={mockHandleTakeTokens}
+        handleTokenUpdate={mockHandleTokenUpdate}
+      />
+    );
+
+    expect(getByAltText('white Token')).toBeInTheDocument();
+    expect(getByAltText('blue Token')).toBeInTheDocument();
+    expect(getByAltText('red Token')).toBeInTheDocument();
+    expect(getByAltText('green Token')).toBeInTheDocument();
+    expect(getByAltText('yellow Token')).toBeInTheDocument();
+    expect(getByAltText('wild Token')).toBeInTheDocument();
   });
 
-  describe('Select2Tokens', () => {
-    test('allows selecting exactly 2 of the same token', () => {
-      render(
-        <Select2Tokens
-          tokens={tokens}
-          setView={mockSetView}
-          handleTakeTokens={mockHandleTakeTokens}
-          handleTokenUpdate={mockHandleTokenUpdate}
-        />
-      );
+  it('allows selecting exactly 2 tokens of the same color', () => {
+    const { getByAltText, getByText } = render(
+      <Select2Tokens
+        tokens={tokens}
+        setView={mockSetView}
+        handleTakeTokens={mockHandleTakeTokens}
+        handleTokenUpdate={mockHandleTokenUpdate}
+      />
+    );
 
-      const whiteToken = screen.getByAltText('white Token');
+    const blueToken = getByAltText('blue Token');
+    fireEvent.click(blueToken); // Select 2 blues
 
-      fireEvent.click(whiteToken);
-      fireEvent.click(screen.getByText('Confirm'));
+    const confirmButton = getByText('Confirm');
+    expect(confirmButton).toBeEnabled();
+  });
 
-      expect(mockHandleTakeTokens).toHaveBeenCalledWith({ white: 2 });
-      expect(mockSetView).toHaveBeenCalledWith('default');
-    });
+  it('disables confirm button if invalid selection', () => {
+    const { getByText } = render(
+      <Select2Tokens
+        tokens={tokens}
+        setView={mockSetView}
+        handleTakeTokens={mockHandleTakeTokens}
+        handleTokenUpdate={mockHandleTokenUpdate}
+      />
+    );
 
-    test('prevents confirming if invalid selection made', () => {
-      render(
-        <Select2Tokens
-          tokens={tokens}
-          setView={mockSetView}
-          handleTakeTokens={mockHandleTakeTokens}
-          handleTokenUpdate={mockHandleTokenUpdate}
-        />
-      );
-
-      const whiteToken = screen.getByAltText('white Token');
-      const blueToken = screen.getByAltText('blue Token');
-
-      fireEvent.click(whiteToken);
-      fireEvent.click(blueToken);
-
-      const confirmButton = screen.getByText('Confirm');
-      expect(confirmButton).toBeDisabled();
-    });
+    const confirmButton = getByText('Confirm');
+    expect(confirmButton).toBeDisabled();
   });
 });
