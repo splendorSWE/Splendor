@@ -11,6 +11,11 @@
     "socket.io-client": "^4.8.1",
     "web-vitals": "^4.2.4"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/components/**/*.{js,jsx}"
+    ]
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

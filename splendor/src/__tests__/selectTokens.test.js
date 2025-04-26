@@ -2,6 +2,7 @@
 // then this: npm install --save-dev @testing-library/react
 
 
+// IMPORTANT: if you want to see code coverage, run this command: npm run test -- --coverage --watchAll=false --collectCoverageFrom="src/components/*.{js,jsx}"
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
