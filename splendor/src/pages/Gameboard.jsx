@@ -6,6 +6,8 @@ import { useAuthContext } from '../context/AuthContext';
 import GetPath from '../components/CardComponents/GetPath';
 import { initialDeck1, initialDeck2, initialDeck3, shuffle } from "../components/CardComponents/Deck";
 import DeckManager from '../components/CardComponents/DeckManager';
+import Token from '../components/Token';
+import Select2Tokens from '../components/Select2Tokens';
 
 function CollectionButton({ player }) {
   return (
@@ -16,52 +18,6 @@ function CollectionButton({ player }) {
     </button>
   );
 }
-
-function Token({ color, number, onClick, isSelected, isDisabled }) {
-  return (
-    <div
-      className='token-div'
-      onClick={isDisabled ? undefined : onClick}
-      style={{
-        cursor: isDisabled ? 'not-allowed' : 'pointer',
-        position: 'relative',  // Ensure that border and image stay in sync
-        borderRadius: '50%',
-        boxSizing: 'border-box',
-        opacity: isDisabled ? 0.3 : 1,  // Lower opacity for disabled tokens
-        transition: 'border 0.2s, opacity 0.2s',
-      }}
-    >
-      <div
-        style={{
-          border: isSelected ? '4px solid rgb(194, 194, 194)' : 'none',
-          boxShadow: isSelected ? '0 0 20px #27394D' : 'none',
-          position: 'absolute',  // To make sure the border doesn't affect layout
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          borderRadius: '50%',
-          pointerEvents: 'none',  // Prevent the border div from interfering with clicks
-        }}
-      />
-      <img
-        src={`/Images/Tokens/${color} Token.png`}
-        alt={`${color} Token`}
-        className='token-img'
-        style={{
-          width: '100%',
-          height: '100%',
-          borderRadius: '50%',
-        }}
-      />
-      <span className='token-span'>
-        {number}
-      </span>
-    </div>
-  );
-}
-
-
 
 function ReservedCard({ viewCard, setViewCard }) {
   return (
@@ -213,82 +169,6 @@ function SelectTokenView({ tokens, setView }) {
   );
 }
 
-function Select2Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate }) {
-  const [selectedTokens, setSelectedTokens] = useState({});
-
-  const isValidSelection = () => {
-    const values = Object.values(selectedTokens);
-    const total = values.reduce((a, b) => a + b, 0);
-    return total === 2 && values.some(val => val === 2);
-  };
-
-  const handleTokenClick = (color, number) => {
-    setSelectedTokens((prev) => {
-      const updatedTokens = { ...tokens };
-      const previouslySelectedColor = Object.keys(prev)[0];
-  
-      // If clicking the same token again, unselect it
-      if (previouslySelectedColor === color) {
-        updatedTokens[color] += 2; // Restore 2 tokens
-        handleTokenUpdate(updatedTokens);
-        return {}; // Clear selection
-      }
-  
-      // Switching to a new token
-      if (previouslySelectedColor) {
-        updatedTokens[previouslySelectedColor] += 2; // Restore old selection
-      }
-  
-      updatedTokens[color] -= 2; // Subtract from new selection
-      handleTokenUpdate(updatedTokens);
-      return { [color]: 2 };
-    });
-  };
-
-  return (
-    <div className="board-tokens-section">
-      <button className='select-tokens-button' onClick={() => setView("default")}>
-        Back
-      </button>
-
-      <div className='selection-choice-row'>
-        <button className="select-tokens-choice-button active-choice" onClick={() => setView("select2")}>
-          Choose 2
-        </button>
-        <button
-          className="select-tokens-choice-button dimmed-choice"
-          onClick={() => {
-            handleTakeTokens(selectedTokens)
-            setView("select3");
-          }}
-        >
-          Choose 3
-        </button>
-      </div>
-
-      {Object.entries(tokens).map(([color, number]) => (
-        <Token
-          key={color}
-          color={color}
-          number={number}
-          onClick={() => handleTokenClick(color, number)} 
-          isSelected={selectedTokens[color] === 2}  
-          isDisabled={number < 4 && !selectedTokens[color]}/>
-      ))}
-
-      <button 
-        className='confirm-tokens-button' 
-        onClick={() => {
-          handleTakeTokens(selectedTokens);
-          setView("default");
-        }} 
-        disabled={!isValidSelection()}
-      >
-        Confirm
-      </button>
-    </div>
-  );
-}
 
 function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate }) {
   const [selectedTokens, setSelectedTokens] = useState({});
@@ -429,7 +309,7 @@ export default function Gameboard() {
   const [selectedDeck, setSelectedDeck] = useState(1)
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/game')
+    fetch('http://localhost:4000/game')
       .then((res) => res.json())
       .then((data) => setGameState(data))
       .catch((err) => console.error('Error fetching game state:', err));
@@ -438,7 +318,7 @@ export default function Gameboard() {
   const makeMove = async (moveData) => {
     try {
       console.log('Making move:', moveData);
-      const response = await fetch('http://127.0.0.1:5000/game/move', {
+      const response = await fetch('http://localhost:4000/game/move', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(moveData)
