@@ -63,9 +63,9 @@ export default function Select2Tokens({ tokens, setView, handleTakeTokens, handl
           key={color}
           color={color}
           number={number}
-          onClick={() => handleTokenClick(color, number)}
+          onClick={color === 'wild' ? undefined : () => handleTokenClick(color, number)}
           isSelected={selectedTokens[color] === 2}
-          isDisabled={number < 4 && !selectedTokens[color]}
+          isDisabled={color === 'wild' || (number < 4 && !selectedTokens[color])}
         />
       ))}
 
