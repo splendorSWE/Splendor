@@ -224,9 +224,9 @@ function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
           key={color}
           color={color}
           number={number}
-          onClick={() => handleTokenClick(color, number)}
+          onClick={color === 'wild' ? undefined : () => handleTokenClick(color, number)}
           isSelected={selectedTokens[color] === 1}
-          isDisabled={number < 1 && !selectedTokens[color]}
+          isDisabled={color === 'wild' || (number < 1 && !selectedTokens[color])}
           />
       ))}
 
