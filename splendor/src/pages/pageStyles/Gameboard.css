@@ -253,14 +253,17 @@
     border-radius: 5px;
     text-align: center;
     cursor: pointer;
+    z-index: 10000;
   }
   
   .play-card-button.disabled {
-    background-color: #434343;
-    pointer-events: none;
     opacity: 0.6;
+    pointer-events: none;
   }
   
-
+  .play-card-button:hover {
+    background-color:#FFFFFF !important;
+    color: #27394D;
+}
 
 
