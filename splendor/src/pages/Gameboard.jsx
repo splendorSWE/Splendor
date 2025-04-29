@@ -9,11 +9,16 @@ import DeckManager from '../components/CardComponents/DeckManager';
 import Token from '../components/Token';
 import Select2Tokens from '../components/Select2Tokens';
 
-function CollectionButton({ player }) {
+function CollectionButton({ player, isSelected, onClick }) {
   return (
     <button
       className='collection-button'
-      title={player}>
+      title={`${player} Collection`}
+      style={{
+        opacity: isSelected ? 1 : 0.5,
+      }}
+      onClick={onClick}
+    >
       {player} Collection
     </button>
   );
@@ -443,6 +448,8 @@ export default function Gameboard() {
 
   };
 
+  const [selectedPlayer, setSelectedPlayer] = useState("My");
+
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
@@ -467,14 +474,25 @@ export default function Gameboard() {
           selectedCard={selectedCard}
         />
         <div>
-          <CollectionButton player={'Your'} />
-          <CollectionButton player={"Opponent's"} />
+        <CollectionButton
+          player="My"
+          isSelected={selectedPlayer === 'My'}
+          onClick={() => setSelectedPlayer('My')}
+        />
+        <CollectionButton
+          player="Opponent"
+          isSelected={selectedPlayer === 'Opponent'}
+          onClick={() => setSelectedPlayer('Opponent')}
+        />
           <PlayerCollection
-            Points={gameState ? gameState.points : 0}
+            Points={gameState ? (selectedPlayer === "My" ? gameState.points : gameState.opponentPoints) : 0}
+            tokens={gameState ? (selectedPlayer === "My" ? gameState.playerTokens : gameState.opponentTokens) : {}}
+            playerCards={gameState ? (selectedPlayer === "My" ? gameState.playerCards : gameState.opponentCards) : {}}          
+            //Points={gameState ? gameState.points : 0}
             viewCard={viewCard}
             setViewCard={setViewCard}
-            tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
-            playerCards={gameState ? gameState.playerCards : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
+            //tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
+            //playerCards={gameState ? gameState.playerCards : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
             reservable={reservable}
             setReservedCard={setReservedCard}
             reservedCard={reservedCard}
