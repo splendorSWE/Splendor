@@ -170,7 +170,7 @@ export default function Home() {
                     </h1>
                     <div className='button-row'>
                     {/* <GameChoiceButton title="Public" selected={selectedOption === "Public"} onClick={() => handleSelect("Public")} /> */}
-                    <GameChoiceButton title="Private" selected={selectedOption === "Private"} onClick={() => handleSelect("Private")} />
+                    <GameChoiceButton title="Private" className="choice-button" selected={selectedOption === "Private"} onClick={() => handleSelect("Private")} />
                     </div>
                     <button className='create-button' onClick={handleCreateLobby}>
                         Create Game

@@ -8,6 +8,8 @@ import { initialDeck1, initialDeck2, initialDeck3, shuffle } from "../components
 import DeckManager from '../components/CardComponents/DeckManager';
 import Token from '../components/Token';
 import Select2Tokens from '../components/Select2Tokens';
+import GameEndPopup from '../components/GameEndPopup';
+import { useNavigate } from 'react-router-dom';
 
 function CollectionButton({ player, isSelected, onClick }) {
   return (
@@ -328,6 +330,8 @@ export default function Gameboard() {
   const [deck2, setDeck2] = useState(shuffle(initialDeck2))
   const [deck3, setDeck3] = useState(shuffle(initialDeck3))
   const [selectedDeck, setSelectedDeck] = useState(1)
+  const [showGameEnd, setShowGameEnd] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:4000/game')
@@ -537,6 +541,17 @@ export default function Gameboard() {
           <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
         </div>
       </div>
+      <GameEndPopup
+        visible={showGameEnd}
+        winner={true}
+        playerName="You"
+        opponentName="Opponent"
+        playerPoints={15}
+        opponentPoints={10}
+        playerPic={"/images/default_pfp.jpg"}
+        opponentPic={"/images/default_pfp.jpg"}
+        onClose={() => {setShowGameEnd(false); navigate('/')}}
+      />
     </div>
   );
 }
