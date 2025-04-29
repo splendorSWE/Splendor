@@ -12,6 +12,7 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
 import random
 import string
+from cards import initialDeck1, initialDeck2, initialDeck3
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -19,6 +20,10 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_cred
 socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
 
 
+ALL_CARDS = {c["id"]: c for c in (
+    initialDeck1 + initialDeck2 + initialDeck3
+)}
+COLORS = ["red", "green", "blue", "yellow", "white"]
 
 # temporary game state to mimic what we have on the screen right now
 game_state = {
@@ -56,6 +61,23 @@ game_state = {
         "yellow": 0
     }
 }
+
+def affordability(card_row, player_tokens, permanent_gems):
+    spend = {c: 0 for c in COLORS}
+    wild_needed = 0
+
+    for c in COLORS:
+        price = card_row[f"{c}Price"]
+        discount = permanent_gems.get(c, 0)
+        net_cost = max(0, price - discount)
+
+        use_colour = min(player_tokens.get(c, 0), net_cost)
+        spend[c] = use_colour
+        shortfall = net_cost - use_colour
+        wild_needed += shortfall
+
+    has_wilds = player_tokens.get("wild", 0) >= wild_needed
+    return has_wilds, spend, wild_needed
 
 @app.route('/game', methods=['GET'])
 def get_game_state():
