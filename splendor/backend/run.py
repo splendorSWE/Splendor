@@ -12,7 +12,7 @@ from flask_cors import CORS
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
 import random
 import string
-from cards import initialDeck1, initialDeck2, initialDeck3
+from cards import initial_deck1, initial_deck2, initial_deck3
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -21,7 +21,7 @@ socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
 
 
 ALL_CARDS = {c["id"]: c for c in (
-    initialDeck1 + initialDeck2 + initialDeck3
+    initial_deck1 + initial_deck2 + initial_deck3
 )}
 COLORS = ["red", "green", "blue", "yellow", "white"]
 
@@ -52,8 +52,8 @@ game_state = {
             "points": 3
         },
     },
+    # PERMANENT GEMS
     "playerCards": {
-        "wild": 0,
         "white": 0,
         "blue": 0,
         "red": 0,
@@ -102,26 +102,53 @@ def make_move(player=None):
         return jsonify(game_state)
 
     elif action == "play_card":
-        card = data.get("card")
-        if not card:
-            return jsonify({"error": "No card provided"}), 400
+        card_id = data.get("cardId")
+        if not card_id or card_id not in ALL_CARDS:
+            return jsonify({"error": "Invalid cardId"}), 400
 
-        tokenPrice = card.get("tokenPrice")
-        if not tokenPrice:
-            return jsonify({"error": "Card token price is missing"}), 400
-        for token, price in tokenPrice.items():
-            if game_state["playerTokens"].get(token, 0) < price:
-                return jsonify({"error": f"Not enough {token} tokens to play this card"}), 400
-        for token, price in tokenPrice.items():
-            game_state["playerTokens"][token] -= price
+        card = ALL_CARDS[card_id]
+        can_buy, spend_colour, wild_needed = affordability(
+            card,
+            game_state["playerTokens"],
+            game_state["playerCards"],
+        )
 
-        game_state["playerCards"][card.get("cardColor")] += 1
-        
-        game_state["points"] += card.get("points", 0)
+        if not can_buy:
+            return jsonify({"error": "Not enough tokens (including wilds)"}), 400
 
+        for c, amt in spend_colour.items():
+            game_state["playerTokens"][c] -= amt
+        game_state["playerTokens"]["wild"] -= wild_needed
+
+        gem_colour = card["color"]
+        game_state["playerCards"][gem_colour] += 1
+        game_state["points"] += card["points"]
+
+        update_clients()
         return jsonify(game_state)
     
-    return jsonify({"error": "Invalid action"}), 400
+    
+    '''Commented out to try out ALL_CARDS global state'''
+    #     card = data.get("card")
+    #     if not card:
+    #         return jsonify({"error": "No card provided"}), 400
+
+    #     tokenPrice = card.get("tokenPrice")
+    #     if not tokenPrice:
+    #         return jsonify({"error": "Card token price is missing"}), 400
+    #     for token, price in tokenPrice.items():
+    #         if game_state["playerTokens"].get(token, 0) < price:
+    #             return jsonify({"error": f"Not enough {token} tokens to play this card"}), 400
+    #     for token, price in tokenPrice.items():
+    #         game_state["playerTokens"][token] -= price
+
+    #     game_state["playerCards"][card.get("cardColor")] += 1
+        
+    #     game_state["points"] += card.get("points", 0)
+
+    #     return jsonify(game_state)
+    
+    # return jsonify({"error": "Invalid action"}), 400
 
 
 # Store lobby state

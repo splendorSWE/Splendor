@@ -410,7 +410,7 @@ export default function Gameboard() {
     }
     const moveData = {
       action: "play_card",
-      card: card
+      card: selectedCard.id
     };
     makeMove(moveData);
     setViewCard(false);
