@@ -284,30 +284,32 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, set
           className="card-pop-up"
         />
         <div className="pop-up-button-container">
-          <div className={!playable ? "disabled-button" : "play-card-button"}
-            disabled={!playable} onClick={() => {
-              setViewCard(false);
-              if (playable) {
-                playCard();
-                handlePlayCard();
-              }
-              if (selectedCard == reservedCard) {
-                setReservable(true)
-              }
-            }}>
-            Play Card
-          </div>
-          <div className={!reservable ? "disabled-button" : "play-card-button"}
-            disabled={!reservable}
+          <div
+            className={`play-card-button ${!playable ? "disabled" : ""}`}
             onClick={() => {
+              if (!playable) return;
+              setViewCard(false);
+              playCard();
+              handlePlayCard();
+              if (selectedCard == reservedCard) {
+                setReservable(true);
+              }
+            }}
+          >
+            Play
+          </div>
+
+          <div
+            className={`play-card-button ${!reservable ? "disabled" : ""}`}
+            onClick={() => {
+              if (!reservable) return;
               setViewCard(false);
               setReservable(false);
               playCard();
-              if (reservable) {
-                handleReserveCard();
-              }
-            }}>
-            Reserve Card
+              handleReserveCard();
+            }}
+          >
+            Reserve
           </div>
         </div>
       </div>
