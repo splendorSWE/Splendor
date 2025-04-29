@@ -208,15 +208,15 @@
 
 .card-pop-up-container {
     display: flex;
-    flex-direction: column; /* Stack items vertically */
+    flex-direction: column;
     align-items: center;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 9999;
-    width: 45vh;
-    height: 55vh;
+    width: 30vw;
+    height: 60vh;
     background-color: #27394D;
     padding: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
@@ -226,7 +226,7 @@
     font-family: 'Trebuchet MS', bold;
     font-size: 7vh;
     color: white;
-    align-self: flex-end; /* Aligns the button to the right */
+    align-self: flex-end;
     margin-right: 2vh;
     padding: 1vh;
     cursor: pointer;
@@ -238,37 +238,29 @@
     flex-direction: row;
     padding: 2vh;
     margin-top: auto;
-    width: 40vh;
     align-items: center;
 }
 
 .play-card-button {
     color: #27394D;
     background-color: #E8E8E8;
-    width: auto;
+    width: 10vw;
     padding: 2%;
-    font-size: 1.5vw;
+    font-size: 24px;
     font-family: "Fondamento", cursive;
-    margin-top: auto;
-    margin-bottom: 3vh;
     margin: 2vh;
+    border: 2px solid #27394D;
+    border-radius: 5px;
+    text-align: center;
     cursor: pointer;
-    z-index: 10000;
-}
-
-.disabled-button{
-    color: #27394D;
+  }
+  
+  .play-card-button.disabled {
     background-color: #434343;
-    width: auto;
-    padding: 2%;
-    font-size: 1.5vw;
-    font-family: "Fondamento", cursive;
-    margin-top: auto;
-    margin-bottom: 3vh;
-    margin: 2vh;
-    cursor: not-allowed;
-    z-index: 10000;
-}
+    pointer-events: none;
+    opacity: 0.6;
+  }
+  
 
 
 
