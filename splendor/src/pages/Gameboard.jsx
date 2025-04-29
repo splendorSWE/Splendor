@@ -19,8 +19,8 @@ function CollectionButton({ player }) {
   );
 }
 
-function ReservedCard({ viewCard, setViewCard }) {
-  return (
+function ReservedCard({ viewCard, setViewCard, reservable, reservedCard, selectedCard, setSelectedCard }) {
+  return !reservable && (
 
     <div className='collection-card-div'>
       <img
@@ -297,7 +297,6 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, set
               setReservable(false);
               playCard();
               if (reservable) {
-                addReserveToken();
                 handleReserveCard();
               }
             }}>
