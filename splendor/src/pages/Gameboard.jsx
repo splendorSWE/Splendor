@@ -14,6 +14,9 @@ function CollectionButton({ player, isSelected, onClick }) {
     <button
       className='collection-button'
       title={`${player} Collection`}
+      style={{
+        opacity: isSelected ? 1 : 0.5,
+      }}
       onClick={onClick}
     >
       {player} Collection
