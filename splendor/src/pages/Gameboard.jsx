@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Gameboard.css';
+import './pageStyles/Gameboard.css';
 import Card from '../components/CardComponents/Card';
 import PageHeader from '../components/PageHeader';
 import { useAuthContext } from '../context/AuthContext';
