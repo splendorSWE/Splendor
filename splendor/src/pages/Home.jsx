@@ -172,9 +172,6 @@ export default function Home() {
                     {/* <GameChoiceButton title="Public" selected={selectedOption === "Public"} onClick={() => handleSelect("Public")} /> */}
                     <GameChoiceButton title="Private" selected={selectedOption === "Private"} onClick={() => handleSelect("Private")} />
                     </div>
-                    <p className='turn-timer'>
-                        Turn Timer:
-                    </p>
                     <button className='create-button' onClick={handleCreateLobby}>
                         Create Game
                     </button>
