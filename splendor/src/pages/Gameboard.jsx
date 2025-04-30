@@ -99,12 +99,12 @@ function BoardTokens({ gameState, handleTakeTokens }) {
   const [view, setView] = useState("default");
 
   const [tokens, setTokens] = useState(gameState?.tokens || {
-    wild: 7,
-    white: 5,
-    blue: 1,
-    red: 3,
-    green: 5,
-    yellow: 0,
+    wild: 5,
+    white: 4,
+    blue: 4,
+    red: 4,
+    green: 4,
+    yellow: 4,
   });
 
   const handleTokenUpdate = (updatedTokens) => {
