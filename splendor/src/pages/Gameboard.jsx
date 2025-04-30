@@ -251,7 +251,7 @@ function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
           onClick={color === 'wild' ? undefined : () => handleTokenClick(color, number)}
           isSelected={selectedTokens[color] === 1}
           isDisabled={color === 'wild' || (number < 1 && !selectedTokens[color])}
-          />
+        />
       ))}
 
       <button
@@ -279,9 +279,17 @@ function NobleCard({ ImagePath }) {
 }
 
 
-function CardPopUp({ ImagePath, viewCard, setViewCard, playable, reservable, setReservable, handlePlayCard, addReserveToken, playCard, handleReserveCard, reservedCard, selectedCard }) {
+function CardPopUp({ ImagePath, viewCard, setViewCard, playable, setPlayable, reservable, setReservable, handlePlayCard, addReserveToken, playCard, handleReserveCard, reservedCard, selectedCard, checkCardAffordability }) {
+  useEffect(() => {
+    const fetchCardAffordability = async () => {
+      const isPlayable = await checkCardAffordability(selectedCard.id);
+      setPlayable(isPlayable);
+    };
 
-  console.log(ImagePath)
+    if (selectedCard) {
+      fetchCardAffordability();
+    }
+  }, [selectedCard, checkCardAffordability, setPlayable]);
   return (
     viewCard && (
       <div className="card-pop-up-container">
@@ -425,15 +433,41 @@ export default function Gameboard() {
     }
   };
 
+  const checkCardAffordability = async (cardId) => {
+    try {
+      const response = await fetch("http://localhost:4000/game/check_affordability", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ cardId: cardId }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to check card affordability");
+      }
+  
+      const result = await response.json();
+      return result.can_buy;
+    } catch (error) {
+      console.error("Error checking card affordability:", error);
+      return false;
+    }
+  };
+
   const handlePlayCard = () => {
-    const card = sampleCards[GetPath(selectedCard.id)];
+    const card =
+      deck1.find(c => c.id === selectedCard.id) ||
+      deck2.find(c => c.id === selectedCard.id) ||
+      deck3.find(c => c.id === selectedCard.id);
     if (!card) {
       console.error("Card details not found");
       return;
     }
+    console.log("Selected card ID:", selectedCard.id);
     const moveData = {
       action: "play_card",
-      card: card
+      cardId: selectedCard.id
     };
     makeMove(moveData);
     setViewCard(false);
@@ -478,6 +512,7 @@ export default function Gameboard() {
           setViewCard={setViewCard}
           reservable={reservable}
           playable={playable}
+          setPlayable={setPlayable}
           setReservable={setReservable}
           handlePlayCard={handlePlayCard}
           addReserveToken={addReserveToken}
@@ -490,6 +525,7 @@ export default function Gameboard() {
           handleReserveCard={handleReserveCard}
           reservedCard={reservedCard}
           selectedCard={selectedCard}
+          checkCardAffordability={checkCardAffordability}
         />
         <div>
         <CollectionButton
