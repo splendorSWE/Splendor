@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Token from './Token';
 
 export default function Select2Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate }) {
   const [selectedTokens, setSelectedTokens] = useState({});
   const [localTokens, setLocalTokens] = useState(tokens);
+  const [initialTokens, setInitialTokens] = useState({});
+  
+  useEffect(() => {
+    setInitialTokens({ ...tokens });
+  }, [tokens]);  
 
   const isValidSelection = () => {
     const values = Object.values(selectedTokens);
@@ -34,12 +39,17 @@ export default function Select2Tokens({ tokens, setView, handleTakeTokens, handl
   
       return { [color]: 2 };
     });
-  };    
+  };
+  
+  const handleBack = () => {
+    handleTokenUpdate(initialTokens);
+    setView("default");
+  };
   
 
   return (
     <div className="board-tokens-section">
-      <button className="select-tokens-button" onClick={() => setView("default")}>
+      <button className="select-tokens-button" onClick={handleBack}>
         Back
       </button>
 
