@@ -8,7 +8,7 @@ export default function Select2Tokens({ tokens, setView, handleTakeTokens, handl
   
   useEffect(() => {
     setInitialTokens({ ...tokens });
-  }, [tokens]);  
+  }, []);
 
   const isValidSelection = () => {
     const values = Object.values(selectedTokens);
