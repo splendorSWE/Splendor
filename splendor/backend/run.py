@@ -24,12 +24,12 @@ socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
 game_state = {
     "points": 0,
     "tokens": {
-        "wild": 3,
-        "white": 3,
-        "blue": 3,
-        "red": 3,
-        "green": 3,
-        "yellow": 3
+        "wild": 5,
+        "white": 4,
+        "blue": 4,
+        "red": 4,
+        "green": 4,
+        "yellow": 4
     },
     "playerTokens": {
         "wild": 0,
