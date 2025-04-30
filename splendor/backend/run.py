@@ -139,6 +139,22 @@ def make_move(player=None):
         update_clients()
         return jsonify(game_state)
     
+@app.route('/game/check_affordability', methods=['POST'])
+def check_affordability():
+    data = request.get_json()
+    card_id = data.get("cardId")
+    
+    if not card_id or card_id not in ALL_CARDS:
+        return jsonify({"error": "Invalid cardId"}), 400
+
+    card = ALL_CARDS[card_id]
+    can_buy, spend_colour, wild_needed = affordability(
+        card,
+        game_state["playerTokens"],
+        game_state["playerCards"]
+    )
+
+    return jsonify({"can_buy": can_buy, "spend_colour": spend_colour, "wild_needed": wild_needed})
     
     '''Commented out to try out ALL_CARDS global state'''
     #     card = data.get("card")
