@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './pageStyles/Gameboard.css';
-import Card from '../components/CardComponents/Card';
-import PageHeader from '../components/PageHeader';
+import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
+import PageHeader from '../components/PageHeader';
 import GetPath from '../components/CardComponents/GetPath';
 import { initialDeck1, initialDeck2, initialDeck3, shuffle } from "../components/CardComponents/Deck";
 import DeckManager from '../components/CardComponents/DeckManager';
-import GameEndPopup from '../components/GameEndPopup';
-import { useNavigate } from 'react-router-dom';
+import GameEndPopup from '../components/GameboardComponents/GameEndPopup';
 import CollectionButton from '../components/GameboardComponents/CollectionButton';
 import PlayerCollection from '../components/GameboardComponents/PlayerCollection';
 import BoardTokens from '../components/GameboardComponents/BoardTokens/BoardTokens';

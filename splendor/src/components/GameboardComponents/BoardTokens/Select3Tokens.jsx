@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Token from '../../Token';
+import Token from '../Token';
 
 export default function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate }) {
     const [selectedTokens, setSelectedTokens] = useState({});

@@ -1,4 +1,4 @@
-import Token from '../../Token';
+import Token from '../Token';
 
 export default function SelectTokenView({ tokens, setView }) {
     return (
