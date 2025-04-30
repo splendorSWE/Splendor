@@ -273,7 +273,6 @@ function CardPopUp({ ImagePath, viewCard, setViewCard, playable, setPlayable, re
       fetchCardAffordability();
     }
   }, [selectedCard, checkCardAffordability, setPlayable]);
-  console.log(ImagePath)
   return (
     viewCard && (
       <div className="card-pop-up-container">
