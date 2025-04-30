@@ -20,9 +20,20 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_cred
 socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
 
 
-ALL_CARDS = {c["id"]: c for c in (
-    initial_deck1 + initial_deck2 + initial_deck3
-)}
+ALL_CARDS = {
+    c["id"]: {
+        **c,  # Retain all other fields like id, color, level, etc.
+        "tokenPrice": {
+            "red": c.get("redPrice", 0),
+            "green": c.get("greenPrice", 0),
+            "blue": c.get("bluePrice", 0),
+            "yellow": c.get("yellowPrice", 0),
+            "white": c.get("whitePrice", 0),
+            "wild": 0,  # You can add wild if needed for now, set to 0
+        }
+    }
+    for c in (initial_deck1 + initial_deck2 + initial_deck3)
+}
 COLORS = ["red", "green", "blue", "yellow", "white"]
 
 # temporary game state to mimic what we have on the screen right now
@@ -67,7 +78,7 @@ def affordability(card_row, player_tokens, permanent_gems):
     wild_needed = 0
 
     for c in COLORS:
-        price = card_row[f"{c}Price"]
+        price = card_row["tokenPrice"].get(c, 0)
         discount = permanent_gems.get(c, 0)
         net_cost = max(0, price - discount)
 
@@ -103,6 +114,7 @@ def make_move(player=None):
 
     elif action == "play_card":
         card_id = data.get("cardId")
+        print(f"Received cardId: {card_id}")  # Log the cardId to check what is received
         if not card_id or card_id not in ALL_CARDS:
             return jsonify({"error": "Invalid cardId"}), 400
 

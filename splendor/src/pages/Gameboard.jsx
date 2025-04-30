@@ -234,7 +234,7 @@ function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
           onClick={color === 'wild' ? undefined : () => handleTokenClick(color, number)}
           isSelected={selectedTokens[color] === 1}
           isDisabled={color === 'wild' || (number < 1 && !selectedTokens[color])}
-          />
+        />
       ))}
 
       <button
@@ -403,14 +403,18 @@ export default function Gameboard() {
   };
 
   const handlePlayCard = () => {
-    const card = sampleCards[GetPath(selectedCard.id)];
+    const card =
+      deck1.find(c => c.id === selectedCard.id) ||
+      deck2.find(c => c.id === selectedCard.id) ||
+      deck3.find(c => c.id === selectedCard.id);
     if (!card) {
       console.error("Card details not found");
       return;
     }
+    console.log("Selected card ID:", selectedCard.id);
     const moveData = {
       action: "play_card",
-      card: selectedCard.id
+      cardId: selectedCard.id
     };
     makeMove(moveData);
     setViewCard(false);
