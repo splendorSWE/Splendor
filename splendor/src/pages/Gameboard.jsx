@@ -186,6 +186,11 @@ function SelectTokenView({ tokens, setView }) {
 
 function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate }) {
   const [selectedTokens, setSelectedTokens] = useState({});
+  const [initialTokens, setInitialTokens] = useState({});
+
+  useEffect(() => {
+    setInitialTokens({ ...tokens });
+  }, []);
 
   const isValidSelection = () => {
     const total = Object.values(selectedTokens).reduce((a, b) => a + b, 0);
@@ -215,9 +220,14 @@ function Select3Tokens({ tokens, setView, handleTakeTokens, handleTokenUpdate })
     });
   };
 
+  const handleBack = () => {
+    handleTokenUpdate(initialTokens);
+    setView("default");
+  };
+
   return (
     <div className="board-tokens-section">
-      <button className="select-tokens-button" onClick={() => setView("default")}>
+      <button className="select-tokens-button" onClick={handleBack}>
         Back
       </button>
 
