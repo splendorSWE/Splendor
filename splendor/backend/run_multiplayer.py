@@ -164,10 +164,12 @@ def make_move():
         if not can_buy:
             return jsonify({"error": "Not enough tokens (including wilds)"}), 400
 
-        # Deduct tokens
+        # Deduct tokens and replenish on the board
         for c, amt in spend_colour.items():
             player_state["tokens"][c] -= amt
+            state["tokens"][c] += amt  # Return to board
         player_state["tokens"]["wild"] -= wild_needed
+        state["tokens"]["wild"] += wild_needed
 
         # Add permanent gem and points
         gem_colour = card["color"]
