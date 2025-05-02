@@ -127,6 +127,10 @@ export default function LobbyRoom() {
           <button
             className="create-button"
             onClick={() => {
+              if (!hasReceivedLobbyInfo) {
+                console.warn("⛔ Can't ready up before lobby info is received");
+                return;
+              }
               const nextState = !isReady;
               setIsReady(nextState);
 

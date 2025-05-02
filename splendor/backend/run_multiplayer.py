@@ -103,7 +103,7 @@ def get_game_state():
     player_id = data.get("playerID")
 
     print(f"Received lobby code: {lobby_code}")
-    print(f"all lobby codes: {game_states}")
+    # print(f"all lobby codes: {game_states}")
     # Check if lobby code is provided and exists in game states
     if not lobby_code or lobby_code not in game_states:
         return jsonify({"error": "Invalid lobby code"}), 400
@@ -307,9 +307,9 @@ def handle_join_lobby(data):
 
     print(f"🙋‍♂️ {username} joined lobby {lobby_code}")
 
+    emit("lobby_joined", {"lobbyCode": lobby_code}, to=request.sid)
     emit("lobby_info", {"players": lobbies[lobby_code]}, room=lobby_code)
     emit("lobby_info", {"players": lobbies[lobby_code]}, to=request.sid)
-    emit("lobby_joined", {"lobbyCode": lobby_code}, to=request.sid)
 
 @socketio.on("unready")
 def handle_unready(data):
@@ -350,16 +350,17 @@ def handle_ready_up(data):
 
     ready_players[lobby_code].add(username)
 
-    emit("ready_status", {
-        "readyPlayers": list(ready_players[lobby_code]),
-        "totalPlayers": lobbies[lobby_code],
-    }, room=lobby_code)
-
-    if set(lobbies[lobby_code]) == ready_players[lobby_code]:
+    print(f"lobbies: {set(lobbies[lobby_code])} and ready_players: {set(ready_players[lobby_code])} should be the same")
+    if set(lobbies[lobby_code]) == set(ready_players[lobby_code]):
         if len(ready_players[lobby_code]) >= 2:
             game_states[lobby_code] = initialize_game_state(lobbies[lobby_code])
+            print(f"lobby added to game_states {game_states[lobby_code]}")
             emit("game_started", {"lobbyCode": lobby_code}, room=lobby_code)
             del ready_players[lobby_code]
+    emit("ready_status", {
+        "readyPlayers": list(ready_players.get(lobby_code, set())),
+        "totalPlayers": lobbies.get(lobby_code, []),
+    }, room=lobby_code)
 
 
 @socketio.on("leave_lobby")
