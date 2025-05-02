@@ -25,7 +25,7 @@ export default function Select2Tokens({ tokens, setView, handleTakeTokens, handl
         if (previouslySelectedColor === color) {
           updatedTokens[color] += 2;
           setLocalTokens(updatedTokens);
-          handleTokenUpdate(updatedTokens);
+          handleTokenUpdate();
           return {};
         }
     
@@ -35,14 +35,14 @@ export default function Select2Tokens({ tokens, setView, handleTakeTokens, handl
     
         updatedTokens[color] -= 2;
         setLocalTokens(updatedTokens);
-        handleTokenUpdate(updatedTokens);
+        handleTokenUpdate();
     
         return { [color]: 2 };
       });
     };
     
     const handleBack = () => {
-      handleTokenUpdate(initialTokens);
+      handleTokenUpdate();
       setView("default");
     };
     

@@ -20,7 +20,7 @@ export default function Select3Tokens({ tokens, setView, handleTakeTokens, handl
   
         if (prev[color] === 1) {
           updatedTokens[color] += 1;
-          handleTokenUpdate(updatedTokens);
+          handleTokenUpdate();
   
           const { [color]: _, ...rest } = prev;
           return rest;
@@ -31,7 +31,7 @@ export default function Select3Tokens({ tokens, setView, handleTakeTokens, handl
         }
   
         updatedTokens[color] -= 1;
-        handleTokenUpdate(updatedTokens);
+        handleTokenUpdate();
   
         return { ...prev, [color]: 1 };
       });

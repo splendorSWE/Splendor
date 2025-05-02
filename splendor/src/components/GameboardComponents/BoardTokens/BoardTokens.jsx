@@ -14,8 +14,8 @@ export default function BoardTokens({ gameState, handleTakeTokens }) {
   const [tokens, setTokens] = useState(gameState?.tokens || {
   });
 
-  const handleTokenUpdate = (updatedTokens) => {
-    setTokens(updatedTokens); // Update the tokens state
+  const handleTokenUpdate = () => {
+    setTokens(gameState.tokens); // Update the tokens state
   };
   
   useEffect(() => {
