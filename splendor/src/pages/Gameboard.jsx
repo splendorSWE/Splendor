@@ -17,7 +17,6 @@ import CardPopUp from '../components/GameboardComponents/CardPopUp';
 
 export default function Gameboard() {
   const [reservable, setReservable] = useState(true)
-  // const [points, setPoints] = useState(0);
   const [reservedCard, setReservedCard] = useState(null)
   const [playable, setPlayable] = useState(true)
   const [viewCard, setViewCard] = useState(false)
@@ -30,7 +29,16 @@ export default function Gameboard() {
   const [deck3, setDeck3] = useState(shuffle(initialDeck3))
   const [selectedDeck, setSelectedDeck] = useState(1)
   const [showGameEnd, setShowGameEnd] = useState(false);
+  const [lobbyCode, setLobbyCode] = useState(null);
+  const [playerId, setPlayerId] = useState(null);
   const navigate = useNavigate();
+
+  // example
+  useEffect(() => {
+    setLobbyCode("ABCD"); // Fetch this from the lobby join screen or URL param
+    setPlayerId(user?.uid || "Player1"); // Make sure it's consistent with the backend
+  }, [user]);
+
 
   useEffect(() => {
     fetch('http://localhost:4000/game')
@@ -45,7 +53,7 @@ export default function Gameboard() {
       const response = await fetch('http://localhost:4000/game/move', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(moveData)
+        body: JSON.stringify({ ...moveData, lobbyCode, player: playerId })
       });
 
       if (!response.ok) {
@@ -114,16 +122,12 @@ export default function Gameboard() {
     try {
       const response = await fetch("http://localhost:4000/game/check_affordability", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ cardId: cardId }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cardId, lobbyCode, player: playerId })
       });
-  
-      if (!response.ok) {
-        throw new Error("Failed to check card affordability");
-      }
-  
+
+      if (!response.ok) throw new Error("Failed to check card affordability");
+
       const result = await response.json();
       return result.can_buy;
     } catch (error) {
@@ -131,6 +135,7 @@ export default function Gameboard() {
       return false;
     }
   };
+
 
   const handlePlayCard = () => {
     const card =
@@ -205,20 +210,20 @@ export default function Gameboard() {
           checkCardAffordability={checkCardAffordability}
         />
         <div>
-        <CollectionButton
-          player="My"
-          isSelected={selectedPlayer === 'My'}
-          onClick={() => setSelectedPlayer('My')}
-        />
-        <CollectionButton
-          player="Opponent"
-          isSelected={selectedPlayer === 'Opponent'}
-          onClick={() => setSelectedPlayer('Opponent')}
-        />
+          <CollectionButton
+            player="My"
+            isSelected={selectedPlayer === 'My'}
+            onClick={() => setSelectedPlayer('My')}
+          />
+          <CollectionButton
+            player="Opponent"
+            isSelected={selectedPlayer === 'Opponent'}
+            onClick={() => setSelectedPlayer('Opponent')}
+          />
           <PlayerCollection
             Points={gameState ? (selectedPlayer === "My" ? gameState.points : gameState.opponentPoints) : 0}
             tokens={gameState ? (selectedPlayer === "My" ? gameState.playerTokens : gameState.opponentTokens) : {}}
-            playerCards={gameState ? (selectedPlayer === "My" ? gameState.playerCards : gameState.opponentCards) : {}}          
+            playerCards={gameState ? (selectedPlayer === "My" ? gameState.playerCards : gameState.opponentCards) : {}}
             //Points={gameState ? gameState.points : 0}
             viewCard={viewCard}
             setViewCard={setViewCard}
@@ -277,7 +282,7 @@ export default function Gameboard() {
         opponentPoints={10}
         playerPic={"/images/default_pfp.jpg"}
         opponentPic={"/images/default_pfp.jpg"}
-        onClose={() => {setShowGameEnd(false); navigate('/')}}
+        onClose={() => { setShowGameEnd(false); navigate('/') }}
       />
     </div>
   );

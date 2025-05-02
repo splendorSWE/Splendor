@@ -19,27 +19,27 @@ export default function LobbyRoom() {
   const [isValidLobbyMember, setIsValidLobbyMember] = useState(true);
   const [isReady, setIsReady] = useState(false);
   const [readyPlayers, setReadyPlayers] = useState([]);
-  
- 
+
+
   useEffect(() => {
     if (!isValidLobbyMember) {
       navigate("/", { replace: true });
     }
   }, [isValidLobbyMember]);
 
-  
+
   useEffect(() => {
     if (!lobbyCode) {
       setStatusMessage("Lobby code not found. Redirecting...");
       setTimeout(() => navigate("/"), 3000);
       return;
     }
-  
+
     // ✅ Force backend to send fresh player list
     console.log("📤 Requesting lobby_info for:", lobbyCode);
     socket.emit("get_lobby_info", { lobbyCode });
   }, [lobbyCode]);
-  
+
   useEffect(() => {
     if (hasReceivedLobbyInfo && !isValidLobbyMember) {
       console.warn("⚠️ User not in lobby — redirecting");
@@ -51,32 +51,32 @@ export default function LobbyRoom() {
       console.log("📥 Received lobby_info:", data.players);
       setPlayers(data.players || []);
       setHasReceivedLobbyInfo(true);
-  
+
       const isInLobby = data.players?.includes(displayName);
       setIsValidLobbyMember(isInLobby);
     });
-  
+
     socket.on("lobby_joined", (data) => {
       console.log("✅ Successfully joined lobby:", data.lobbyCode);
     });
-  
+
     socket.on("ready_status", (data) => {
       console.log("🔄 Ready players:", data.readyPlayers);
       setReadyPlayers(data.readyPlayers || []);
     });
-  
+
     socket.on("game_started", (data) => {
       console.log("🎮 Game is starting!");
       localStorage.removeItem("lobbyCode");
       localStorage.removeItem("lobbyUsername");
       navigate("/Gameboard", { state: { lobbyCode: data.lobbyCode } });
     });
-  
+
     socket.on("error", (data) => {
       console.error("❌ Error:", data.message);
       setStatusMessage(data.message);
     });
-  
+
     return () => {
       socket.off("lobby_info");
       socket.off("lobby_joined");
@@ -85,26 +85,24 @@ export default function LobbyRoom() {
       socket.off("error");
     };
   }, []);
-  
+
   useEffect(() => {
     const handleUnload = () => {
       socket.emit("leave_lobby");
     };
-  
+
     // ✅ Only register leave for actual tab close / reload
     window.addEventListener("beforeunload", handleUnload);
-  
+
     // ❌ Don't call leave() here
     return () => {
       window.removeEventListener("beforeunload", handleUnload);
     };
   }, []);
-  
-  
+
+
   const handleStartGame = () => {
     socket.emit("start_game", { lobbyCode });
-    navigate("/gameboard")
-    // TODO: setup game start
   };
 
   return (
@@ -126,29 +124,27 @@ export default function LobbyRoom() {
             ))}
           </ul>
           <p className="turn-timer">Lobby Code: {lobbyCode}</p>
-        <button
-          className="create-button"
-          onClick={() => {
-            const nextState = !isReady;
-            setIsReady(nextState);
+          <button
+            className="create-button"
+            onClick={() => {
+              const nextState = !isReady;
+              setIsReady(nextState);
 
-            if (nextState) {
-              socket.emit("ready_up", { lobbyCode });
-            } else {
-              socket.emit("unready", { lobbyCode });
-            }
-          }}
-        >
+              if (nextState) {
+                socket.emit("ready_up", { lobbyCode });
+              } else {
+                socket.emit("unready", { lobbyCode });
+              }
+            }}
+          >
             {isReady ? "Unready" : "Ready Up"}
-        </button>
-
-
+          </button>
           <button
             className="create-button"
             onClick={() => {
               socket.emit("leave_lobby");
 
-              
+
               navigate("/");
             }}
           >

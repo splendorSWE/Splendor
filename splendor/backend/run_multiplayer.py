@@ -11,6 +11,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
 import random
+from random import shuffle
 import string
 from cards import initial_deck1, initial_deck2, initial_deck3
 
@@ -35,6 +36,45 @@ ALL_CARDS = {
     for c in (initial_deck1 + initial_deck2 + initial_deck3)
 }
 COLORS = ["red", "green", "blue", "yellow", "white"]
+
+game_states = {}  # lobby_code -> game_state
+
+def initialize_game_state(players):
+    deck1 = initial_deck1.copy()
+    deck2 = initial_deck2.copy()
+    deck3 = initial_deck3.copy()
+    shuffle(deck1)
+    shuffle(deck2)
+    shuffle(deck3)
+
+    return {
+        "players": {
+            player: {
+                "tokens": {color: 0 for color in COLORS + ["wild"]},
+                "permanentGems": {color: 0 for color in COLORS},
+                "points": 0
+            }
+            for player in players
+        },
+        "tokens": {
+            "wild": 5,
+            "white": 4,
+            "blue": 4,
+            "red": 4,
+            "green": 4,
+            "yellow": 4
+        },
+        "available_cards": {
+            "level1": [deck1.pop() for _ in range(4)],
+            "level2": [deck2.pop() for _ in range(4)],
+            "level3": [deck3.pop() for _ in range(4)],
+        },
+        "decks": {
+            "level1": deck1,
+            "level2": deck2,
+            "level3": deck3
+        }
+    }
 
 # temporary game state to mimic what we have on the screen right now
 game_state = {
@@ -90,54 +130,93 @@ def affordability(card_row, player_tokens, permanent_gems):
     has_wilds = player_tokens.get("wild", 0) >= wild_needed
     return has_wilds, spend, wild_needed
 
-@app.route('/game', methods=['GET'])
+@app.route('/game', methods=['POST'])
 def get_game_state():
-    return jsonify(game_state)
+    data = request.get_json()
+    lobby_code = data.get("lobbyCode")
+
+    if not lobby_code or lobby_code not in game_states:
+        return jsonify({"error": "Invalid lobby code"}), 400
+
+    return jsonify(game_states[lobby_code])
 
 @app.route('/game/move', methods=['POST'])
-def make_move(player=None):
+def make_move():
     data = request.get_json()
     action = data.get("action")
-    
+    lobby_code = data.get("lobbyCode")
+    player = data.get("player")
+
+    if not lobby_code or lobby_code not in game_states:
+        return jsonify({"error": "Invalid lobby code"}), 400
+
+    if not player or player not in game_states[lobby_code]["players"]:
+        return jsonify({"error": "Invalid player"}), 400
+
+    state = game_states[lobby_code]
+    player_state = state["players"][player]
+
     if action == "take_tokens":
-        tokens_requested = data.get("tokens")
+        tokens_requested = data.get("tokens", {})
 
         for token, count in tokens_requested.items():
-            available = game_state["tokens"].get(token, 0)
+            available = state["tokens"].get(token, 0)
             if available < count:
                 return jsonify({"error": f"Not enough {token} tokens available"}), 400
 
         for token, count in tokens_requested.items():
-            game_state["tokens"][token] -= count
-            game_state["playerTokens"][token] += count
-        return jsonify(game_state)
+            state["tokens"][token] -= count
+            player_state["tokens"][token] += count
+
+        update_clients(lobby_code)
+        return jsonify(state)
 
     elif action == "play_card":
         card_id = data.get("cardId")
-        print(f"Received cardId: {card_id}")  # Log the cardId to check what is received
         if not card_id or card_id not in ALL_CARDS:
             return jsonify({"error": "Invalid cardId"}), 400
 
         card = ALL_CARDS[card_id]
+
         can_buy, spend_colour, wild_needed = affordability(
             card,
-            game_state["playerTokens"],
-            game_state["playerCards"],
+            player_state["tokens"],
+            player_state["permanentGems"]
         )
 
         if not can_buy:
             return jsonify({"error": "Not enough tokens (including wilds)"}), 400
 
+        # Deduct tokens
         for c, amt in spend_colour.items():
-            game_state["playerTokens"][c] -= amt
-        game_state["playerTokens"]["wild"] -= wild_needed
+            player_state["tokens"][c] -= amt
+        player_state["tokens"]["wild"] -= wild_needed
 
+        # Add permanent gem and points
         gem_colour = card["color"]
-        game_state["playerCards"][gem_colour] += 1
-        game_state["points"] += card["points"]
+        player_state["permanentGems"][gem_colour] += 1
+        player_state["points"] += card["points"]
 
-        update_clients()
-        return jsonify(game_state)
+        # Remove the card from available_cards and replace from deck
+        for level in ["level1", "level2", "level3"]:
+            available = state["available_cards"][level]
+            for i, c in enumerate(available):
+                if c["id"] == card_id:
+                    del available[i]  # Remove the bought card
+
+                    # Replace if deck has more cards
+                    if state["decks"][level]:
+                        new_card = state["decks"][level].pop()
+                        available.append(new_card)
+                    break
+
+
+        update_clients(lobby_code)
+        return jsonify(state)
+
+    else:
+        return jsonify({"error": "Unknown action"}), 400
+
     
 @app.route('/game/check_affordability', methods=['POST'])
 def check_affordability():
@@ -155,29 +234,8 @@ def check_affordability():
     )
 
     return jsonify({"can_buy": can_buy, "spend_colour": spend_colour, "wild_needed": wild_needed})
-    
-    '''Commented out to try out ALL_CARDS global state'''
-    #     card = data.get("card")
-    #     if not card:
-    #         return jsonify({"error": "No card provided"}), 400
 
-    #     tokenPrice = card.get("tokenPrice")
-    #     if not tokenPrice:
-    #         return jsonify({"error": "Card token price is missing"}), 400
-    #     for token, price in tokenPrice.items():
-    #         if game_state["playerTokens"].get(token, 0) < price:
-    #             return jsonify({"error": f"Not enough {token} tokens to play this card"}), 400
-    #     for token, price in tokenPrice.items():
-    #         game_state["playerTokens"][token] -= price
-
-    #     game_state["playerCards"][card.get("cardColor")] += 1
-        
-    #     game_state["points"] += card.get("points", 0)
-
-    #     return jsonify(game_state)
-    
-    # return jsonify({"error": "Invalid action"}), 400
-
+# JACKS LOBBY STUFF
 
 # Store lobby state
 lobbies = {}  # lobby_code -> [usernames]
@@ -195,8 +253,8 @@ def handle_connect():
     print(f"✅ Client connected: {request.sid}")
     emit('game_state', game_state)
 
-def update_clients():
-    socketio.emit('game_state', game_state)
+def update_clients(lobby_code):
+    socketio.emit('game_state', game_states[lobby_code], room=lobby_code)
 
 @socketio.on("disconnect")
 def handle_disconnect():
@@ -322,8 +380,10 @@ def handle_ready_up(data):
     }, room=lobby_code)
 
     if set(lobbies[lobby_code]) == ready_players[lobby_code]:
-        emit("game_started", {"lobbyCode": lobby_code}, room=lobby_code)
-        del ready_players[lobby_code]
+        if len(ready_players[lobby_code]) >= 2:
+            game_states[lobby_code] = initialize_game_state(lobbies[lobby_code])
+            emit("game_started", {"lobbyCode": lobby_code}, room=lobby_code)
+            del ready_players[lobby_code]
 
 
 @socketio.on("leave_lobby")
