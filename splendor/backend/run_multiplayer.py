@@ -184,7 +184,7 @@ def make_move():
                     # Replace if deck has more cards
                     if state["decks"][level]:
                         new_card = state["decks"][level].pop()
-                        available.append(new_card)
+                        available.insert(i, new_card)
                     break
 
 
@@ -198,16 +198,26 @@ def make_move():
 @app.route('/game/check_affordability', methods=['POST'])
 def check_affordability():
     data = request.get_json()
+    lobby_code = data.get("lobbyCode", "").strip().upper()
+    player = data.get("player")  # This is the player's username or ID
     card_id = data.get("cardId")
-    
+
+    # Validate lobby and player
+    if not lobby_code or lobby_code not in game_states:
+        return jsonify({"error": "Invalid lobby code"}), 400
+
+    if not player or player not in game_states[lobby_code]["players"]:
+        return jsonify({"error": "Invalid player"}), 400
+
     if not card_id or card_id not in ALL_CARDS:
         return jsonify({"error": "Invalid cardId"}), 400
 
     card = ALL_CARDS[card_id]
+    player_state = game_states[lobby_code]["players"][player]
     can_buy, spend_colour, wild_needed = affordability(
         card,
-        game_state["playerTokens"],
-        game_state["playerCards"]
+        player_state["tokens"],
+        player_state["permanentGems"]
     )
 
     return jsonify({"can_buy": can_buy, "spend_colour": spend_colour, "wild_needed": wild_needed})

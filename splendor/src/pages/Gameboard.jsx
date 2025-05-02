@@ -29,7 +29,7 @@ export default function Gameboard() {
   const [deck1, setDeck1] = useState(shuffle(initialDeck1))
   const [deck2, setDeck2] = useState(shuffle(initialDeck2))
   const [deck3, setDeck3] = useState(shuffle(initialDeck3))
-  const [selectedDeck, setSelectedDeck] = useState(1)
+  const [selectedDeck, setSelectedDeck] = useState(null)
   const [showGameEnd, setShowGameEnd] = useState(false);
   const location = useLocation();
   const lobbyCode = location.state?.lobbyCode;
@@ -37,8 +37,6 @@ export default function Gameboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const lobbyCode = location.state?.lobbyCode;  // Get the lobby code from location
-    const playerID = location.state?.playerID;    // Get the player ID from location
   
     console.log('Location State:', location.state);
 
@@ -53,6 +51,11 @@ export default function Gameboard() {
         .then((res) => res.json())
         .then((data) => setGameState(data))
         .catch((err) => console.error('Error fetching game state:', err));
+        // if (gameState && gameState[lobbyCode] && gameState[lobbyCode].available_cards) {
+        //   setDeck1(gameState.available_cards.level1 || [])
+        //   setDeck2(gameState.available_cards.level2 || [])
+        //   setDeck3(gameState.available_cards.level3 || [])
+        // }
     } else {
       console.error('Missing lobbyCode or playerID');
     }
@@ -61,11 +64,11 @@ export default function Gameboard() {
 
   const makeMove = async (moveData) => {
     try {
-      console.log('Making move:', moveData);
+      console.log('Making move:', moveData, lobbyCode, playerID);
       const response = await fetch('http://localhost:4000/game/move', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...moveData, lobbyCode, player: playerID })
+        body: JSON.stringify({ ...moveData, lobbyCode: lobbyCode, player: playerID })
       });
 
       if (!response.ok) {
@@ -132,21 +135,35 @@ export default function Gameboard() {
 
   const checkCardAffordability = async (cardId) => {
     try {
+      // Ensure lobbyCode and playerID are available in your component's state or props
+      console.log("Sending lobbyCode:", lobbyCode);
       const response = await fetch("http://localhost:4000/game/check_affordability", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cardId, lobbyCode, player: playerID })
+        body: JSON.stringify({
+          cardId: cardId,       // Send the cardId
+          lobbyCode: lobbyCode, // Ensure lobbyCode is set properly
+          player: playerID     // Ensure playerID is the correct player identifier
+        })
       });
-
-      if (!response.ok) throw new Error("Failed to check card affordability");
-
+  
+      // Check for unsuccessful response
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error checking card affordability:', errorData.error);
+        throw new Error(errorData.error || "Failed to check card affordability");
+      }
+  
+      // Handle success: Return the affordability result
       const result = await response.json();
       return result.can_buy;
+  
     } catch (error) {
       console.error("Error checking card affordability:", error);
       return false;
     }
   };
+  
 
 
   const handlePlayCard = () => {
