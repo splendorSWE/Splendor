@@ -3,7 +3,7 @@ import './pageStyles/Gameboard.css';
 import { useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
-import { io } from 'socket.io-client';
+import socket from '../socket/socket';
 import PageHeader from '../components/PageHeader';
 import GetPath from '../components/CardComponents/GetPath';
 import { initialDeck1, initialDeck2, initialDeck3, shuffle } from "../components/CardComponents/Deck";
@@ -59,6 +59,16 @@ export default function Gameboard() {
     } else {
       console.error('Missing lobbyCode or playerID');
     }
+  }, []);
+
+  useEffect(() => {
+    socket.on("game_update", (updatedState) => {
+      setGameState(updatedState);
+    });
+  
+    return () => {
+      socket.off("game_update"); // Clean up listener on unmount
+    };
   }, []);
 
 

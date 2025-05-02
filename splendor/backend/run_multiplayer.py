@@ -243,6 +243,8 @@ def handle_connect():
 
 def update_clients(lobby_code):
     socketio.emit('game_state', game_states[lobby_code], room=lobby_code)
+    state = game_states[lobby_code]
+    socketio.emit("game_update", state, room=lobby_code)
 
 @socketio.on("disconnect")
 def handle_disconnect():
