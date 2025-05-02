@@ -213,8 +213,8 @@ export default function Gameboard() {
 
   const [selectedPlayer, setSelectedPlayer] = useState("My");
   console.log("Game state:", gameState);
-  console.log("Player Tokens:", gameState?.players?.[playerID]?.tokens);
-  console.log("Player Cards:", gameState?.players?.[playerID]?.permanentGems);
+  console.log("Player Tokens:", playerID, gameState?.players?.[playerID]?.tokens);
+  console.log("Player Cards:", playerID, gameState?.players?.[playerID]?.permanentGems);
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
@@ -258,8 +258,8 @@ export default function Gameboard() {
             Points={gameState?.points || 0}
             viewCard={viewCard}
             setViewCard={setViewCard}
-            tokens={gameState?.playerTokens || { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
-            playerCards={gameState?.playerCards || { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
+            tokens={gameState?.players?.[playerID]?.tokens || {}}
+            playerCards={gameState?.players?.[playerID]?.permanentGems || {}}
             reservable={reservable}
             setReservedCard={setReservedCard}
             reservedCard={reservedCard}
