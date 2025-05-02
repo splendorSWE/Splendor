@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import DefaultTokenView from './DefaultTokenView';
 import SelectTokenView from './SelectTokenView';
 import Select2Tokens from './Select2Tokens';
@@ -11,17 +12,17 @@ export default function BoardTokens({ gameState, handleTakeTokens }) {
   const [view, setView] = useState("default");
 
   const [tokens, setTokens] = useState(gameState?.tokens || {
-    wild: 5,
-    white: 4,
-    blue: 4,
-    red: 4,
-    green: 4,
-    yellow: 4,
   });
 
   const handleTokenUpdate = (updatedTokens) => {
     setTokens(updatedTokens); // Update the tokens state
   };
+  
+  useEffect(() => {
+    if (gameState?.tokens) {
+      setTokens(gameState.tokens);
+    }
+  }, [gameState]);
 
   switch (view) {
     case "select":
