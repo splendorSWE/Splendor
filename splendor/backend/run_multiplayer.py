@@ -76,43 +76,6 @@ def initialize_game_state(players):
         }
     }
 
-# temporary game state to mimic what we have on the screen right now
-game_state = {
-    "points": 0,
-    "tokens": {
-        "wild": 5,
-        "white": 4,
-        "blue": 4,
-        "red": 4,
-        "green": 4,
-        "yellow": 4
-    },
-    "playerTokens": {
-        "wild": 0,
-        "white": 0,
-        "blue": 0,
-        "red": 0,
-        "green": 0,
-        "yellow": 0
-    },
-    "cards": {
-        "card1": {
-            "cardId": "card1",
-            "ImagePath": "/Images/MainCards/Blue 3.0.png",
-            "tokenPrice": { "blue": 2, "red": 1, "white": 0, "green": 0, "yellow": 0, "wild": 0 },
-            "points": 3
-        },
-    },
-    # PERMANENT GEMS
-    "playerCards": {
-        "white": 0,
-        "blue": 0,
-        "red": 0,
-        "green": 0,
-        "yellow": 0
-    }
-}
-
 def affordability(card_row, player_tokens, permanent_gems):
     spend = {c: 0 for c in COLORS}
     wild_needed = 0
@@ -132,13 +95,27 @@ def affordability(card_row, player_tokens, permanent_gems):
 
 @app.route('/game', methods=['POST'])
 def get_game_state():
+    # Get the JSON data from the request
     data = request.get_json()
+    
+    # Extract lobby code and player ID
     lobby_code = data.get("lobbyCode")
+    player_id = data.get("playerID")
 
+    print(f"Received lobby code: {lobby_code}")
+    print(f"all lobby codes: {game_states}")
+    # Check if lobby code is provided and exists in game states
     if not lobby_code or lobby_code not in game_states:
         return jsonify({"error": "Invalid lobby code"}), 400
 
-    return jsonify(game_states[lobby_code])
+    # Check if player ID is provided and is part of the game
+    game = game_states[lobby_code]
+    if not player_id or player_id not in game["players"]:
+        return jsonify({"error": "Player not part of this game"}), 403
+
+    # Return the game state if everything is valid
+    return jsonify(game)
+
 
 @app.route('/game/move', methods=['POST'])
 def make_move():
@@ -251,7 +228,6 @@ def generate_lobby_code(length=5):
 @socketio.on("connect")
 def handle_connect():
     print(f"✅ Client connected: {request.sid}")
-    emit('game_state', game_state)
 
 def update_clients(lobby_code):
     socketio.emit('game_state', game_states[lobby_code], room=lobby_code)

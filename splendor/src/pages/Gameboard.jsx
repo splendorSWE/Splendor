@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './pageStyles/Gameboard.css';
+import { useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
+import { io } from 'socket.io-client';
 import PageHeader from '../components/PageHeader';
 import GetPath from '../components/CardComponents/GetPath';
 import { initialDeck1, initialDeck2, initialDeck3, shuffle } from "../components/CardComponents/Deck";
@@ -29,23 +31,33 @@ export default function Gameboard() {
   const [deck3, setDeck3] = useState(shuffle(initialDeck3))
   const [selectedDeck, setSelectedDeck] = useState(1)
   const [showGameEnd, setShowGameEnd] = useState(false);
-  const [lobbyCode, setLobbyCode] = useState(null);
-  const [playerId, setPlayerId] = useState(null);
+  const location = useLocation();
+  const lobbyCode = location.state?.lobbyCode;
+  const playerID = location.state?.playerID;
   const navigate = useNavigate();
 
-  // example
   useEffect(() => {
-    setLobbyCode("ABCD"); // Fetch this from the lobby join screen or URL param
-    setPlayerId(user?.uid || "Player1"); // Make sure it's consistent with the backend
-  }, [user]);
+    const lobbyCode = location.state?.lobbyCode;  // Get the lobby code from location
+    const playerID = location.state?.playerID;    // Get the player ID from location
+  
+    console.log('Location State:', location.state);
 
-
-  useEffect(() => {
-    fetch('http://localhost:4000/game')
-      .then((res) => res.json())
-      .then((data) => setGameState(data))
-      .catch((err) => console.error('Error fetching game state:', err));
+    if (lobbyCode && playerID) {
+      fetch('http://localhost:4000/game', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ lobbyCode, playerID }),
+      })
+        .then((res) => res.json())
+        .then((data) => setGameState(data))
+        .catch((err) => console.error('Error fetching game state:', err));
+    } else {
+      console.error('Missing lobbyCode or playerID');
+    }
   }, []);
+  
 
   const makeMove = async (moveData) => {
     try {
@@ -53,7 +65,7 @@ export default function Gameboard() {
       const response = await fetch('http://localhost:4000/game/move', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...moveData, lobbyCode, player: playerId })
+        body: JSON.stringify({ ...moveData, lobbyCode, player: playerID })
       });
 
       if (!response.ok) {
@@ -123,7 +135,7 @@ export default function Gameboard() {
       const response = await fetch("http://localhost:4000/game/check_affordability", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cardId, lobbyCode, player: playerId })
+        body: JSON.stringify({ cardId, lobbyCode, player: playerID })
       });
 
       if (!response.ok) throw new Error("Failed to check card affordability");
@@ -183,7 +195,9 @@ export default function Gameboard() {
   };
 
   const [selectedPlayer, setSelectedPlayer] = useState("My");
-
+  console.log("Game state:", gameState);
+  console.log("Player Tokens:", gameState?.playerTokens);
+  console.log("Player Cards:", gameState?.playerCards);
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
@@ -221,14 +235,14 @@ export default function Gameboard() {
             onClick={() => setSelectedPlayer('Opponent')}
           />
           <PlayerCollection
-            Points={gameState ? (selectedPlayer === "My" ? gameState.points : gameState.opponentPoints) : 0}
-            tokens={gameState ? (selectedPlayer === "My" ? gameState.playerTokens : gameState.opponentTokens) : {}}
-            playerCards={gameState ? (selectedPlayer === "My" ? gameState.playerCards : gameState.opponentCards) : {}}
-            //Points={gameState ? gameState.points : 0}
+            // Points={gameState ? (selectedPlayer === "My" ? gameState.points : gameState.opponentPoints) : 0}
+            // tokens={gameState ? (selectedPlayer === "My" ? gameState.playerTokens : gameState.opponentTokens) : {}}
+            // playerCards={gameState ? (selectedPlayer === "My" ? gameState.playerCards : gameState.opponentCards) : {}}
+            Points={gameState?.points || 0}
             viewCard={viewCard}
             setViewCard={setViewCard}
-            //tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
-            //playerCards={gameState ? gameState.playerCards : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
+            tokens={gameState?.playerTokens || { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
+            playerCards={gameState?.playerCards || { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
             reservable={reservable}
             setReservedCard={setReservedCard}
             reservedCard={reservedCard}

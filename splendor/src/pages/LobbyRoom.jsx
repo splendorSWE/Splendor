@@ -19,7 +19,7 @@ export default function LobbyRoom() {
   const [isValidLobbyMember, setIsValidLobbyMember] = useState(true);
   const [isReady, setIsReady] = useState(false);
   const [readyPlayers, setReadyPlayers] = useState([]);
-
+  
 
   useEffect(() => {
     if (!isValidLobbyMember) {
@@ -69,7 +69,7 @@ export default function LobbyRoom() {
       console.log("🎮 Game is starting!");
       localStorage.removeItem("lobbyCode");
       localStorage.removeItem("lobbyUsername");
-      navigate("/Gameboard", { state: { lobbyCode: data.lobbyCode } });
+      navigate("/Gameboard", { state: { lobbyCode: data.lobbyCode, playerID: displayName } });
     });
 
     socket.on("error", (data) => {
