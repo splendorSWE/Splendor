@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, setPlayable, reservable, setReservable, handlePlayCard, addReserveToken, playCard, handleReserveCard, reservedCard, selectedCard, checkCardAffordability }) {
+export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, setPlayable, reservable, setReservable, handlePlayCard, addReserveToken, handleReserveCard, reservedCard, selectedCard, checkCardAffordability }) {
     useEffect(() => {
       const fetchCardAffordability = async () => {
         const isPlayable = await checkCardAffordability(selectedCard.id);
@@ -28,7 +28,6 @@ export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, 
               onClick={() => {
                 if (!playable) return;
                 setViewCard(false);
-                playCard();
                 handlePlayCard();
                 if (selectedCard == reservedCard) {
                   setReservable(true);
@@ -45,7 +44,6 @@ export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, 
               onClick={() => {
                 setViewCard(false);
                 setReservable(false);
-                playCard();
                 if (reservable) {
                   handleReserveCard();
                 }

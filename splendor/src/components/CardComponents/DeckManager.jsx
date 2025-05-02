@@ -2,12 +2,11 @@ import React from "react";
 import Card from "./Card";
 
 export default function DeckManager({ deck, onClick }) {
-  // Ensure deck is always an array
   const safeDeck = Array.isArray(deck) ? deck : [];
-
+  console.log("DeckManager received deck:", deck);
   return (
     <div>
-      {safeDeck.slice(0, 4).map((card) => (
+      {safeDeck.map((card) => (
         <Card
           key={card.id}
           {...card}
@@ -17,3 +16,4 @@ export default function DeckManager({ deck, onClick }) {
     </div>
   );
 }
+

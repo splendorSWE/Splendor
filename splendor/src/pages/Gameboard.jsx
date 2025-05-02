@@ -6,7 +6,7 @@ import { useAuthContext } from '../context/AuthContext';
 import socket from '../socket/socket';
 import PageHeader from '../components/PageHeader';
 import GetPath from '../components/CardComponents/GetPath';
-import { initialDeck1, initialDeck2, initialDeck3, shuffle } from "../components/CardComponents/Deck";
+// import { initialDeck1, initialDeck2, initialDeck3, shuffle } from "../components/CardComponents/Deck";
 import DeckManager from '../components/CardComponents/DeckManager';
 import GameEndPopup from '../components/GameboardComponents/GameEndPopup';
 import CollectionButton from '../components/GameboardComponents/CollectionButton';
@@ -26,10 +26,10 @@ export default function Gameboard() {
   const [gameState, setGameState] = useState(null);
   const [error, setError] = useState('');
   const { user } = useAuthContext();
-  const [deck1, setDeck1] = useState(shuffle(initialDeck1))
-  const [deck2, setDeck2] = useState(shuffle(initialDeck2))
-  const [deck3, setDeck3] = useState(shuffle(initialDeck3))
-  const [selectedDeck, setSelectedDeck] = useState(null)
+  const [deck1, setDeck1] = useState([]);
+  const [deck2, setDeck2] = useState([]);
+  const [deck3, setDeck3] = useState([]);
+  // const [selectedDeck, setSelectedDeck] = useState(null)
   const [showGameEnd, setShowGameEnd] = useState(false);
   const location = useLocation();
   const lobbyCode = location.state?.lobbyCode;
@@ -49,28 +49,36 @@ export default function Gameboard() {
         body: JSON.stringify({ lobbyCode, playerID }),
       })
         .then((res) => res.json())
-        .then((data) => setGameState(data))
+        .then((data) => {
+          setGameState(data);
+
+          // ✅ Update decks based on the data, not the gameState
+          const cards = data[lobbyCode]?.available_cards;
+          if (cards) {
+            setDeck1(cards.level1 || []);
+            setDeck2(cards.level2 || []);
+            setDeck3(cards.level3 || []);
+          }
+        })
         .catch((err) => console.error('Error fetching game state:', err));
-      // if (gameState && gameState[lobbyCode] && gameState[lobbyCode].available_cards) {
-      //   setDeck1(gameState.available_cards.level1 || [])
-      //   setDeck2(gameState.available_cards.level2 || [])
-      //   setDeck3(gameState.available_cards.level3 || [])
-      // }
-    } else {
-      console.error('Missing lobbyCode or playerID');
     }
   }, []);
 
   useEffect(() => {
     socket.on("game_update", (updatedState) => {
       setGameState(updatedState);
+      const cards = updatedState[lobbyCode]?.available_cards;
+      if (cards) {
+        setDeck1(cards.level1 || []);
+        setDeck2(cards.level2 || []);
+        setDeck3(cards.level3 || []);
+      }
     });
-  
+
     return () => {
       socket.off("game_update"); // Clean up listener on unmount
     };
   }, []);
-
 
   const makeMove = async (moveData) => {
     try {
@@ -107,41 +115,41 @@ export default function Gameboard() {
   };
 
 
-  const playCard1 = () => {
-    console.log('selectedDeck:', selectedDeck);
-    if (!selectedCard) return;
-    const newDeck = deck1.filter((card) => card.id !== selectedCard.id);
-    setDeck1(newDeck);
-    setViewCard(false);
-    setSelectedCard(null);
-  };
+  // const playCard1 = () => {
+  //   console.log('selectedDeck:', selectedDeck);
+  //   if (!selectedCard) return;
+  //   const newDeck = deck1.filter((card) => card.id !== selectedCard.id);
+  //   setDeck1(newDeck);
+  //   setViewCard(false);
+  //   setSelectedCard(null);
+  // };
 
-  const playCard2 = () => {
-    console.log('selectedDeck:', selectedDeck);
-    if (!selectedCard) return;
-    const newDeck = deck2.filter((card) => card.id !== selectedCard.id);
-    setDeck2(newDeck);
-    setViewCard(false);
-    setSelectedCard(null);
-  };
+  // const playCard2 = () => {
+  //   console.log('selectedDeck:', selectedDeck);
+  //   if (!selectedCard) return;
+  //   const newDeck = deck2.filter((card) => card.id !== selectedCard.id);
+  //   setDeck2(newDeck);
+  //   setViewCard(false);
+  //   setSelectedCard(null);
+  // };
 
-  const playCard3 = () => {
-    console.log('selectedDeck:', selectedDeck);
-    if (!selectedCard) return;
-    const newDeck = deck3.filter((card) => card.id !== selectedCard.id);
-    setDeck3(newDeck);
-    setViewCard(false);
-    setSelectedCard(null);
-  }
+  // const playCard3 = () => {
+  //   console.log('selectedDeck:', selectedDeck);
+  //   if (!selectedCard) return;
+  //   const newDeck = deck3.filter((card) => card.id !== selectedCard.id);
+  //   setDeck3(newDeck);
+  //   setViewCard(false);
+  //   setSelectedCard(null);
+  // }
 
-  const sampleCards = {
-    "/Images/MainCards/Blue 1.0.png": {
-      cardId: "card1",
-      cardColor: "blue",
-      tokenPrice: { blue: 0, red: 1, white: 1, green: 1, yellow: 1, wild: 0 },
-      points: 0
-    }
-  };
+  // const sampleCards = {
+  //   "/Images/MainCards/Blue 1.0.png": {
+  //     cardId: "card1",
+  //     cardColor: "blue",
+  //     tokenPrice: { blue: 0, red: 1, white: 1, green: 1, yellow: 1, wild: 0 },
+  //     points: 0
+  //   }
+  // };
 
   const checkCardAffordability = async (cardId) => {
     try {
@@ -177,6 +185,9 @@ export default function Gameboard() {
 
 
   const handlePlayCard = () => {
+    setDeck1(gameState.available_cards.level1)
+    setDeck2(gameState.available_cards.level2)
+    setDeck3(gameState.available_cards.level3)
     const card =
       deck1.find(c => c.id === selectedCard.id) ||
       deck2.find(c => c.id === selectedCard.id) ||
@@ -240,11 +251,11 @@ export default function Gameboard() {
           handlePlayCard={handlePlayCard}
           addReserveToken={addReserveToken}
           setReservedCard={setReservedCard}
-          playCard={
-            selectedDeck === 1 ? playCard1 :
-              selectedDeck === 2 ? playCard2 :
-                playCard3
-          }
+          // playCard={
+          //   selectedDeck === 1 ? playCard1 :
+          //     selectedDeck === 2 ? playCard2 :
+          //       playCard3
+          // }
           handleReserveCard={handleReserveCard}
           reservedCard={reservedCard}
           selectedCard={selectedCard}
@@ -282,29 +293,23 @@ export default function Gameboard() {
 
         <div class='cards'>
           <div class='cards-row'>
-            <DeckManager deck={deck3} onClick={(card) => {
+            <DeckManager deck={gameState?.available_cards.level3} onClick={(card) => {
               setSelectedCard(card);
               setViewCard(true);
-              setSelectedDeck(3)
-              setDeck3(deck3)
             }} />
 
           </div>
           <div class='cards-row'>
-            <DeckManager deck={deck2} onClick={(card) => {
+            <DeckManager deck={gameState?.available_cards.level2} onClick={(card) => {
               setSelectedCard(card);
               setViewCard(true);
-              setSelectedDeck(2)
-              setDeck2(deck2)
             }} />
 
           </div>
           <div class='cards-row'>
-            <DeckManager deck={deck1} onClick={(card) => {
+            <DeckManager deck={gameState?.available_cards.level1} onClick={(card) => {
               setSelectedCard(card);
               setViewCard(true);
-              setSelectedDeck(1)
-              setDeck1(deck1)
             }} />
           </div>
         </div>
