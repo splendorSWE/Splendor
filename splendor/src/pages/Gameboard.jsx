@@ -37,7 +37,7 @@ export default function Gameboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-  
+
     console.log('Location State:', location.state);
 
     if (lobbyCode && playerID) {
@@ -51,16 +51,16 @@ export default function Gameboard() {
         .then((res) => res.json())
         .then((data) => setGameState(data))
         .catch((err) => console.error('Error fetching game state:', err));
-        // if (gameState && gameState[lobbyCode] && gameState[lobbyCode].available_cards) {
-        //   setDeck1(gameState.available_cards.level1 || [])
-        //   setDeck2(gameState.available_cards.level2 || [])
-        //   setDeck3(gameState.available_cards.level3 || [])
-        // }
+      // if (gameState && gameState[lobbyCode] && gameState[lobbyCode].available_cards) {
+      //   setDeck1(gameState.available_cards.level1 || [])
+      //   setDeck2(gameState.available_cards.level2 || [])
+      //   setDeck3(gameState.available_cards.level3 || [])
+      // }
     } else {
       console.error('Missing lobbyCode or playerID');
     }
   }, []);
-  
+
 
   const makeMove = async (moveData) => {
     try {
@@ -146,24 +146,24 @@ export default function Gameboard() {
           player: playerID     // Ensure playerID is the correct player identifier
         })
       });
-  
+
       // Check for unsuccessful response
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Error checking card affordability:', errorData.error);
         throw new Error(errorData.error || "Failed to check card affordability");
       }
-  
+
       // Handle success: Return the affordability result
       const result = await response.json();
       return result.can_buy;
-  
+
     } catch (error) {
       console.error("Error checking card affordability:", error);
       return false;
     }
   };
-  
+
 
 
   const handlePlayCard = () => {
@@ -213,8 +213,8 @@ export default function Gameboard() {
 
   const [selectedPlayer, setSelectedPlayer] = useState("My");
   console.log("Game state:", gameState);
-  console.log("Player Tokens:", gameState?.playerTokens);
-  console.log("Player Cards:", gameState?.playerCards);
+  console.log("Player Tokens:", gameState?.players?.[playerID]?.tokens);
+  console.log("Player Cards:", gameState?.players?.[playerID]?.permanentGems);
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
