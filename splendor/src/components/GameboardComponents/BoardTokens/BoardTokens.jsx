@@ -10,6 +10,7 @@ import Select3Tokens from './Select3Tokens';
 
 export default function BoardTokens({ gameState, handleTakeTokens }) {
   const [view, setView] = useState("default");
+  const tokenOrder = ['wild', 'white', 'blue', 'red', 'green', 'yellow'];
 
   const [tokens, setTokens] = useState(gameState?.tokens || {
   });
@@ -26,12 +27,12 @@ export default function BoardTokens({ gameState, handleTakeTokens }) {
 
   switch (view) {
     case "select":
-      return <SelectTokenView tokens={tokens} setView={setView} />;
+      return <SelectTokenView tokens={tokens} setView={setView} tokenOrder={tokenOrder}/>;
     case "select2":
-      return <Select2Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate} />;
+      return <Select2Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate} tokenOrder={tokenOrder}/>;
     case "select3":
-      return <Select3Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate} />;
+      return <Select3Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate} tokenOrder={tokenOrder}/>;
     default:
-      return <DefaultTokenView tokens={tokens} setView={setView} />;
+      return <DefaultTokenView tokens={tokens} setView={setView} tokenOrder={tokenOrder}/>;
   }
 }
