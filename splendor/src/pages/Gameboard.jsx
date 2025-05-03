@@ -185,13 +185,14 @@ export default function Gameboard() {
 
 
   const handlePlayCard = () => {
-    setDeck1(gameState.available_cards.level1)
-    setDeck2(gameState.available_cards.level2)
-    setDeck3(gameState.available_cards.level3)
+    const level1 = gameState.available_cards.level1 || [];
+    const level2 = gameState.available_cards.level2 || [];
+    const level3 = gameState.available_cards.level3 || [];
+  
     const card =
-      deck1.find(c => c.id === selectedCard.id) ||
-      deck2.find(c => c.id === selectedCard.id) ||
-      deck3.find(c => c.id === selectedCard.id);
+      level1.find(c => c.id === selectedCard.id) ||
+      level2.find(c => c.id === selectedCard.id) ||
+      level3.find(c => c.id === selectedCard.id);
     if (!card) {
       console.error("Card details not found");
       return;
