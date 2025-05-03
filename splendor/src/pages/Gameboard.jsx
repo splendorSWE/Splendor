@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './pageStyles/Gameboard.css';
+import { useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
+import socket from '../socket/socket';
 import PageHeader from '../components/PageHeader';
 import GetPath from '../components/CardComponents/GetPath';
-import { initialDeck1, initialDeck2, initialDeck3, shuffle } from "../components/CardComponents/Deck";
+// import { initialDeck1, initialDeck2, initialDeck3, shuffle } from "../components/CardComponents/Deck";
 import DeckManager from '../components/CardComponents/DeckManager';
 import GameEndPopup from '../components/GameboardComponents/GameEndPopup';
 import CollectionButton from '../components/GameboardComponents/CollectionButton';
@@ -17,7 +19,6 @@ import CardPopUp from '../components/GameboardComponents/CardPopUp';
 
 export default function Gameboard() {
   const [reservable, setReservable] = useState(true)
-  // const [points, setPoints] = useState(0);
   const [reservedCard, setReservedCard] = useState(null)
   const [playable, setPlayable] = useState(true)
   const [viewCard, setViewCard] = useState(false)
@@ -25,27 +26,67 @@ export default function Gameboard() {
   const [gameState, setGameState] = useState(null);
   const [error, setError] = useState('');
   const { user } = useAuthContext();
-  const [deck1, setDeck1] = useState(shuffle(initialDeck1))
-  const [deck2, setDeck2] = useState(shuffle(initialDeck2))
-  const [deck3, setDeck3] = useState(shuffle(initialDeck3))
-  const [selectedDeck, setSelectedDeck] = useState(1)
+  const [deck1, setDeck1] = useState([]);
+  const [deck2, setDeck2] = useState([]);
+  const [deck3, setDeck3] = useState([]);
+  // const [selectedDeck, setSelectedDeck] = useState(null)
   const [showGameEnd, setShowGameEnd] = useState(false);
+  const location = useLocation();
+  const lobbyCode = location.state?.lobbyCode;
+  const playerID = location.state?.playerID;
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:4000/game')
-      .then((res) => res.json())
-      .then((data) => setGameState(data))
-      .catch((err) => console.error('Error fetching game state:', err));
+
+    console.log('Location State:', location.state);
+
+    if (lobbyCode && playerID) {
+      fetch('http://localhost:4000/game', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ lobbyCode, playerID }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setGameState(data);
+
+          // ✅ Update decks based on the data, not the gameState
+          const cards = data[lobbyCode]?.available_cards;
+          if (cards) {
+            setDeck1(cards.level1 || []);
+            setDeck2(cards.level2 || []);
+            setDeck3(cards.level3 || []);
+          }
+        })
+        .catch((err) => console.error('Error fetching game state:', err));
+    }
+  }, []);
+
+  useEffect(() => {
+    socket.on("game_update", (updatedState) => {
+      setGameState(updatedState);
+      const cards = updatedState[lobbyCode]?.available_cards;
+      if (cards) {
+        setDeck1(cards.level1 || []);
+        setDeck2(cards.level2 || []);
+        setDeck3(cards.level3 || []);
+      }
+    });
+
+    return () => {
+      socket.off("game_update"); // Clean up listener on unmount
+    };
   }, []);
 
   const makeMove = async (moveData) => {
     try {
-      console.log('Making move:', moveData);
+      console.log('Making move:', moveData, lobbyCode, playerID);
       const response = await fetch('http://localhost:4000/game/move', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(moveData)
+        body: JSON.stringify({ ...moveData, lobbyCode: lobbyCode, player: playerID })
       });
 
       if (!response.ok) {
@@ -74,69 +115,84 @@ export default function Gameboard() {
   };
 
 
-  const playCard1 = () => {
-    console.log('selectedDeck:', selectedDeck);
-    if (!selectedCard) return;
-    const newDeck = deck1.filter((card) => card.id !== selectedCard.id);
-    setDeck1(newDeck);
-    setViewCard(false);
-    setSelectedCard(null);
-  };
+  // const playCard1 = () => {
+  //   console.log('selectedDeck:', selectedDeck);
+  //   if (!selectedCard) return;
+  //   const newDeck = deck1.filter((card) => card.id !== selectedCard.id);
+  //   setDeck1(newDeck);
+  //   setViewCard(false);
+  //   setSelectedCard(null);
+  // };
 
-  const playCard2 = () => {
-    console.log('selectedDeck:', selectedDeck);
-    if (!selectedCard) return;
-    const newDeck = deck2.filter((card) => card.id !== selectedCard.id);
-    setDeck2(newDeck);
-    setViewCard(false);
-    setSelectedCard(null);
-  };
+  // const playCard2 = () => {
+  //   console.log('selectedDeck:', selectedDeck);
+  //   if (!selectedCard) return;
+  //   const newDeck = deck2.filter((card) => card.id !== selectedCard.id);
+  //   setDeck2(newDeck);
+  //   setViewCard(false);
+  //   setSelectedCard(null);
+  // };
 
-  const playCard3 = () => {
-    console.log('selectedDeck:', selectedDeck);
-    if (!selectedCard) return;
-    const newDeck = deck3.filter((card) => card.id !== selectedCard.id);
-    setDeck3(newDeck);
-    setViewCard(false);
-    setSelectedCard(null);
-  }
+  // const playCard3 = () => {
+  //   console.log('selectedDeck:', selectedDeck);
+  //   if (!selectedCard) return;
+  //   const newDeck = deck3.filter((card) => card.id !== selectedCard.id);
+  //   setDeck3(newDeck);
+  //   setViewCard(false);
+  //   setSelectedCard(null);
+  // }
 
-  const sampleCards = {
-    "/Images/MainCards/Blue 1.0.png": {
-      cardId: "card1",
-      cardColor: "blue",
-      tokenPrice: { blue: 0, red: 1, white: 1, green: 1, yellow: 1, wild: 0 },
-      points: 0
-    }
-  };
+  // const sampleCards = {
+  //   "/Images/MainCards/Blue 1.0.png": {
+  //     cardId: "card1",
+  //     cardColor: "blue",
+  //     tokenPrice: { blue: 0, red: 1, white: 1, green: 1, yellow: 1, wild: 0 },
+  //     points: 0
+  //   }
+  // };
 
   const checkCardAffordability = async (cardId) => {
     try {
+      // Ensure lobbyCode and playerID are available in your component's state or props
+      console.log("Sending lobbyCode:", lobbyCode);
       const response = await fetch("http://localhost:4000/game/check_affordability", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ cardId: cardId }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cardId: cardId,       // Send the cardId
+          lobbyCode: lobbyCode, // Ensure lobbyCode is set properly
+          player: playerID     // Ensure playerID is the correct player identifier
+        })
       });
-  
+
+      // Check for unsuccessful response
       if (!response.ok) {
-        throw new Error("Failed to check card affordability");
+        const errorData = await response.json();
+        console.error('Error checking card affordability:', errorData.error);
+        throw new Error(errorData.error || "Failed to check card affordability");
       }
-  
+
+      // Handle success: Return the affordability result
       const result = await response.json();
       return result.can_buy;
+
     } catch (error) {
       console.error("Error checking card affordability:", error);
       return false;
     }
   };
 
+
+
   const handlePlayCard = () => {
+    const level1 = gameState.available_cards.level1 || [];
+    const level2 = gameState.available_cards.level2 || [];
+    const level3 = gameState.available_cards.level3 || [];
+  
     const card =
-      deck1.find(c => c.id === selectedCard.id) ||
-      deck2.find(c => c.id === selectedCard.id) ||
-      deck3.find(c => c.id === selectedCard.id);
+      level1.find(c => c.id === selectedCard.id) ||
+      level2.find(c => c.id === selectedCard.id) ||
+      level3.find(c => c.id === selectedCard.id);
     if (!card) {
       console.error("Card details not found");
       return;
@@ -152,7 +208,14 @@ export default function Gameboard() {
 
   const handleReserveCard = () => {
     console.log("Reserving card");
-    const card = [...deck1, ...deck2, ...deck3].find(card => card.id === selectedCard.id);
+    const level1 = gameState.available_cards.level1 || [];
+    const level2 = gameState.available_cards.level2 || [];
+    const level3 = gameState.available_cards.level3 || [];
+
+    const card =
+      level1.find(c => c.id === selectedCard.id) ||
+      level2.find(c => c.id === selectedCard.id) ||
+      level3.find(c => c.id === selectedCard.id);
     if (!card) {
       console.error("Card details not found");
       return;
@@ -178,7 +241,9 @@ export default function Gameboard() {
   };
 
   const [selectedPlayer, setSelectedPlayer] = useState("My");
-
+  console.log("Game state:", gameState);
+  console.log("Player Tokens:", playerID, gameState?.players?.[playerID]?.tokens);
+  console.log("Player Cards:", playerID, gameState?.players?.[playerID]?.permanentGems);
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
@@ -194,36 +259,36 @@ export default function Gameboard() {
           handlePlayCard={handlePlayCard}
           addReserveToken={addReserveToken}
           setReservedCard={setReservedCard}
-          playCard={
-            selectedDeck === 1 ? playCard1 :
-              selectedDeck === 2 ? playCard2 :
-                playCard3
-          }
+          // playCard={
+          //   selectedDeck === 1 ? playCard1 :
+          //     selectedDeck === 2 ? playCard2 :
+          //       playCard3
+          // }
           handleReserveCard={handleReserveCard}
           reservedCard={reservedCard}
           selectedCard={selectedCard}
           checkCardAffordability={checkCardAffordability}
         />
         <div>
-        <CollectionButton
-          player="My"
-          isSelected={selectedPlayer === 'My'}
-          onClick={() => setSelectedPlayer('My')}
-        />
-        <CollectionButton
-          player="Opponent"
-          isSelected={selectedPlayer === 'Opponent'}
-          onClick={() => setSelectedPlayer('Opponent')}
-        />
+          <CollectionButton
+            player="My"
+            isSelected={selectedPlayer === 'My'}
+            onClick={() => setSelectedPlayer('My')}
+          />
+          <CollectionButton
+            player="Opponent"
+            isSelected={selectedPlayer === 'Opponent'}
+            onClick={() => setSelectedPlayer('Opponent')}
+          />
           <PlayerCollection
-            Points={gameState ? (selectedPlayer === "My" ? gameState.points : gameState.opponentPoints) : 0}
-            tokens={gameState ? (selectedPlayer === "My" ? gameState.playerTokens : gameState.opponentTokens) : {}}
-            playerCards={gameState ? (selectedPlayer === "My" ? gameState.playerCards : gameState.opponentCards) : {}}          
-            //Points={gameState ? gameState.points : 0}
+            // Points={gameState ? (selectedPlayer === "My" ? gameState.points : gameState.opponentPoints) : 0}
+            // tokens={gameState ? (selectedPlayer === "My" ? gameState.playerTokens : gameState.opponentTokens) : {}}
+            // playerCards={gameState ? (selectedPlayer === "My" ? gameState.playerCards : gameState.opponentCards) : {}}
+            Points={gameState?.players?.[playerID]?.points || 0}
             viewCard={viewCard}
             setViewCard={setViewCard}
-            //tokens={gameState ? gameState.playerTokens : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
-            //playerCards={gameState ? gameState.playerCards : { wild: 0, white: 0, blue: 0, red: 0, green: 0, yellow: 0 }}
+            tokens={gameState?.players?.[playerID]?.tokens || {}}
+            playerCards={gameState?.players?.[playerID]?.permanentGems || {}}
             reservable={reservable}
             setReservedCard={setReservedCard}
             reservedCard={reservedCard}
@@ -236,29 +301,23 @@ export default function Gameboard() {
 
         <div class='cards'>
           <div class='cards-row'>
-            <DeckManager deck={deck3} onClick={(card) => {
+            <DeckManager deck={gameState?.available_cards.level3} onClick={(card) => {
               setSelectedCard(card);
               setViewCard(true);
-              setSelectedDeck(3)
-              setDeck3(deck3)
             }} />
 
           </div>
           <div class='cards-row'>
-            <DeckManager deck={deck2} onClick={(card) => {
+            <DeckManager deck={gameState?.available_cards.level2} onClick={(card) => {
               setSelectedCard(card);
               setViewCard(true);
-              setSelectedDeck(2)
-              setDeck2(deck2)
             }} />
 
           </div>
           <div class='cards-row'>
-            <DeckManager deck={deck1} onClick={(card) => {
+            <DeckManager deck={gameState?.available_cards.level1} onClick={(card) => {
               setSelectedCard(card);
               setViewCard(true);
-              setSelectedDeck(1)
-              setDeck1(deck1)
             }} />
           </div>
         </div>
@@ -277,7 +336,7 @@ export default function Gameboard() {
         opponentPoints={10}
         playerPic={"/images/default_pfp.jpg"}
         opponentPic={"/images/default_pfp.jpg"}
-        onClose={() => {setShowGameEnd(false); navigate('/')}}
+        onClose={() => { setShowGameEnd(false); navigate('/') }}
       />
     </div>
   );

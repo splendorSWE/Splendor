@@ -1,23 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "./Card";
 
 export default function DeckManager({ deck, onClick }) {
-
-    // const replaceCard = (id) => {
-    //     const newDeck = deck.filter(c => c.id !== id);
-    //     setDeck(newDeck);
-    //     onClick?.(id);
-    // };
-
-    return (
-        <div>
-            {deck.slice(0, 4).map((card) => (
-                <Card
-                    key={card.id}
-                    {...card}
-                    onClick={() => onClick(card)}
-                />
-            ))}
-        </div>
-    );
+  const safeDeck = Array.isArray(deck) ? deck : [];
+  console.log("DeckManager received deck:", deck);
+  return (
+    <div>
+      {safeDeck.map((card) => (
+        <Card
+          key={card.id}
+          {...card}
+          onClick={() => onClick(card)}
+        />
+      ))}
+    </div>
+  );
 }
+

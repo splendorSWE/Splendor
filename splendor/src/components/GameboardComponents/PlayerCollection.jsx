@@ -3,7 +3,7 @@ import CollectionCard from './CollectionCard';
 import Token from './Token';
 
 export default function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard, reservable, reservedCard, setSelectedCard, selectedCard }) {
-
+  
   return (
     <div className='player-collection-main-div'>
 

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import DefaultTokenView from './DefaultTokenView';
 import SelectTokenView from './SelectTokenView';
 import Select2Tokens from './Select2Tokens';
@@ -9,28 +10,29 @@ import Select3Tokens from './Select3Tokens';
 
 export default function BoardTokens({ gameState, handleTakeTokens }) {
   const [view, setView] = useState("default");
+  const tokenOrder = ['wild', 'white', 'blue', 'red', 'green', 'yellow'];
 
   const [tokens, setTokens] = useState(gameState?.tokens || {
-    wild: 5,
-    white: 4,
-    blue: 4,
-    red: 4,
-    green: 4,
-    yellow: 4,
   });
 
-  const handleTokenUpdate = (updatedTokens) => {
-    setTokens(updatedTokens); // Update the tokens state
+  const handleTokenUpdate = () => {
+    setTokens(gameState.tokens); // Update the tokens state
   };
+  
+  useEffect(() => {
+    if (gameState?.tokens) {
+      setTokens(gameState.tokens);
+    }
+  }, [gameState]);
 
   switch (view) {
     case "select":
-      return <SelectTokenView tokens={tokens} setView={setView} />;
+      return <SelectTokenView tokens={tokens} setView={setView} tokenOrder={tokenOrder}/>;
     case "select2":
-      return <Select2Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate} />;
+      return <Select2Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate} tokenOrder={tokenOrder}/>;
     case "select3":
-      return <Select3Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate} />;
+      return <Select3Tokens tokens={tokens} setView={setView} handleTakeTokens={handleTakeTokens} handleTokenUpdate={handleTokenUpdate} tokenOrder={tokenOrder}/>;
     default:
-      return <DefaultTokenView tokens={tokens} setView={setView} />;
+      return <DefaultTokenView tokens={tokens} setView={setView} tokenOrder={tokenOrder}/>;
   }
 }

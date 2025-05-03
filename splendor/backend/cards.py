@@ -89,17 +89,6 @@ initial_deck1 = [
         "points": 0,
     },
     {
-        "id": "Blue 1.7",
-        "level": 1,
-        "color": "blue",
-        "redPrice": 4,
-        "greenPrice": 0,
-        "bluePrice": 0,
-        "yellowPrice": 0,
-        "whitePrice": 0,
-        "points": 0,
-    },
-    {
         "id": "Green 1.0",
         "level": 1,
         "color": "green",
@@ -441,7 +430,7 @@ initial_deck1 = [
         "points": 0,
     },
     {
-        "id": "Yellow 1.6",
+        "id": "Yellow 1.7",
         "level": 1,
         "color": "yellow",
         "redPrice": 0,
@@ -999,7 +988,7 @@ initial_deck3 = [
         "points": 4,
     },
     {
-        "id": "Yellow 3.0",
+        "id": "Yellow 3.3",
         "level": 3,
         "color": "yellow",
         "redPrice": 1,
