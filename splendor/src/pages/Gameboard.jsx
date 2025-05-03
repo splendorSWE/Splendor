@@ -208,7 +208,14 @@ export default function Gameboard() {
 
   const handleReserveCard = () => {
     console.log("Reserving card");
-    const card = [...deck1, ...deck2, ...deck3].find(card => card.id === selectedCard.id);
+    const level1 = gameState.available_cards.level1 || [];
+    const level2 = gameState.available_cards.level2 || [];
+    const level3 = gameState.available_cards.level3 || [];
+    
+    const card =
+      level1.find(c => c.id === selectedCard.id) ||
+      level2.find(c => c.id === selectedCard.id) ||
+      level3.find(c => c.id === selectedCard.id);
     if (!card) {
       console.error("Card details not found");
       return;
