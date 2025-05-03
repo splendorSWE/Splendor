@@ -211,7 +211,7 @@ export default function Gameboard() {
     const level1 = gameState.available_cards.level1 || [];
     const level2 = gameState.available_cards.level2 || [];
     const level3 = gameState.available_cards.level3 || [];
-    
+
     const card =
       level1.find(c => c.id === selectedCard.id) ||
       level2.find(c => c.id === selectedCard.id) ||
@@ -284,7 +284,7 @@ export default function Gameboard() {
             // Points={gameState ? (selectedPlayer === "My" ? gameState.points : gameState.opponentPoints) : 0}
             // tokens={gameState ? (selectedPlayer === "My" ? gameState.playerTokens : gameState.opponentTokens) : {}}
             // playerCards={gameState ? (selectedPlayer === "My" ? gameState.playerCards : gameState.opponentCards) : {}}
-            Points={gameState?.points || 0}
+            Points={gameState?.players?.[playerID]?.points || 0}
             viewCard={viewCard}
             setViewCard={setViewCard}
             tokens={gameState?.players?.[playerID]?.tokens || {}}
