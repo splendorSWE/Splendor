@@ -73,7 +73,9 @@ def initialize_game_state(players):
             "level1": deck1,
             "level2": deck2,
             "level3": deck3
-        }
+        },
+        "current_turn": players[0],
+        "turn_order": players
     }
 
 def affordability(card_row, player_tokens, permanent_gems):
@@ -133,6 +135,9 @@ def make_move():
     state = game_states[lobby_code]
     player_state = state["players"][player]
 
+    if state["current_turn"] != player:
+        return jsonify({"error": "Not your turn"}), 403
+
     if action == "take_tokens":
         tokens_requested = data.get("tokens", {})
 
@@ -145,6 +150,11 @@ def make_move():
             state["tokens"][token] -= count
             player_state["tokens"][token] += count
 
+        turn_order = state["turn_order"]
+        current_index = turn_order.index(state["current_turn"])
+        next_index = (current_index + 1) % len(turn_order)
+        state["current_turn"] = turn_order[next_index]
+        
         update_clients(lobby_code)
         return jsonify(state)
 
@@ -188,7 +198,11 @@ def make_move():
                         new_card = state["decks"][level].pop()
                         available.insert(i, new_card)
                     break
-
+        
+        turn_order = state["turn_order"]
+        current_index = turn_order.index(state["current_turn"])
+        next_index = (current_index + 1) % len(turn_order)
+        state["current_turn"] = turn_order[next_index]
 
         update_clients(lobby_code)
         return jsonify(state)
