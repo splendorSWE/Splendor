@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, setPlayable, reservable, setReservable, handlePlayCard, addReserveToken, handleReserveCard, reservedCard, selectedCard, checkCardAffordability }) {
+export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, setPlayable, reservable, setReservable, handlePlayCard, addReserveToken, handleReserveCard, reservedCard, selectedCard, checkCardAffordability, gameState, playerID }) {
     useEffect(() => {
       const fetchCardAffordability = async () => {
         const isPlayable = await checkCardAffordability(selectedCard.id);
@@ -11,6 +11,7 @@ export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, 
         fetchCardAffordability();
       }
     }, [selectedCard, checkCardAffordability, setPlayable]);
+    
     return (
       viewCard && (
         <div className="card-pop-up-container">
@@ -23,8 +24,8 @@ export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, 
             className="card-pop-up"
           />
           <div className="pop-up-button-container">
-            <div
-              className={`play-card-button ${!playable ? "disabled" : ""}`}
+            <button
+              className={`play-card-button ${!playable || gameState?.current_turn !== playerID? "disabled" : ""}`}
               onClick={() => {
                 if (!playable) return;
                 setViewCard(false);
@@ -35,11 +36,11 @@ export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, 
               }}
             >
               Play
-            </div>
+            </button>
   
-            <div className={`play-card-button ${!reservable ? "disabled" : ""}`}
+            <button className={`play-card-button ${!reservable || gameState?.current_turn !== playerID ? "disabled" : ""}`}
   
-              disabled={!reservable}
+              disabled={!reservable || gameState?.current_turn !== playerID}
   
               onClick={() => {
                 setViewCard(false);
@@ -49,7 +50,7 @@ export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, 
                 }
               }}>
               Reserve
-            </div>
+            </button>
           </div>
         </div>
       )

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Token from '../Token';
 
-export default function DefaultTokenView({ tokens, setView, tokenOrder }) {
+export default function DefaultTokenView({ tokens, setView, tokenOrder, isTurn }) {
   return (
     <div className="board-tokens-section">
-      <button className='select-tokens-button' onClick={() => setView("select")}>
+      <button className='select-tokens-button' disabled={!isTurn} onClick={() => setView("select")}>
         Select Tokens
       </button>
 
