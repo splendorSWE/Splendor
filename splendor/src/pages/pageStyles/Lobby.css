@@ -11,18 +11,16 @@
 }
 
 .main-box {
-    width: 40vw;
-    height: calc(100vh - 225px);
+    width: 550px;
+    height: 550px;
     min-width: 400px;
     min-height: 400px;
     background-color: #E9E9E9;
-    margin-left: 40px;
-    margin-right: 40px;
     font-family: Inknut Antiqua, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: none;
+    justify-content: center;
     color: #27394D;
 }
 
