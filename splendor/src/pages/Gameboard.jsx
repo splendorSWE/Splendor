@@ -152,11 +152,11 @@ export default function Gameboard() {
   // };
 
   const checkCardAffordability = async (cardId) => {
-    if (gameState?.current_turn != playerID){
+    if (gameState?.current_turn != playerID) {
       console.log("not your turn")
       return false
     }
-    
+
     try {
       // Ensure lobbyCode and playerID are available in your component's state or props
       console.log("Sending lobbyCode:", lobbyCode);
@@ -190,7 +190,7 @@ export default function Gameboard() {
 
 
   const handlePlayCard = () => {
-    if (gameState?.current_turn != playerID){
+    if (gameState?.current_turn != playerID) {
       console.log("not your turn")
       return false
     }
@@ -217,7 +217,7 @@ export default function Gameboard() {
   };
 
   const handleReserveCard = () => {
-    if (gameState?.current_turn != playerID){
+    if (gameState?.current_turn != playerID) {
       console.log("not your turn")
       return false
     }
@@ -337,16 +337,17 @@ export default function Gameboard() {
           <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
           <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
           <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
+        </div>
+        <div>
           {gameState && (
-            <div className="turn-info">
+            <div className="turn-tracker">
               <h3>
                 {gameState.current_turn === playerID
-                  ? "Your Turn"
+                  ? "Your Turn!"
                   : `Waiting for ${gameState.current_turn}'s Turn...`}
               </h3>
             </div>
           )}
-
         </div>
       </div>
       <GameEndPopup
