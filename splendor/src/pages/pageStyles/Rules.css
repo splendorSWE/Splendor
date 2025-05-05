@@ -30,4 +30,34 @@
     margin-left: auto;
     margin-right: auto;
   }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #27394D;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  ul {
+    padding-left: 1.25rem;
+    list-style-type: disc;
+  }
+  
+  li {
+    margin-bottom: 0.5rem;
+  }
+  
+  strong {
+    color: #27394D;
+  }
+  
+  .page-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #27394D;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
   
