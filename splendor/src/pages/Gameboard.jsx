@@ -309,7 +309,7 @@ export default function Gameboard() {
           />
         </div>
 
-        <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
+        <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} playerID={playerID} />
 
         <div class='cards'>
           <div class='cards-row'>
