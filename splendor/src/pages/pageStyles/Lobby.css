@@ -1,0 +1,48 @@
+.main-container {
+    font-family: "Fondamento", sans-serif;
+    width: 100vw;
+    height: calc(100vh - 140px);
+    display: flex;
+    flex-direction: row;
+    margin-top: 100px;
+    margin-bottom: 40px;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-box {
+    width: 550px;
+    height: 550px;
+    min-width: 400px;
+    min-height: 400px;
+    background-color: #E9E9E9;
+    font-family: Inknut Antiqua, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #27394D;
+}
+
+.ready-button {
+    height: 10vh;
+    width: 25vw;
+    min-width: 200px;
+    min-height: 75px;
+    background: #F6D354;
+    color: #27394D;
+    border-radius: 5px;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-weight: 600;
+    font-size: 1.5em;
+    font-family: Inknut Antiqua, sans-serif;
+    border: 2;
+    border-color: #F6D354;
+    margin-bottom: 10px;
+}
+
+.ready {
+    background-color: rgb(223, 223, 223);
+    border-color: #F6D354;
+  }
