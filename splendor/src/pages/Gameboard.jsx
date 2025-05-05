@@ -35,6 +35,7 @@ export default function Gameboard() {
   const lobbyCode = location.state?.lobbyCode;
   const playerID = location.state?.playerID;
   const navigate = useNavigate();
+  const [selectedPlayer, setSelectedPlayer] = useState("My");
 
   useEffect(() => {
 
@@ -52,7 +53,6 @@ export default function Gameboard() {
         .then((data) => {
           setGameState(data);
 
-          // ✅ Update decks based on the data, not the gameState
           const cards = data[lobbyCode]?.available_cards;
           if (cards) {
             setDeck1(cards.level1 || []);
@@ -240,10 +240,6 @@ export default function Gameboard() {
 
   };
 
-  const [selectedPlayer, setSelectedPlayer] = useState("My");
-  console.log("Game state:", gameState);
-  console.log("Player Tokens:", playerID, gameState?.players?.[playerID]?.tokens);
-  console.log("Player Cards:", playerID, gameState?.players?.[playerID]?.permanentGems);
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
@@ -281,14 +277,26 @@ export default function Gameboard() {
             onClick={() => setSelectedPlayer('Opponent')}
           />
           <PlayerCollection
-            // Points={gameState ? (selectedPlayer === "My" ? gameState.points : gameState.opponentPoints) : 0}
-            // tokens={gameState ? (selectedPlayer === "My" ? gameState.playerTokens : gameState.opponentTokens) : {}}
-            // playerCards={gameState ? (selectedPlayer === "My" ? gameState.playerCards : gameState.opponentCards) : {}}
-            Points={gameState?.players?.[playerID]?.points || 0}
+            Points={
+              selectedPlayer === "My"
+                ? gameState?.players?.[playerID]?.points || 0
+                : Object.entries(gameState?.players || {})
+                    .find(([id]) => id !== playerID)?.[1]?.points || 0
+            } 
+            tokens={
+              selectedPlayer === "My"
+                ? gameState?.players?.[playerID]?.tokens || {}
+                : Object.entries(gameState?.players || {})
+                    .find(([id]) => id !== playerID)?.[1]?.tokens || {}
+            }
+            playerCards={
+              selectedPlayer === "My"
+                ? gameState?.players?.[playerID]?.permanentGems || {}
+                : Object.entries(gameState?.players || {})
+                    .find(([id]) => id !== playerID)?.[1]?.permanentGems || {}
+            }
             viewCard={viewCard}
             setViewCard={setViewCard}
-            tokens={gameState?.players?.[playerID]?.tokens || {}}
-            playerCards={gameState?.players?.[playerID]?.permanentGems || {}}
             reservable={reservable}
             setReservedCard={setReservedCard}
             reservedCard={reservedCard}
