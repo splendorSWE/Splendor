@@ -11,6 +11,7 @@ export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, 
         fetchCardAffordability();
       }
     }, [selectedCard, checkCardAffordability, setPlayable]);
+    
     return (
       viewCard && (
         <div className="card-pop-up-container">
@@ -24,7 +25,7 @@ export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, 
           />
           <div className="pop-up-button-container">
             <button
-              className={`play-card-button ${!playable ? "disabled" : ""}`}
+              className={`play-card-button ${!playable || gameState?.current_turn !== playerID? "disabled" : ""}`}
               onClick={() => {
                 if (!playable) return;
                 setViewCard(false);
