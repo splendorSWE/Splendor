@@ -221,7 +221,7 @@ export default function Gameboard() {
       console.log("not your turn")
       return false
     }
-    
+
     console.log("Reserving card");
     const level1 = gameState.available_cards.level1 || [];
     const level2 = gameState.available_cards.level2 || [];
@@ -274,15 +274,12 @@ export default function Gameboard() {
           handlePlayCard={handlePlayCard}
           addReserveToken={addReserveToken}
           setReservedCard={setReservedCard}
-          // playCard={
-          //   selectedDeck === 1 ? playCard1 :
-          //     selectedDeck === 2 ? playCard2 :
-          //       playCard3
-          // }
+          gameState={gameState}
           handleReserveCard={handleReserveCard}
           reservedCard={reservedCard}
           selectedCard={selectedCard}
           checkCardAffordability={checkCardAffordability}
+          playerID={playerID}
         />
         <div>
           <CollectionButton
