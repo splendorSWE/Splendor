@@ -1,4 +1,5 @@
 import GetPath from '../CardComponents/GetPath';
+import '../componentStyles/CollectionCard.css';
 
 export default function ReservedCard({ viewCard, setViewCard, reservable, reservedCard, selectedCard, setSelectedCard }) {
     return (
