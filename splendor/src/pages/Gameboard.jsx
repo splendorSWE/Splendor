@@ -3,7 +3,7 @@ import './pageStyles/Gameboard.css';
 import { useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
-import socket from '../socket/socket';
+// import socket from '../socket/socket';
 import PageHeader from '../components/PageHeader';
 import GetPath from '../components/CardComponents/GetPath';
 // import { initialDeck1, initialDeck2, initialDeck3, shuffle } from "../components/CardComponents/Deck";
@@ -14,7 +14,8 @@ import PlayerCollection from '../components/GameboardComponents/PlayerCollection
 import BoardTokens from '../components/GameboardComponents/BoardTokens/BoardTokens';
 import NobleCard from '../components/GameboardComponents/NobleCard';
 import CardPopUp from '../components/GameboardComponents/CardPopUp';
-
+import { useContext } from 'react';
+import { SocketContext } from '../context/SocketContext';
 
 
 export default function Gameboard() {
@@ -30,13 +31,14 @@ export default function Gameboard() {
   const [deck2, setDeck2] = useState([]);
   const [deck3, setDeck3] = useState([]);
   // const [selectedDeck, setSelectedDeck] = useState(null)
-  const [showGameEnd, setShowGameEnd] = useState(false);
+  const [showGameEnd, setShowGameEnd] = useState(true);
   const location = useLocation();
   const lobbyCode = location.state?.lobbyCode;
   const playerID = location.state?.playerID;
   const navigate = useNavigate();
   const [selectedPlayer, setSelectedPlayer] = useState("My");
 
+  const socket = useContext(SocketContext);
   useEffect(() => {
 
     console.log('Location State:', location.state);

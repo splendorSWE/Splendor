@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { SocketContext } from "../context/SocketContext";
 import { db } from "../firebase";
 import { ref, get } from "firebase/database";
+import socket from '../socket/socket';
 
 
 // import { io } from "socket.io-client";
