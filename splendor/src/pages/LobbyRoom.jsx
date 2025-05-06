@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import socket from "../socket/socket";
 import PageHeader from "../components/PageHeader";
-import "./pageStyles/Home.css";
+import "./pageStyles/Lobby.css";
 import { useAuthContext } from "../context/AuthContext";
 
 
@@ -115,8 +115,8 @@ export default function LobbyRoom() {
         />
       </div>
 
-      <div className="home-container">
-        <div className="option-box">
+      <div className="main-container">
+        <div className="main-box">
           <h2>Players in Lobby</h2>
           <ul>
             {players.map((p, i) => (
@@ -125,7 +125,7 @@ export default function LobbyRoom() {
           </ul>
           <p className="turn-timer">Lobby Code: {lobbyCode}</p>
           <button
-            className="create-button"
+            className={`ready-button ${isReady ? "ready" : "not-ready"}`}
             onClick={() => {
               if (!hasReceivedLobbyInfo) {
                 console.warn("⛔ Can't ready up before lobby info is received");
