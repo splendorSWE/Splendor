@@ -358,13 +358,30 @@ export default function Gameboard() {
           <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
         </div>
         <div>
-          {gameState && (
+          {/* {gameState && (
             <div className="turn-tracker">
               <h3>
                 {gameState.current_turn === playerID
                   ? "Your Turn!"
                   : `Waiting for ${gameState.current_turn}'s Turn...`}
               </h3>
+            </div>
+          )} */}
+          {gameState && (
+            <div className="turn-tracker">
+              <img
+                src={
+                  gameState.players?.[gameState.current_turn]?.photoURL ||
+                  "/images/default_pfp.jpg"
+                }
+                alt="Profile"
+                className="turn-tracker-pfp"
+              />
+              <span className="turn-tracker-text">
+                {gameState.current_turn === playerID
+                  ? "Your Turn"
+                  : `${gameState.players?.[gameState.current_turn]?.username || "Opponent"}'s Turn`}
+              </span>
             </div>
           )}
         </div>
