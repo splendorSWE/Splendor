@@ -31,35 +31,42 @@ export default function EditProfile() {
     const { user } = useAuthContext();
 
     useEffect(() => {
+       
         const fetchUserInfo = async () => {
-            
-            if (user) {
-                if (user.isAnonymous) {
-                    setUserInfo({
-                        username: "Guest",
-                        createdAt: "N/A",
-                        wins: "N/A",
-                        isGuest: true,
-                    });
-                } else {
-                    const userId = user.uid;
-                    const snapshot = await get(ref(db, "users/" + userId));
-                    if (snapshot.exists()) {
-                        const data = snapshot.val();
-                        setUserInfo({
-                            username: data.username,
-                            createdAt: new Date(data.createdAt).toLocaleDateString(),
-                            wins: data.wins,
-                        });
-                    } else {
-                        console.log("No user data found!");
-                    }
-                }
-            } else {
-                setUserInfo("No User");
+            if (!user) {
+              setUserInfo("No User");
+              return;
             }
-        };
-
+          
+            const userId = user.uid;
+            try {
+              const snapshot = await get(ref(db, "users/" + userId));
+          
+              if (snapshot.exists()) {
+                const data = snapshot.val();
+                setUserInfo({
+                  username: data.username || (user.isAnonymous ? "Guest" : user.email?.split("@")[0]),
+                  createdAt: data.createdAt ? new Date(data.createdAt).toLocaleDateString() : "N/A",
+                  wins: data.wins ?? "N/A",
+                  isGuest: user.isAnonymous,
+                });
+              } else {
+                // fallback values for both anonymous and signed-in users
+                console.warn("No user data found!");
+          
+                setUserInfo({
+                  username: user.isAnonymous ? `Guest-${userId.slice(-4)}` : user.email?.split("@")[0],
+                  createdAt: "N/A",
+                  wins: "N/A",
+                  isGuest: user.isAnonymous,
+                });
+              }
+            } catch (err) {
+              console.error("Error fetching user info:", err);
+              setUserInfo("No User");
+            }
+          };
+          
         fetchUserInfo();
     }, [user, loading]);
     useEffect(() => {
