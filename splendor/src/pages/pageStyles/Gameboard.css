@@ -29,16 +29,6 @@
     /* margin-left: 20px; */
 }
 
-.collection-button {
-    height: 60px;
-    width: 105px;
-    margin-top: 40px;
-    margin-left: 10px;
-    font-family: Inknut Antiqua, sans-serif;
-    font-weight: 800;
-    line-height: 20px;
-}
-
 .token-div {
     position: relative;
     width: 80px;

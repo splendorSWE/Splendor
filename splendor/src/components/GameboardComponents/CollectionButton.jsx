@@ -1,3 +1,5 @@
+import '../componentStyles/CollectionButton.css';
+
 export default function CollectionButton({ player, isSelected, onClick }) {
     return (
       <button
