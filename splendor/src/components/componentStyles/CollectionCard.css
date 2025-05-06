@@ -24,3 +24,14 @@
     color: black;
     font-Family: Ponomar, sans-serif;
 }
+
+.reserved-card-span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    font-weight: 800;
+    color: White;
+    font-family: Ponomar, sans-serif;
+}
