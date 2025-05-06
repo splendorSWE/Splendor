@@ -153,11 +153,6 @@ export default function Gameboard() {
   //     points: 0
   //   }
   // };
-  useEffect(() => {
-    if (gameState?.game_over) {
-      setShowGameEnd(true);
-    }
-  }, [gameState?.gameOver]);
 
   const checkCardAffordability = async (cardId) => {
     if (gameState?.current_turn != playerID) {
