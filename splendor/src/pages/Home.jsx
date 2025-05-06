@@ -9,23 +9,6 @@ import { SocketContext } from "../context/SocketContext";
 import { db } from "../firebase";
 import { ref, get } from "firebase/database";
 
-
-// import { io } from "socket.io-client";
-
-// const SocketContext = io("http://localhost:4000");
-
-function GameChoiceButton({ title, selected, onClick }) {
-    return (
-      <button
-        className={`game-choice-button ${selected ? "selected" : ""}`}
-        onClick={onClick}
-      >
-        {title}
-      </button>
-    );
-  }
-
-
 export default function Home() {
 
     const {user} = useAuthContext()
@@ -183,10 +166,10 @@ export default function Home() {
         <div>
             <div className="page-header"><PageHeader title='Home' home={false} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous}/></div>
             <div className="home-container">
-            <div className="option-box">
+            <div className="home-play-box">
               <h1 className="box-header">Play Splendor</h1>
 
-              <button className="create-button primary-button" onClick={handleCreateLobby}>
+              <button className="create-game-button" onClick={handleCreateLobby}>
                 Create Game
               </button>
 
@@ -199,13 +182,11 @@ export default function Home() {
                   onChange={(e) => setJoinCode(e.target.value)}
                 />
 
-                <button className="create-button secondary-button" onClick={handleJoinLobby} disabled={joinCode.trim().length < 4}>
+                <button className="join-game-button" onClick={handleJoinLobby} disabled={joinCode.trim().length < 4}>
                   Join Game
                 </button>
               </div>
             </div>
-
-
             </div>
     </div>        
     )
