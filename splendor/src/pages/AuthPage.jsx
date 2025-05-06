@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { signup, login, logout, loginGuest, useAuth } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import { ref, set } from "firebase/database";
+import { ref, set, get } from "firebase/database";
 import { db } from "../firebase";
 import PageHeader from '../components/PageHeader';
 import NavigationButton from "../components/NavigationButton";
@@ -22,7 +22,20 @@ export default function AuthPage() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const user = useAuth()
+  const [username, setUsername] = useState("");
 
+  useEffect(() => {
+    const checkAndNavigate = async () => {
+      if (user && user.isAnonymous) {
+        const snapshot = await get(ref(db, "users/" + user.uid));
+        if (snapshot.exists()) {
+          navigate("/");
+        }
+      }
+    };
+  
+    checkAndNavigate();
+  }, [user, navigate]);
 
   const handleGuestSignIn = async () => {
     try {
@@ -32,6 +45,13 @@ export default function AuthPage() {
       setError(error.message);
     }
   };
+  // const handleGuestSignIn = async () => {
+  //   try {
+  //     await loginGuest(); 
+  //   } catch (error) {
+  //     setError(error.message);
+  //   }
+  // };
   
 
   const handleSignOut = async () => {
@@ -55,8 +75,8 @@ export default function AuthPage() {
       else {
         const userCredential = await signup(email, password);
         const user = userCredential.user;
-        const randomNumber = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
-        const userName = "User" + randomNumber
+        const userName = username.trim();
+
         // ✅ Save user info to Realtime Database
         await set(ref(db, "users/" + user.uid), {
           email: user.email,
@@ -118,6 +138,24 @@ export default function AuthPage() {
               gap: "0.75rem",
             }}
           >
+            {!isLogin && (
+              <input
+                type="text"
+                placeholder="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                style={{
+                  padding: "0.75rem",
+                  fontSize: "1rem",
+                  borderRadius: "4px",
+                  border: "none",
+                  backgroundColor: "#E8E8E8",
+                  fontFamily: "YourCustomFont, serif",
+                }}
+              />
+            )}
+
             <input
               type="email"
               placeholder="email"

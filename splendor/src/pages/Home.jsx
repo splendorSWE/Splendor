@@ -29,10 +29,7 @@ function GameChoiceButton({ title, selected, onClick }) {
 export default function Home() {
 
     const {user} = useAuthContext()
-    const username =
-  user && !user.isAnonymous
-    ? user.username || user.displayName || user.email?.split("@")[0]
-    : `Guest-${Math.floor(Math.random() * 1000)}`;
+
     const usernameRef = useRef("");
 
 
@@ -83,8 +80,23 @@ export default function Home() {
               console.error("Error fetching username from DB:", error);
             }
           } else {
-            usernameRef.current = `Guest-${Math.floor(Math.random() * 1000)}`;
+          
+            try {
+              const snapshot = await get(ref(db, "users/" + user.uid));
+              if (snapshot.exists()) {
+                const data = snapshot.val();
+                usernameRef.current = data.username || "Guest";
+              } else {
+                console.warn("No guest username found in database.");
+                usernameRef.current = "Guest";
+              }
+            } catch (error) {
+              console.error("Error fetching guest username:", error);
+              usernameRef.current = "Guest";
+            }
           }
+          
+          
         };
       
         fetchUsername();
