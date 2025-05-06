@@ -75,6 +75,7 @@ export default function Gameboard() {
         setDeck2(cards.level2 || []);
         setDeck3(cards.level3 || []);
       }
+      setShowGameEnd(updatedState.game_over);
     });
 
     return () => {
@@ -300,19 +301,19 @@ export default function Gameboard() {
               selectedPlayer === "My"
                 ? gameState?.players?.[playerID]?.points || 0
                 : Object.entries(gameState?.players || {})
-                    .find(([id]) => id !== playerID)?.[1]?.points || 0
-            } 
+                  .find(([id]) => id !== playerID)?.[1]?.points || 0
+            }
             tokens={
               selectedPlayer === "My"
                 ? gameState?.players?.[playerID]?.tokens || {}
                 : Object.entries(gameState?.players || {})
-                    .find(([id]) => id !== playerID)?.[1]?.tokens || {}
+                  .find(([id]) => id !== playerID)?.[1]?.tokens || {}
             }
             playerCards={
               selectedPlayer === "My"
                 ? gameState?.players?.[playerID]?.permanentGems || {}
                 : Object.entries(gameState?.players || {})
-                    .find(([id]) => id !== playerID)?.[1]?.permanentGems || {}
+                  .find(([id]) => id !== playerID)?.[1]?.permanentGems || {}
             }
             viewCard={viewCard}
             setViewCard={setViewCard}
