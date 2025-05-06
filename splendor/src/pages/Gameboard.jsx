@@ -320,24 +320,29 @@ export default function Gameboard() {
         <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} playerID={playerID} />
 
 
+
         <div class='cards'>
           <div class='cards-row'>
             <DeckManager deck={gameState?.available_cards.level3} onClick={(card) => {
 
+
               setSelectedCard(card);
               setViewCard(true);
             }} />
 
           </div>
+
 
           <div class='cards-row'>
             <DeckManager deck={gameState?.available_cards.level2} onClick={(card) => {
 
+
               setSelectedCard(card);
               setViewCard(true);
             }} />
 
           </div>
+
 
           <div class='cards-row'>
             <DeckManager deck={gameState?.available_cards.level1} onClick={(card) => {
