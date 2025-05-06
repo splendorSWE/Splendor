@@ -42,23 +42,18 @@ export default function AuthPage() {
       await loginGuest();
       navigate("/");
     } catch (error) {
+      alert(error.message);
       setError(error.message);
     }
   };
-  // const handleGuestSignIn = async () => {
-  //   try {
-  //     await loginGuest(); 
-  //   } catch (error) {
-  //     setError(error.message);
-  //   }
-  // };
+
   
 
   const handleSignOut = async () => {
     try {
       await logout();
     } catch (error) {
-      console.error("Error signing out: ", error);
+      alert(error.message);
     }
   };
 
@@ -89,6 +84,7 @@ export default function AuthPage() {
       navigate("/");
 
     } catch (err) {
+      alert(err.message);
       setError(err.message);
     }
   };
@@ -186,7 +182,7 @@ export default function AuthPage() {
                 fontFamily: "YourCustomFont, serif",
               }}
             />
-            {error && <p style={{ color: "white", fontSize: "35px" }}>{error}</p>}
+
             <button
               type="submit"
               style={{

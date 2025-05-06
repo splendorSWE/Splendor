@@ -31,7 +31,7 @@
     height: 100vh;
 }
 
-.profile-card {
+/* .profile-card {
     display: flex;
     flex-direction: column;
     width: 30vw;
@@ -41,7 +41,25 @@
     text-align: center;
     align-items: center;
     justify-content: center;
+    font-size: 1.2rem; /* ⬅️ Increase overall size */
+    /* padding: 2rem;
+    line-height: 1.6; */
+/* } */
+.profile-card {
+  display: flex;
+  flex-direction: column;
+  width: 30vw;
+  height: 80vh;
+  background: #27394D;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  padding: 2rem;
+  line-height: 1.6;
 }
+
 
 .profile-pic {
     width: 15vw;
@@ -52,7 +70,7 @@
 
 .info {
     margin: 1vh;
-    font-size: 2vw;
+    font-size: 1.8rem;
     color: white;
     font-family: "Fondamento", cursive;
     text-align: center;
@@ -60,6 +78,7 @@
 
 
 .info strong {
+  font-size: 1.7rem;
   color: white; /* or #253047 or any visible color you want */
   font-weight: bold;
 }
@@ -69,31 +88,45 @@
     background-color: #FEDB5F;
     border-radius: 0%;
     width: auto;
-    font-size: 1.5vw;
     font-family: "Fondamento", cursive;
     margin-top: 3vh;
+    font-size: 1.7rem;
+    padding: 0.6rem 1rem;
+    margin-top: 0.5rem;
 }
 
-.password-input {
+/* .password-input {
     width: 20vw;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
-}
+} */
 
 
 .password-update-section {
-    margin: 20px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center contents */
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 320px;
+}
+.password-update-section input,
+.password-update-section button {
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
+  margin: 0.3rem 0;
+}
+
   
   .password-input {
-    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     width: 100%;
+    font-size: 1.5rem;
+    padding: 0.8rem;
   }
   
   .error-message {
@@ -107,12 +140,40 @@
     margin: 5px 0;
     font-size: 1.1em;
   }
+
   
-  .view-password-btn {
-    background: #f0f0f0;
-    border: 1px solid #ccc;
-    padding: 5px 10px;
-    cursor: pointer;
-    align-self: flex-start;
-    border-radius: 4px;
+  .profile-card  {
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
   }
+  
+  /* .password-input {
+    font-size: 1.1rem;
+    padding: 0.5rem;
+    margin: 0.3rem 0;
+    width: 100%;
+    max-width: 300px;
+  } */
+  
+  .button,
+  .upload-button {
+    font-size: 1.5rem;
+    padding: 0.6rem 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .view-password-btn {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
+    font-family: "Fondamento", cursive;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .view-password-btn:hover {
+    background-color: #ddd;
+  }
+  
+  

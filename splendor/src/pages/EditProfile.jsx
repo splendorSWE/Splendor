@@ -24,6 +24,10 @@ export default function EditProfile() {
     const [showPassword, setShowPassword] = useState(false);
     const [passwordError, setPasswordError] = useState("");
     const [passwordSuccess, setPasswordSuccess] = useState(false);
+    const [showPasswordForm, setShowPasswordForm] = useState(false);
+    const [showUsernameForm, setShowUsernameForm] = useState(false);
+    const [newUsername, setNewUsername] = useState("");
+
     const { user } = useAuthContext();
 
     useEffect(() => {
@@ -85,27 +89,35 @@ export default function EditProfile() {
             return;
         }
 
-        try {
-            // Create credential with current password
-            const credential = emailAuthProvider(user.email, currentPassword);
+       
             
-            // Reauthenticate user
-            updatePassword(user, credential, newPassword)
+            try {
+                // Create credential with current password
+                const credential = emailAuthProvider(user.email, currentPassword);
+              
+                // Reauthenticate user and update password
+                await updatePassword(user, credential, newPassword);
+                alert("Password Updated Successfully")
+                setPasswordSuccess(true);  // ✅ Only now it's safe to show success
+                setNewPassword("");
+                setCurrentPassword("");
+              }  catch (error) {
+                console.error("Error updating password:", error);
             
-            setPasswordSuccess(true);
-            setNewPassword("");
-            setCurrentPassword("");
-        } catch (error) {
-            console.error("Error updating password:", error);
-            if (error.code === "auth/wrong-password") {
+                if (
+                error.code === "auth/wrong-password" ||
+                error.code === "auth/invalid-credential"
+                ) {
                 setPasswordError("The current password you entered is incorrect.");
-            } else if (error.code === "auth/requires-recent-login") {
+                } else if (error.code === "auth/requires-recent-login") {
                 setPasswordError("Session expired. Please sign in again.");
-            } else {
+                } else {
                 setPasswordError(error.message);
+                }
+                alert(passwordError); 
+                setPasswordSuccess(false);
             }
         }
-    }
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -147,49 +159,105 @@ export default function EditProfile() {
                 style={{ display: "none" }}
                 onChange={handleProfilePicChange}
                 />
-                <button disabled={loading || !photo} onClick={handleProfilePicClick}>
-                Upload
+                <button class="view-password-btn" disabled={loading || !photo} onClick={handleProfilePicClick}>
+                Upload Profile Pic
                 </button>
             </>
             )}
+            
+            
 
 
                 {(userInfo !== "No User") ? (
                     <>
                         <p className="info"><strong>Username:</strong> {userInfo.username}</p>
-                        
                         {!user?.isAnonymous && (
-            <div className="password-update-section">
-                <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Current Password"
-                className="password-input"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                />
-                <input
-                type={showPassword ? "text" : "password"}
-                placeholder="New Password"
-                className="password-input"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                />
-                <button
-                type="button"
-                className="view-password-btn"
-                onClick={() => setShowPassword(!showPassword)}
-                >
-                {showPassword ? "Hide" : "Show"}
-                </button>
+  <>
+    <button
+      className="button"
+      onClick={() => setShowUsernameForm((prev) => !prev)}
+    >
+      {showUsernameForm ? "Cancel Username Change" : "Change Username"}
+    </button>
 
-                {passwordError && <p className="error-message">{passwordError}</p>}
-                {passwordSuccess && <p className="success-message">Password updated successfully!</p>}
+    {showUsernameForm && (
+      <div className="password-update-section">
+        <input
+          type="text"
+          placeholder="New Username"
+          className="password-input"
+          value={newUsername}
+          onChange={(e) => setNewUsername(e.target.value)}
+        />
+        <button
+          className="button"
+          onClick={async () => {
+            if (!newUsername.trim()) return;
+            try {
+              await update(ref(db, "users/" + user.uid), { username: newUsername.trim() });
+              setUserInfo((prev) => ({ ...prev, username: newUsername.trim() }));
+              setNewUsername("");
+              setShowUsernameForm(false);
+              alert("Username updated!");
+            } catch (err) {
+              console.error("Error updating username:", err);
+              alert("Failed to update username.");
+            }
+          }}
+          disabled={!newUsername.trim()}
+        >
+          Update Username
+        </button>
+      </div>
+    )}
+  </>
+)}
 
-                <button className="button" onClick={handleUpdatePassword}>
-                Update Password
-                </button>
-            </div>
-            )}
+                        {!user?.isAnonymous && (
+  <>
+    <button
+      className="button"
+      onClick={() => setShowPasswordForm((prev) => !prev)}
+    >
+      {showPasswordForm ? "Cancel Password Change" : "Change Password"}
+    </button>
+
+    {showPasswordForm && (
+      <div className="password-update-section">
+        <input
+          type={showPassword ? "text" : "password"}
+          placeholder="Current Password"
+          className="password-input"
+          value={currentPassword}
+          onChange={(e) => setCurrentPassword(e.target.value)}
+        />
+        <input
+          type={showPassword ? "text" : "password"}
+          placeholder="New Password"
+          className="password-input"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
+        <button
+          type="button"
+          className="view-password-btn"
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? "Hide Password" : "Show Password"}
+        </button>
+
+        <button
+          className="button"
+          onClick={handleUpdatePassword}
+          disabled={!currentPassword || newPassword.length < 6}
+        >
+          Update Password
+        </button>
+      </div>
+    )}
+  </>
+)}
+            
 
                         
                         <button className='button' onClick={() => navigate("/profile", { state: { profilePic } })}>
