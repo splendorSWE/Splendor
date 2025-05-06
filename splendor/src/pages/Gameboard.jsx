@@ -152,7 +152,12 @@ export default function Gameboard() {
   //     points: 0
   //   }
   // };
-
+  useEffect(() => {
+    if (gameState?.gameOver) {
+      setShowGameEnd(true);
+    }
+  }, [gameState?.gameOver]);
+  
   const checkCardAffordability = async (cardId) => {
     if (gameState?.current_turn != playerID) {
       console.log("not your turn")
@@ -390,15 +395,34 @@ export default function Gameboard() {
       </div>
       <GameEndPopup
         visible={showGameEnd}
-        winner={true}
+        winner={
+          gameState?.players?.[playerID]?.points >=
+          Object.entries(gameState?.players || {})
+            .find(([id]) => id !== playerID)?.[1]?.points
+        }
         playerName="You"
-        opponentName="Opponent"
-        playerPoints={15}
-        opponentPoints={10}
-        playerPic={"/images/default_pfp.jpg"}
-        opponentPic={"/images/default_pfp.jpg"}
-        onClose={() => { setShowGameEnd(false); navigate('/') }}
+        opponentName={
+          Object.entries(gameState?.players || {})
+            .find(([id]) => id !== playerID)?.[0] || "Opponent"
+        }
+        playerPoints={gameState?.players?.[playerID]?.points || 0}
+        opponentPoints={
+          Object.entries(gameState?.players || {})
+            .find(([id]) => id !== playerID)?.[1]?.points || 0
+        }
+        playerPic={
+          gameState?.players?.[playerID]?.photoURL || "/images/default_pfp.jpg"
+        }
+        opponentPic={
+          Object.entries(gameState?.players || {})
+            .find(([id]) => id !== playerID)?.[1]?.photoURL || "/images/default_pfp.jpg"
+        }
+        onClose={() => {
+          setShowGameEnd(false);
+          navigate("/");
+        }}
       />
+
     </div>
   );
 }
