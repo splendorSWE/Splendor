@@ -1,3 +1,5 @@
+import '../componentStyles/NobleCard.css';
+
 export default function NobleCard({ ImagePath }) {
   return (
     <img
