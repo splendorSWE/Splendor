@@ -12,3 +12,30 @@
   .spacer {
     flex: 1;
   }
+
+  .dark-button {
+    background-color: #27394D;
+    color: #F6D354;
+    font-family: Inknut Antiqua, sans-serif;
+    font-weight: 600;
+    font-size: 1.5rem; 
+    padding: 0.5rem 1.25rem;
+    margin: 0 0.5rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .dark-button:hover {
+    background-color: #1e2c3b;
+  }
+
+  .page-title {
+    font-family: 'Inknut Antiqua', serif; /* or your brand font */
+    font-size: 3rem;
+    font-weight: 700;
+    color: #F6D354;
+    margin: 0 1rem;
+
+  }
