@@ -15,6 +15,7 @@ from random import shuffle
 import string
 from cards import initial_deck1, initial_deck2, initial_deck3
 
+
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
@@ -432,12 +433,14 @@ def handle_get_lobby_info(data):
 def handle_custom_event(data):
     print(f"Received from frontend: {data}")
     send(f"Backend received: {data}", broadcast=True)
+    
+    
 
-# --- Run ---
+# # --- Run ---
 if __name__ == "__main__":
     socketio.run(app, host='0.0.0.0', port=4000, debug=True)
 
 
 
-# if __name__ == '__main__':
-#     app.run(debug=True)
+# # if __name__ == '__main__':
+# #     app.run(debug=True)
