@@ -7,12 +7,17 @@
 # from flask import Flask, request, jsonify
 # from flask_cors import CORS
 # from flask_socketio import SocketIO, emit
+import eventlet
+eventlet.monkey_patch()
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
 import random
 import string
 from cards import initial_deck1, initial_deck2, initial_deck3
+
+
+
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -370,7 +375,7 @@ def handle_custom_event(data):
 
 # --- Run ---
 if __name__ == "__main__":
-    socketio.run(app, host='0.0.0.0', port=4000, debug=True)
+    socketio.run(app, host="0.0.0.0", port=4000, debug=True)
 
 
 

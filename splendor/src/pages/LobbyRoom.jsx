@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import socket from "../socket/socket";
+
 import PageHeader from "../components/PageHeader";
 import "./pageStyles/Lobby.css";
 import { useAuthContext } from "../context/AuthContext";
+import { SocketContext } from "../context/SocketContext";
 
 
 
@@ -21,6 +22,9 @@ export default function LobbyRoom() {
   const [readyPlayers, setReadyPlayers] = useState([]);
   
 
+
+  const socket = useContext(SocketContext);
+ 
   useEffect(() => {
     if (!isValidLobbyMember) {
       navigate("/", { replace: true });
@@ -118,6 +122,10 @@ export default function LobbyRoom() {
       <div className="main-container">
         <div className="main-box">
           <h2>Players in Lobby</h2>
+          <p className="lobby-username">
+            You are: <strong>{displayName}</strong>
+          </p>
+
           <ul>
             {players.map((p, i) => (
               <li key={i}>{p}</li>

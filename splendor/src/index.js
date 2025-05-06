@@ -11,21 +11,65 @@ import { AuthProvider } from './context/AuthContext';
 import AuthPage from './pages/AuthPage.jsx';
 import Rules from './pages/Rules.jsx'
 import LobbyRoom from './pages/LobbyRoom.jsx';
+import { SocketProvider } from './context/SocketContext';
+import { useAuthContext } from './context/AuthContext';
+import { Navigate } from 'react-router-dom';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>    
       <BrowserRouter>
       <AuthProvider>
+      <SocketProvider>
           <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="/gameboard" element={<Gameboard />} />
+          
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <App />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/user-auth" element={<AuthPage />} />
+            <Route
+              path="/gameboard"
+              element={
+                <ProtectedRoute>
+                  <Gameboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/editprofile"
+              element={
+                <ProtectedRoute>
+                  <EditProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/lobby"
+              element={
+                <ProtectedRoute>
+                  <LobbyRoom />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/rules" element={<Rules />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/editprofile" element={<EditProfile />} />
-            <Route path="/lobby" element={<LobbyRoom />} />
           </Routes>
+          </SocketProvider>
         </AuthProvider>
       </BrowserRouter>
   </React.StrictMode>

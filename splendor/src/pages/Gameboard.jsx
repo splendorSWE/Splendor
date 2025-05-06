@@ -258,7 +258,7 @@ export default function Gameboard() {
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
-      <div class='main'>
+      <div className='main'>
         <CardPopUp
           ImagePath={selectedCard ? GetPath(selectedCard.id) : null}
           viewCard={viewCard}
@@ -319,29 +319,40 @@ export default function Gameboard() {
 
         <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} playerID={playerID} />
 
+
+
         <div class='cards'>
           <div class='cards-row'>
             <DeckManager deck={gameState?.available_cards.level3} onClick={(card) => {
+
+
               setSelectedCard(card);
               setViewCard(true);
             }} />
 
           </div>
+
+
           <div class='cards-row'>
             <DeckManager deck={gameState?.available_cards.level2} onClick={(card) => {
+
+
               setSelectedCard(card);
               setViewCard(true);
             }} />
 
           </div>
+
+
           <div class='cards-row'>
             <DeckManager deck={gameState?.available_cards.level1} onClick={(card) => {
+
               setSelectedCard(card);
               setViewCard(true);
             }} />
           </div>
         </div>
-        <div class='cards'>
+        <div className='cards'>
           <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
           <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
           <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
