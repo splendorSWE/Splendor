@@ -93,10 +93,10 @@ export default function LobbyRoom() {
       socket.emit("leave_lobby");
     };
 
-    // ✅ Only register leave for actual tab close / reload
+    // Only register leave for actual tab close / reload
     window.addEventListener("beforeunload", handleUnload);
 
-    // ❌ Don't call leave() here
+    // Don't call leave() here
     return () => {
       window.removeEventListener("beforeunload", handleUnload);
     };
@@ -119,7 +119,7 @@ export default function LobbyRoom() {
 
       <div className="main-container">
         <div className="main-box">
-        <p className="lobby-username">Lobby Code: <strong>{lobbyCode}</strong></p>
+        <p className="lobby-code">Lobby Code: <strong>{lobbyCode}</strong></p>
         <p className="lobby-username">
             You are: <strong>{displayName}</strong>
           </p>
@@ -155,8 +155,6 @@ export default function LobbyRoom() {
             className="ready-button"
             onClick={() => {
               socket.emit("leave_lobby");
-
-
               navigate("/");
             }}
           >
