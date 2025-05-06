@@ -8,6 +8,7 @@ Ensure you have the following installed on your system:
 - [Python 3.9+](https://www.python.org/)
 - pip (Python package manager)
 
+
 1. Clone the Repository
     ```bash
     git clone https://github.com/splendorSWE/Splendor.git
@@ -20,7 +21,7 @@ Ensure you have the following installed on your system:
         pip3 install flask\_cors
         pip3 install flask\_socketio
 
-    - in a Python terminal run the following line:
+    - in a Python terminal run the following lines:
         ```bash
         cd splendor
         python3 backend/run.py
