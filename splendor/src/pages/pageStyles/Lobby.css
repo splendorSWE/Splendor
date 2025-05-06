@@ -80,8 +80,9 @@ body, html {
 }
 
 .ready-button.ready {
-  background-color: #ccc;
+  background-color: #efe0a9;
   color: #27394D;
+  border-color: #27394D;
 }
 
 .ready-button.not-ready {
