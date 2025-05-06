@@ -153,7 +153,7 @@ export default function Gameboard() {
   //   }
   // };
   useEffect(() => {
-    if (gameState?.gameOver) {
+    if (gameState?.game_over) {
       setShowGameEnd(true);
     }
   }, [gameState?.gameOver]);
