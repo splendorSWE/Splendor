@@ -1,0 +1,48 @@
+.board-tokens-section {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 35px;
+    margin-left: 20px;
+}
+
+.select-tokens-button {
+    width: 150px;
+    height: 50px;
+    font-family: Inknut Antiqua, sans-serif;
+    font-weight: 800;
+    line-height: 20px;
+    margin-bottom: 10px;
+}
+
+.selection-choice-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.select-tokens-choice-button {
+    width: 100px;
+    height: 50px;
+    margin: 5px;
+    color: #27394D;
+    background-color: #FEDB5F;
+    border: 2px solid #27394D;
+    font-family: Inknut Antiqua, sans-serif;
+    font-weight: 800;
+}
+
+.dimmed-choice {
+    opacity: 0.5;
+}
+
+.confirm-tokens-button {
+    width: 150px;
+    height: 50px;
+    font-family: Inknut Antiqua, sans-serif;
+    font-weight: 800;
+    line-height: 20px;
+}

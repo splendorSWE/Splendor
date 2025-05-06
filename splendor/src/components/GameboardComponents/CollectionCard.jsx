@@ -1,3 +1,5 @@
+import '../componentStyles/CollectionCard.css';
+
 export default function CollectionCard({ ImagePath, number }) {
   return (
     <div className='collection-card-div'>

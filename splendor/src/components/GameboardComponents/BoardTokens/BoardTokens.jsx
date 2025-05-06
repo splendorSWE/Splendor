@@ -3,10 +3,7 @@ import { useEffect } from 'react';
 import DefaultTokenView from './DefaultTokenView';
 import SelectTokenView from './SelectTokenView';
 import Select2Tokens from './Select2Tokens';
-import Select3Tokens from './Select3Tokens';
-  
-
-
+import Select3Tokens from './Select3Tokens';  
 
 export default function BoardTokens({ gameState, handleTakeTokens, playerID }) {
   const [view, setView] = useState("default");
@@ -17,7 +14,7 @@ export default function BoardTokens({ gameState, handleTakeTokens, playerID }) {
   const [isTurn, setIsTurn] = useState(gameState?.current_turn === playerID)
 
   const handleTokenUpdate = () => {
-    setTokens(gameState.tokens); // Update the tokens state
+    setTokens(gameState.tokens);
   };
   
   useEffect(() => {

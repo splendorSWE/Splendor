@@ -4,15 +4,6 @@
     margin-left: 30px;
 }
 
-.noble-card {
-    width: 132px;
-    height: 132px;
-    margin-left: 30px;
-    align-self: center;
-    padding-top: 27.5px;
-    padding-bottom: 27.5px;
-}
-
 .cards-row {
     margin-top: 20px;
     flex-direction: row;
@@ -26,27 +17,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* margin-left: 20px; */
-}
-
-.board-tokens-section {
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 35px;
-    margin-left: 20px;
-}
-
-.collection-button {
-    height: 60px;
-    width: 105px;
-    margin-top: 40px;
-    margin-left: 10px;
-    font-family: Inknut Antiqua, sans-serif;
-    font-weight: 800;
-    line-height: 20px;
 }
 
 .token-div {
@@ -75,200 +45,12 @@
     font-family: Ponomar, sans-serif;
 }
 
-.collection-card-div {
-    position: relative;
-    width: 56.41px;
-    height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 5px;
-    margin-left: 40px;
-}
-
-.collection-card-img {
-    width: 56.41px;
-    height: 80px;
-}
-
-.reserved-card-span {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 20px;
-    font-weight: 800;
-    color: White;
-    font-family: Ponomar, sans-serif;
-}
-
-.collection-card-span {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 35px;
-    font-weight: 900;
-    color: black;
-    font-Family: Ponomar, sans-serif;
-}
-
-.player-collection-main-div {
-    left: 20px;
-    width: 220px;
-    margin-top: 10px;
-    margin-left: 10px;
-    height: 80vh;
-    background-color: #E8E8E8;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-}
-
-.player-collection-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 40px;
-    font-family: Fondamento, sans-serif;
-    margin-top: 10px;
-    font-weight: 600;
-    width: 100%;
-    text-align: center;
-}
-
-.player-collection-header-space {
-    margin-right: 10px;
-}
-
-.player-collection-row {
-    display: flex;
-    flex-direction: row;
-}
-
-
-.select-tokens-button {
-    width: 150px;
-    height: 50px;
-    font-family: Inknut Antiqua, sans-serif;
-    font-weight: 800;
-    line-height: 20px;
-    margin-bottom: 10px;
-}
-
-.confirm-tokens-button {
-    width: 150px;
-    height: 50px;
-    font-family: Inknut Antiqua, sans-serif;
-    font-weight: 800;
-    line-height: 20px;
-}
-
-.select-tokens-choice-button {
-    width: 100px;
-    height: 50px;
-    margin: 5px;
-    color: #27394D;
-    background-color: #FEDB5F;
-    border: 2px solid #27394D;
-    font-family: Inknut Antiqua, sans-serif;
-    font-weight: 800;
-}
-
-
-.selection-choice-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-.dimmed-choice {
-    opacity: 0.5;
-}
-
-
 .main {
     display: flex;
     flex-direction: row;
     justify-content: center;
     margin-top: 30px;
 }
-
-.card-pop-up {
-    position: fixed;
-    top: 47%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    /* Centers the div */
-    width: 25vh;
-    height: auto;
-    padding: 10vh;
-    z-index: 1000;
-}
-
-.card-pop-up-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    width: 30vw;
-    height: 60vh;
-    background-color: #27394D;
-    padding: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.x-button {
-    font-family: 'Trebuchet MS', bold;
-    font-size: 7vh;
-    color: white;
-    align-self: flex-end;
-    margin-right: 2vh;
-    padding: 1vh;
-    cursor: pointer;
-    z-index: 10000;
-}
-
-.pop-up-button-container {
-    display: flex;
-    flex-direction: row;
-    padding: 2vh;
-    margin-top: auto;
-    align-items: center;
-}
-
-.play-card-button {
-    color: #27394D;
-    background-color: #E8E8E8;
-    width: 10vw;
-    padding: 2%;
-    font-size: 24px;
-    font-family: "Fondamento", cursive;
-    margin: 2vh;
-    border: 2px solid #27394D;
-    border-radius: 5px;
-    text-align: center;
-    cursor: pointer;
-    z-index: 10000;
-}
-
-.play-card-button.disabled {
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-.play-card-button:hover {
-    background-color: #FFFFFF !important;
-    color: #27394D;
-}
-
 
 .turn-tracker {
     position: fixed;
