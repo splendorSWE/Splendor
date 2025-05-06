@@ -29,29 +29,22 @@ export default function Profile() {
         const fetchUserInfo = async () => {
             
             if (user) {
-                if (user.isAnonymous) {
-                    setUserInfo({
-                        username: "Guest",
-                        createdAt: "N/A",
-                        wins: "N/A",
-                        isGuest: true,
-                    });
+                const userId = user.uid;
+                const snapshot = await get(ref(db, "users/" + userId));
+                if (snapshot.exists()) {
+                const data = snapshot.val();
+                setUserInfo({
+                    username: data.username || "Guest",
+                    createdAt: data.createdAt ? new Date(data.createdAt).toLocaleDateString() : "N/A",
+                    wins: data.wins ?? "N/A",
+                    isGuest: user.isAnonymous,
+                });
+                const profilePicURL = data.profilePic || user.photoURL || "/images/default_pfp.jpg";
+                setProfilePic(profilePicURL);
                 } else {
-                    const userId = user.uid;
-                    const snapshot = await get(ref(db, "users/" + userId));
-                    if (snapshot.exists()) {
-                        const data = snapshot.val();
-                        setUserInfo({
-                            username: data.username,
-                            createdAt: new Date(data.createdAt).toLocaleDateString(),
-                            wins: data.wins,
-                        });
-                        const profilePicURL = data.profilePic || user.photoURL || "/images/default_pfp.jpg";
-                    setProfilePic(profilePicURL);
-                    } else {
-                        console.log("No user data found!");
-                    }
+                console.log("No user data found!");
                 }
+
             } else {
                 setUserInfo("No User");
             }
