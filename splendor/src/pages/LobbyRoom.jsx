@@ -132,7 +132,8 @@ export default function LobbyRoom() {
           </ul>
           <p className="lobby-username">Lobby Code: <strong>{lobbyCode}</strong></p>
           <button
-            className={`create-button ${isReady ? "ready" : "not-ready"}`}
+            className={`ready-button ${isReady ? "ready" : "not-ready"}`}
+
             onClick={() => {
               if (!hasReceivedLobbyInfo) {
                 console.warn("⛔ Can't ready up before lobby info is received");

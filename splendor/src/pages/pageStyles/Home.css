@@ -97,6 +97,12 @@
 
 
 
+.game-code-input-box::-webkit-outer-spin-button,
+.game-code-input-box::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+} 
+
 
 
 .option-box {
