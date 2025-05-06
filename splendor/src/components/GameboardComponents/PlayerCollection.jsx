@@ -1,6 +1,7 @@
 import ReservedCard from './ReservedCard';
 import CollectionCard from './CollectionCard';
 import Token from './Token';
+import '../componentStyles/PlayerCollection.css';
 
 export default function PlayerCollection({ Points, tokens, playerCards, viewCard, setViewCard, reservable, reservedCard, setSelectedCard, selectedCard }) {
   

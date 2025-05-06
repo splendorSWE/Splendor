@@ -1,0 +1,34 @@
+.player-collection-main-div {
+    left: 20px;
+    width: 220px;
+    margin-top: 10px;
+    margin-left: 10px;
+    height: 80vh;
+    background-color: #E8E8E8;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.player-collection-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    font-family: Fondamento, sans-serif;
+    margin-top: 10px;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+}
+
+.player-collection-header-space {
+    margin-right: 10px;
+}
+
+.player-collection-row {
+    display: flex;
+    flex-direction: row;
+}
