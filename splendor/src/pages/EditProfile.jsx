@@ -135,52 +135,62 @@ export default function EditProfile() {
         <div className="profile-container">
             <PageHeader title='Edit Profile' home={true} rules={true}/>
             <div className="profile-card">
-                <label htmlFor="profile-pic-input" style={{ cursor: "pointer" }}>
-                    <img src={profilePic} alt="Profile" className="profile-pic" />
-                </label>
+            <label htmlFor="profile-pic-input" style={{ cursor: user?.isAnonymous ? "default" : "pointer" }}>
+                <img src={profilePic} alt="Profile" className="profile-pic" />
+            </label>
+            {!user?.isAnonymous && (
+            <>
                 <input
-                    type="file"
-                    id="profile-pic-input"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    onChange={handleProfilePicChange}
+                type="file"
+                id="profile-pic-input"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={handleProfilePicChange}
                 />
-                <button disabled={loading || !photo} onClick ={handleProfilePicClick}>Upload</button>
+                <button disabled={loading || !photo} onClick={handleProfilePicClick}>
+                Upload
+                </button>
+            </>
+            )}
+
 
                 {(userInfo !== "No User") ? (
                     <>
                         <p className="info"><strong>Username:</strong> {userInfo.username}</p>
                         
-                        <div className="password-update-section">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Current Password"
-                                className="password-input"
-                                value={currentPassword}
-                                onChange={(e) => setCurrentPassword(e.target.value)}
-                            />
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                placeholder="New Password"
-                                className="password-input"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                            />
-                            <button
-                                type="button"
-                                className="view-password-btn"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? "Hide" : "Show"}
-                            </button>
-                            
-                            {passwordError && <p className="error-message">{passwordError}</p>}
-                            {passwordSuccess && <p className="success-message">Password updated successfully!</p>}
-                            
-                            <button className="button" onClick={handleUpdatePassword}>
-                                Update Password
-                            </button>
-                        </div>
+                        {!user?.isAnonymous && (
+            <div className="password-update-section">
+                <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Current Password"
+                className="password-input"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                />
+                <input
+                type={showPassword ? "text" : "password"}
+                placeholder="New Password"
+                className="password-input"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                />
+                <button
+                type="button"
+                className="view-password-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                >
+                {showPassword ? "Hide" : "Show"}
+                </button>
+
+                {passwordError && <p className="error-message">{passwordError}</p>}
+                {passwordSuccess && <p className="success-message">Password updated successfully!</p>}
+
+                <button className="button" onClick={handleUpdatePassword}>
+                Update Password
+                </button>
+            </div>
+            )}
+
                         
                         <button className='button' onClick={() => navigate("/profile", { state: { profilePic } })}>
                             Back to Profile
