@@ -152,6 +152,11 @@ export default function Gameboard() {
   // };
 
   const checkCardAffordability = async (cardId) => {
+    if (gameState?.current_turn != playerID) {
+      console.log("not your turn")
+      return false
+    }
+
     try {
       // Ensure lobbyCode and playerID are available in your component's state or props
       console.log("Sending lobbyCode:", lobbyCode);
@@ -185,10 +190,15 @@ export default function Gameboard() {
 
 
   const handlePlayCard = () => {
+    if (gameState?.current_turn != playerID) {
+      console.log("not your turn")
+      return false
+    }
+
     const level1 = gameState.available_cards.level1 || [];
     const level2 = gameState.available_cards.level2 || [];
     const level3 = gameState.available_cards.level3 || [];
-  
+
     const card =
       level1.find(c => c.id === selectedCard.id) ||
       level2.find(c => c.id === selectedCard.id) ||
@@ -207,6 +217,11 @@ export default function Gameboard() {
   };
 
   const handleReserveCard = () => {
+    if (gameState?.current_turn != playerID) {
+      console.log("not your turn")
+      return false
+    }
+
     console.log("Reserving card");
     const level1 = gameState.available_cards.level1 || [];
     const level2 = gameState.available_cards.level2 || [];
@@ -243,7 +258,7 @@ export default function Gameboard() {
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
-      <div class='main'>
+      <div className='main'>
         <CardPopUp
           ImagePath={selectedCard ? GetPath(selectedCard.id) : null}
           viewCard={viewCard}
@@ -255,15 +270,12 @@ export default function Gameboard() {
           handlePlayCard={handlePlayCard}
           addReserveToken={addReserveToken}
           setReservedCard={setReservedCard}
-          // playCard={
-          //   selectedDeck === 1 ? playCard1 :
-          //     selectedDeck === 2 ? playCard2 :
-          //       playCard3
-          // }
+          gameState={gameState}
           handleReserveCard={handleReserveCard}
           reservedCard={reservedCard}
           selectedCard={selectedCard}
           checkCardAffordability={checkCardAffordability}
+          playerID={playerID}
         />
         <div>
           <CollectionButton
@@ -305,34 +317,56 @@ export default function Gameboard() {
           />
         </div>
 
-        <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} />
+        <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} playerID={playerID} />
+
+
 
         <div class='cards'>
           <div class='cards-row'>
             <DeckManager deck={gameState?.available_cards.level3} onClick={(card) => {
+
+
               setSelectedCard(card);
               setViewCard(true);
             }} />
 
           </div>
+
+
           <div class='cards-row'>
             <DeckManager deck={gameState?.available_cards.level2} onClick={(card) => {
+
+
               setSelectedCard(card);
               setViewCard(true);
             }} />
 
           </div>
+
+
           <div class='cards-row'>
             <DeckManager deck={gameState?.available_cards.level1} onClick={(card) => {
+
               setSelectedCard(card);
               setViewCard(true);
             }} />
           </div>
         </div>
-        <div class='cards'>
+        <div className='cards'>
           <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
           <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
           <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
+        </div>
+        <div>
+          {gameState && (
+            <div className="turn-tracker">
+              <h3>
+                {gameState.current_turn === playerID
+                  ? "Your Turn!"
+                  : `Waiting for ${gameState.current_turn}'s Turn...`}
+              </h3>
+            </div>
+          )}
         </div>
       </div>
       <GameEndPopup

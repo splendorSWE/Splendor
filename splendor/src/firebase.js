@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, signInAnonymously, updateProfile } from "firebase/auth";
-import { getDatabase } from "firebase/database";
-import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
+import { getDatabase, ref, get, set } from "firebase/database";
+
+import {getDownloadURL, getStorage, uploadBytes} from "firebase/storage";
 import { updatePassword as firebaseUpdatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 const firebaseConfig = {
   apiKey: "AIzaSyBvaHi_soL2kocOj4K8rdoXSzX1R8c9FD0",
@@ -30,9 +31,34 @@ export function login(email, password) {
   return signInWithEmailAndPassword(auth, email, password);
 }
 
-export function loginGuest() {
-  //return signInWithEmailAndPassword(auth, email, password);
-  return signInAnonymously(auth);
+
+export async function loginGuest() {
+  console.log("logging guest in");
+  const result = await signInAnonymously(auth);
+  const user = result.user;
+
+  try {
+    const userRef = ref(db, "users/" + user.uid);
+    const snapshot = await get(userRef);
+
+    if (!snapshot.exists()) {
+      const randomNumber = Math.floor(1000 + Math.random() * 9000);
+      const guestName = `Guest-${randomNumber}`;
+
+      await set(userRef, {
+        username: guestName,
+        createdAt: new Date().toISOString(),
+        wins: 0,
+      });
+      console.log("guestName =", guestName);
+    } else {
+      console.log("guest already has username");
+    }
+  } catch (err) {
+    console.error("🔥 Error in loginGuest DB access:", err);
+  }
+
+  return result;
 }
 
 export function logout() {

@@ -3,7 +3,7 @@
     width: 100vw;
     height: calc(100vh - 140px);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin-top: 100px;
     margin-bottom: 40px;
     justify-content: center;
@@ -11,7 +11,7 @@
 }
 
 
-.option-box {
+/* .option-box {
     width: 40vw;
     height: calc(80vh - 225px);
     min-width: 400px;
@@ -25,7 +25,7 @@
     align-items: center;
     justify-content: none;
     color: #27394D;
-}
+} */
 
 .button-row {
     display: flex;
@@ -72,27 +72,7 @@
     margin-bottom: 10px;
 }
 
-.game-code-input-box {
-    height: 10vh;
-    width: calc(30vw + 25px);
-    min-width: 250px;
-    font-size: 30px;
-    font-family: Ponomar, sans-serif;
-    text-align: center;
-    border-radius: 5px;
-    background: #27394D;
-    color: #FFFFFF;
-    font-weight: 600;
-    font-size: 2.5em;
-    margin-bottom: 20px;
 
-    border: none;
-    box-shadow: none;
-    outline: none;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-}
 
 .game-choice-button:hover {
     background-color:#FFFFFF;
@@ -110,18 +90,83 @@
     color: #27394D;
 }
 
-.box-header {
+/* .box-header {
     font-size: 2.5em;
     margin: 0;
-}
+} */
 
-.game-code-input-box::placeholder {
-    color: #cdcdcd;
-    opacity: 1;
-}
+
 
 .game-code-input-box::-webkit-outer-spin-button,
 .game-code-input-box::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 } 
+
+
+
+.option-box {
+    background-color: #e9e9e9;
+    padding: 3rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 450px;
+    min-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    gap: 1.5rem;
+  }
+  
+  .box-header {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #253047;
+    font-family: "Inknut Antiqua", serif;
+  }
+  
+  .primary-button,
+  .secondary-button {
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .primary-button {
+    background-color: #f7d774;
+    color: #253047;
+  }
+  
+  .secondary-button {
+    background-color: #253047;
+    color: #f7d774;
+  }
+  
+  .join-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .game-code-input-box {
+    width: 100%;
+    max-width: 400px;
+    width: calc(30vw + 25px);
+    padding: 0.75rem 1rem;
+    font-size: 1.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+  
+  .secondary-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
