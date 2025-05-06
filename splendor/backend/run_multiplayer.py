@@ -321,7 +321,7 @@ def handle_create_lobby(data):
 def handle_join_lobby(data):
     username = data.get("username", "Guest")
     lobby_code = data.get("lobbyCode", "").upper()
-
+    photo_url = data.get("photoURL", "/images/default_pfp.jpg")
     if not lobby_code or lobby_code not in lobbies:
         emit("error", {"message": f"Lobby {lobby_code} not found."}, to=request.sid)
         return
@@ -340,6 +340,7 @@ def handle_join_lobby(data):
     # ✅ Step 3: Track lobby and username by socket ID
     user_lobby_map[request.sid] = lobby_code
     user_lobby_map[request.sid + "_name"] = username
+    user_lobby_map[request.sid + "_photoURL"] = photo_url
 
     print(f"🙋‍♂️ {username} joined lobby {lobby_code}")
 
@@ -373,6 +374,7 @@ def handle_ready_up(data):
     sid = request.sid
     lobby_code = data.get("lobbyCode", "").upper()
     username = user_lobby_map.get(sid + "_name")
+    photo_url = data.get("photoURL", "/images/default_pfp.jpg")
 
     print("🎯 received ready_up:", data)  # ✅ this MUST print if it's working
 
@@ -390,6 +392,12 @@ def handle_ready_up(data):
     if set(lobbies[lobby_code]) == set(ready_players[lobby_code]):
         if len(ready_players[lobby_code]) >= 2:
             game_states[lobby_code] = initialize_game_state(lobbies[lobby_code])
+            for sid_key, name in user_lobby_map.items():
+                if sid_key.endswith("_name") and user_lobby_map[sid_key] in lobbies[lobby_code]:
+                    sid = sid_key[:-5]
+                    player_name = user_lobby_map[sid_key]
+                    player_photo = user_lobby_map.get(sid + "_photoURL", "/images/default_pfp.jpg")
+                    game_states[lobby_code]["players"][player_name]["photoURL"] = player_photo
             print(f"lobby added to game_states {game_states[lobby_code]}")
             emit("game_started", {"lobbyCode": lobby_code}, room=lobby_code)
             del ready_players[lobby_code]

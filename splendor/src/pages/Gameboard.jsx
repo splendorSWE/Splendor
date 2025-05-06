@@ -31,7 +31,7 @@ export default function Gameboard() {
   const [deck2, setDeck2] = useState([]);
   const [deck3, setDeck3] = useState([]);
   // const [selectedDeck, setSelectedDeck] = useState(null)
-  const [showGameEnd, setShowGameEnd] = useState(true);
+  const [showGameEnd, setShowGameEnd] = useState(false);
   const location = useLocation();
   const lobbyCode = location.state?.lobbyCode;
   const playerID = location.state?.playerID;
@@ -157,7 +157,7 @@ export default function Gameboard() {
       setShowGameEnd(true);
     }
   }, [gameState?.gameOver]);
-  
+
   const checkCardAffordability = async (cardId) => {
     if (gameState?.current_turn != playerID) {
       console.log("not your turn")
@@ -400,7 +400,7 @@ export default function Gameboard() {
           Object.entries(gameState?.players || {})
             .find(([id]) => id !== playerID)?.[1]?.points
         }
-        playerName="You"
+        playerName={gameState?.players?.[playerID]?.username || playerID}
         opponentName={
           Object.entries(gameState?.players || {})
             .find(([id]) => id !== playerID)?.[0] || "Opponent"

@@ -114,8 +114,8 @@ export default function Home() {
           const code = generateNumericCode(6);
           socket.emit("create_lobby", {
             username: usernameRef.current,
-            type: "Private",
             lobbyCode: code,
+            photoURL: user.photoURL || "/images/default_pfp.jpg"
           });
         
           socket.once("lobby_created", (data) => {
@@ -139,8 +139,8 @@ export default function Home() {
         
           socket.emit("join_lobby", {
             username: usernameRef.current,
-            type: "Private",
             lobbyCode: joinCode,
+            photoURL: user.photoURL || "/images/default_pfp.jpg"
           });
         
           socket.once("lobby_joined", (data) => {
