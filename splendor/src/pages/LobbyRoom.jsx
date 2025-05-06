@@ -21,8 +21,6 @@ export default function LobbyRoom() {
   const [isReady, setIsReady] = useState(false);
   const [readyPlayers, setReadyPlayers] = useState([]);
   
-
-
   const socket = useContext(SocketContext);
  
   useEffect(() => {
