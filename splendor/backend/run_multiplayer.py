@@ -76,7 +76,8 @@ def initialize_game_state(players):
             "level3": deck3
         },
         "current_turn": players[0],
-        "turn_order": players
+        "turn_order": players,
+        "game_over": False
     }
 
 def affordability(card_row, player_tokens, permanent_gems):
@@ -155,6 +156,9 @@ def make_move():
         current_index = turn_order.index(state["current_turn"])
         next_index = (current_index + 1) % len(turn_order)
         state["current_turn"] = turn_order[next_index]
+
+        if game_states[lobby_code]["players"][player]["points"] >= 15:
+            game_states[lobby_code]["game_over"] = True
         
         update_clients(lobby_code)
         return jsonify(state)
@@ -204,6 +208,9 @@ def make_move():
         current_index = turn_order.index(state["current_turn"])
         next_index = (current_index + 1) % len(turn_order)
         state["current_turn"] = turn_order[next_index]
+
+        if game_states[lobby_code]["players"][player]["points"] >= 15:
+            game_states[lobby_code]["game_over"] = True
 
         update_clients(lobby_code)
         return jsonify(state)
