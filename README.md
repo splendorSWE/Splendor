@@ -15,16 +15,19 @@ Ensure you have the following installed on your system:
 
 2. Run the Backend:
     - you need the following installations:
+        ```bash
         pip3 install flask
         pip3 install flask\_cors
         pip3 install flask\_socketio
 
     - in a Python terminal run the following line:
+        ```bash
         cd splendor
         python3 backend/run.py
 
 3. Run the frontend:
     - in a zsh terminal run the following lines:
+        ```bash
         cd splendor
         npm start
 
