@@ -18,6 +18,7 @@ from cards import initial_deck1, initial_deck2, initial_deck3
 
 
 
+
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
