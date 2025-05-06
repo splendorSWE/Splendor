@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import '../componentStyles/CardPopUp.css';
 
 export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, setPlayable, reservable, setReservable, handlePlayCard, addReserveToken, handleReserveCard, reservedCard, selectedCard, checkCardAffordability, gameState, playerID }) {
     useEffect(() => {
