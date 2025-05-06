@@ -123,7 +123,7 @@
   .primary-button,
   .secondary-button {
     padding: 1rem 2rem;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     border: none;
     border-radius: 8px;
@@ -153,7 +153,7 @@
     max-width: 400px;
     width: calc(30vw + 25px);
     padding: 0.75rem 1rem;
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     border-radius: 6px;
     border: 1px solid #ccc;
     margin-bottom: 0.75rem;

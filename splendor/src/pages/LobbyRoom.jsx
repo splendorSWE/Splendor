@@ -119,17 +119,18 @@ export default function LobbyRoom() {
 
       <div className="main-container">
         <div className="main-box">
-          <h2>Players in Lobby</h2>
-          <p className="lobby-username">
+        <p className="lobby-username">
             You are: <strong>{displayName}</strong>
           </p>
+          <h2>Players in Lobby</h2>
+          
 
           <ul>
             {players.map((p, i) => (
               <li key={i}>{p}</li>
             ))}
           </ul>
-          <p className="turn-timer">Lobby Code: {lobbyCode}</p>
+          <p className="lobby-username">Lobby Code: <strong>{lobbyCode}</strong></p>
           <button
             className={`create-button ${isReady ? "ready" : "not-ready"}`}
             onClick={() => {

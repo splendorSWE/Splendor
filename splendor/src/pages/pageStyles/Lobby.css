@@ -45,6 +45,7 @@
     padding: 0;
     margin-bottom: 1rem;
     width: 100%;
+    font-size: 1.25rem;
     max-height: 180px;
     overflow-y: auto;
     border: 1px solid #ccc;
@@ -70,7 +71,7 @@
   
   .create-button {
     padding: 0.85rem 2rem;
-    font-size: 1.15rem;
+    font-size: 1.9rem;
     font-weight: bold;
     font-family: "Inknut Antiqua", serif;
     border-radius: 8px;
@@ -88,6 +89,7 @@
   .create-button.not-ready {
     background-color: #F7D774;
     color: #27394D;
+
   }
   
   .create-button:hover {
@@ -110,5 +112,6 @@
   .lobby-username strong {
     color: #27394D;
     font-weight: 700;
+    font-size: 1.5rem;
   }
   
