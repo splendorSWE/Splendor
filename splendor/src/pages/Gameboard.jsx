@@ -155,66 +155,66 @@ export default function Gameboard() {
 
 
 
-  const handlePlayCard = () => {
-    if (gameState?.current_turn != playerID) {
-      console.log("not your turn")
-      return false
-    }
+  // const handlePlayCard = () => {
+  //   if (gameState?.current_turn != playerID) {
+  //     console.log("not your turn")
+  //     return false
+  //   }
 
-    const level1 = gameState.available_cards.level1 || [];
-    const level2 = gameState.available_cards.level2 || [];
-    const level3 = gameState.available_cards.level3 || [];
+  //   const level1 = gameState.available_cards.level1 || [];
+  //   const level2 = gameState.available_cards.level2 || [];
+  //   const level3 = gameState.available_cards.level3 || [];
 
-    const reserved = gameState.players?.[playerID]?.reservedCard;
+  //   const reserved = gameState.players?.[playerID]?.reservedCard;
 
-    const card =
-      level1.find(c => c.id === selectedCard.id) ||
-      level2.find(c => c.id === selectedCard.id) ||
-      level3.find(c => c.id === selectedCard.id) ||
-      (reserved && reserved.id === selectedCard.id ? reserved : null);
+  //   const card =
+  //     level1.find(c => c.id === selectedCard.id) ||
+  //     level2.find(c => c.id === selectedCard.id) ||
+  //     level3.find(c => c.id === selectedCard.id) ||
+  //     (reserved && reserved.id === selectedCard.id ? reserved : null);
 
-    if (!card) {
-      console.error("Card details not found");
-      return;
-    }
-    console.log("Selected card ID:", selectedCard.id);
-    const moveData = {
-      action: "play_card",
-      cardId: selectedCard.id
-    };
-    makeMove(moveData);
-    setViewCard(false);
-  };
+  //   if (!card) {
+  //     console.error("Card details not found");
+  //     return;
+  //   }
+  //   console.log("Selected card ID:", selectedCard.id);
+  //   const moveData = {
+  //     action: "play_card",
+  //     cardId: selectedCard.id
+  //   };
+  //   makeMove(moveData);
+  //   setViewCard(false);
+  // };
 
-  const handleReserveCard = () => {
-    if (gameState?.current_turn != playerID) {
-      console.log("not your turn")
-      return false
-    }
+  // const handleReserveCard = () => {
+  //   if (gameState?.current_turn != playerID) {
+  //     console.log("not your turn")
+  //     return false
+  //   }
 
-    console.log("Reserving card");
-    const level1 = gameState.available_cards.level1 || [];
-    const level2 = gameState.available_cards.level2 || [];
-    const level3 = gameState.available_cards.level3 || [];
+  //   console.log("Reserving card");
+  //   const level1 = gameState.available_cards.level1 || [];
+  //   const level2 = gameState.available_cards.level2 || [];
+  //   const level3 = gameState.available_cards.level3 || [];
 
-    const card =
-      level1.find(c => c.id === selectedCard.id) ||
-      level2.find(c => c.id === selectedCard.id) ||
-      level3.find(c => c.id === selectedCard.id);
-    if (!card) {
-      console.error("Card details not found");
-      return;
-    }
-    console.log("reserving card")
-    const moveData = {
-      action: "reserve_card",
-      cardId: selectedCard.id
-    };
-    console.log("Sending moveData:", moveData);
-    makeMove(moveData);
-    setViewCard(false);
-    setReservedCard(selectedCard);
-  };
+  //   const card =
+  //     level1.find(c => c.id === selectedCard.id) ||
+  //     level2.find(c => c.id === selectedCard.id) ||
+  //     level3.find(c => c.id === selectedCard.id);
+  //   if (!card) {
+  //     console.error("Card details not found");
+  //     return;
+  //   }
+  //   console.log("reserving card")
+  //   const moveData = {
+  //     action: "reserve_card",
+  //     cardId: selectedCard.id
+  //   };
+  //   console.log("Sending moveData:", moveData);
+  //   makeMove(moveData);
+  //   setViewCard(false);
+  //   setReservedCard(selectedCard);
+  // };
 
 
   return (
@@ -229,14 +229,14 @@ export default function Gameboard() {
           playable={playable}
           setPlayable={setPlayable}
           setReservable={setReservable}
-          handlePlayCard={handlePlayCard}
           setReservedCard={setReservedCard}
           gameState={gameState}
-          handleReserveCard={handleReserveCard}
           reservedCard={reservedCard}
           selectedCard={selectedCard}
-          checkCardAffordability={checkCardAffordability}
           playerID={playerID}
+          lobbyCode={lobbyCode}
+          makeMove={makeMove}
+          checkCardAffordability={checkCardAffordability}
         />
         <div>
           <CollectionButton
