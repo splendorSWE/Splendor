@@ -128,7 +128,7 @@ initial_deck1 = [
         "redPrice": 0,
         "greenPrice": 1,
         "bluePrice": 3,
-        "yellowPrice": 2,
+        "yellowPrice": 0,
         "whitePrice": 1,
         "points": 0,
     },
