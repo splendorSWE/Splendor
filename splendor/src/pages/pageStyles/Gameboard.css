@@ -1,7 +1,15 @@
-.development-card {
-    width: 132px;
-    height: 187px;
-    margin-left: 30px;
+.main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.cards {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .cards-row {
@@ -12,11 +20,39 @@
     min-width: 650px;
 }
 
-.cards {
+.turn-tracker {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #253047;
+    color: #F7D774;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    z-index: 999;
+    font-family: "Fondamento", cursive;
+}
+  
+.turn-tracker-pfp {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+  
+.turn-tracker-text {
+    font-size: 1.4rem;
+}
+
+ /* this no longer belongs to gameboard */
+
+.development-card {
+    width: 132px;
+    height: 187px;
+    margin-left: 30px;
 }
 
 .token-div {
@@ -44,37 +80,3 @@
     color: black;
     font-family: Ponomar, sans-serif;
 }
-
-.main {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 30px;
-}
-
-.turn-tracker {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #253047;
-    color: #F7D774;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    box-shadow: 0 0 10px rgba(0,0,0,0.4);
-    z-index: 999;
-    font-family: "Fondamento", cursive;
-  }
-  
-  .turn-tracker-pfp {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .turn-tracker-text {
-    font-size: 1.4rem;
-  }
