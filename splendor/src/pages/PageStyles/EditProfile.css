@@ -1,0 +1,82 @@
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    width: 30vw;
+    height: 80vh;
+    background: #27394D;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    padding: 2rem;
+    line-height: 1.6;
+}
+
+
+.profile-pic {
+    width: 15vw;
+    height: 15vw;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-pic-input {
+    display: none;
+}
+
+.info {
+    margin: 1vh;
+    font-size: 1.8rem;
+    color: white;
+    font-family: "Fondamento", cursive;
+    text-align: center;
+}
+
+.button {
+    color: #27394D;
+    background-color: #FEDB5F;
+    border-radius: 0%;
+    width: auto;
+    font-family: "Fondamento", cursive;
+    margin-top: 3vh;
+    font-size: 1.7rem;
+    padding: 0.6rem 1rem;
+    margin-top: 0.5rem;
+}
+
+.password-update-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* center contents */
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 320px;
+}
+
+.password-input {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 1.5rem;
+    padding: 0.8rem;
+}
+
+.view-password-btn {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
+    font-family: "Fondamento", cursive;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
