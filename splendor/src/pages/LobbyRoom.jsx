@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import PageHeader from "../components/PageHeader";
-import "./pageStyles/Lobby.css";
+import "./PageStyles/Lobby.css";
 import { useAuthContext } from "../context/AuthContext";
 import { SocketContext } from "../context/SocketContext";
 

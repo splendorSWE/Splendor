@@ -1,5 +1,5 @@
 import React from "react";
-import "./pageStyles/Rules.css";
+import "./PageStyles/Rules.css";
 import PageHeader from "../components/PageHeader";
 import { useAuthContext } from "../context/AuthContext";
 

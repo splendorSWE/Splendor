@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './pageStyles/Gameboard.css';
+import './PageStyles/Gameboard.css';
 import { useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
