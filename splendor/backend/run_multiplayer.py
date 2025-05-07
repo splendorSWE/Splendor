@@ -53,7 +53,8 @@ def initialize_game_state(players):
             player: {
                 "tokens": {color: 0 for color in COLORS + ["wild"]},
                 "permanentGems": {color: 0 for color in COLORS},
-                "points": 0
+                "points": 0,
+                "reservedCard": None
             }
             for player in players
         },
@@ -191,6 +192,44 @@ def make_move():
         player_state["permanentGems"][gem_colour] += 1
         player_state["points"] += card["points"]
 
+        is_reserved = player_state.get("reservedCard") and player_state["reservedCard"]["id"] == card_id
+
+        # Remove the card from available_cards and replace from deck
+        if not is_reserved:
+            for level in ["level1", "level2", "level3"]:
+                available = state["available_cards"][level]
+                for i, c in enumerate(available):
+                    if c["id"] == card_id:
+                        del available[i]
+                    if state["decks"][level]:
+                        new_card = state["decks"][level].pop()
+                        available.insert(i, new_card)
+                    break
+        else:
+            # Clear the reserved card after play
+            player_state["reservedCard"] = None
+        
+        turn_order = state["turn_order"]
+        current_index = turn_order.index(state["current_turn"])
+        next_index = (current_index + 1) % len(turn_order)
+        state["current_turn"] = turn_order[next_index]
+
+        if game_states[lobby_code]["players"][player]["points"] >= 15:
+            game_states[lobby_code]["game_over"] = True
+
+        update_clients(lobby_code)
+        return jsonify(state)
+    
+    elif action == "reserve_card":
+        card_id = data.get("cardId")
+        if not card_id or card_id not in ALL_CARDS:
+            return jsonify({"error": "Invalid cardId"}), 400
+
+        card = ALL_CARDS[card_id]
+
+        if player_state["reservedCard"] is None:
+            player_state["reservedCard"] = card
+
         # Remove the card from available_cards and replace from deck
         for level in ["level1", "level2", "level3"]:
             available = state["available_cards"][level]
@@ -204,13 +243,15 @@ def make_move():
                         available.insert(i, new_card)
                     break
         
+        # Add wild token
+        player_state["tokens"]["wild"] += 1
+        state["tokens"]["wild"] -= 1
+
+        # End player's turn
         turn_order = state["turn_order"]
         current_index = turn_order.index(state["current_turn"])
         next_index = (current_index + 1) % len(turn_order)
         state["current_turn"] = turn_order[next_index]
-
-        if game_states[lobby_code]["players"][player]["points"] >= 15:
-            game_states[lobby_code]["game_over"] = True
 
         update_clients(lobby_code)
         return jsonify(state)

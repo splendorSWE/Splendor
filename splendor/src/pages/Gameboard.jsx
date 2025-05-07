@@ -165,10 +165,14 @@ export default function Gameboard() {
     const level2 = gameState.available_cards.level2 || [];
     const level3 = gameState.available_cards.level3 || [];
 
+    const reserved = gameState.players?.[playerID]?.reservedCard;
+
     const card =
       level1.find(c => c.id === selectedCard.id) ||
       level2.find(c => c.id === selectedCard.id) ||
-      level3.find(c => c.id === selectedCard.id);
+      level3.find(c => c.id === selectedCard.id) ||
+      (reserved && reserved.id === selectedCard.id ? reserved : null);
+
     if (!card) {
       console.error("Card details not found");
       return;
@@ -201,11 +205,13 @@ export default function Gameboard() {
       console.error("Card details not found");
       return;
     }
-    // const moveData = {
-    //   action: "reserve_card",
-    //   card: card
-    // };
-    // makeMove(moveData);
+    console.log("reserving card")
+    const moveData = {
+      action: "reserve_card",
+      cardId: selectedCard.id
+    };
+    console.log("Sending moveData:", moveData);
+    makeMove(moveData);
     setViewCard(false);
     setReservedCard(selectedCard);
     addReserveToken()
