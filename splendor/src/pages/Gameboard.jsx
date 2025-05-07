@@ -214,18 +214,8 @@ export default function Gameboard() {
     makeMove(moveData);
     setViewCard(false);
     setReservedCard(selectedCard);
-    addReserveToken()
   };
 
-  const addReserveToken = () => {
-    console.log("Adding wild token");
-    const moveData = {
-      action: "take_tokens",
-      tokens: { wild: 1 }
-    }
-    makeMove(moveData);
-
-  };
 
   return (
     <div>
@@ -240,7 +230,6 @@ export default function Gameboard() {
           setPlayable={setPlayable}
           setReservable={setReservable}
           handlePlayCard={handlePlayCard}
-          addReserveToken={addReserveToken}
           setReservedCard={setReservedCard}
           gameState={gameState}
           handleReserveCard={handleReserveCard}

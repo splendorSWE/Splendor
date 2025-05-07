@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import '../componentStyles/CardPopUp.css';
 
-export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, setPlayable, reservable, setReservable, handlePlayCard, addReserveToken, handleReserveCard, reservedCard, selectedCard, checkCardAffordability, gameState, playerID }) {
+export default function CardPopUp({ ImagePath, viewCard, setViewCard, playable, setPlayable, reservable, setReservable, handlePlayCard, handleReserveCard, reservedCard, selectedCard, checkCardAffordability, gameState, playerID }) {
     useEffect(() => {
       const fetchCardAffordability = async () => {
         const isPlayable = await checkCardAffordability(selectedCard.id);
