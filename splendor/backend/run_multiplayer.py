@@ -196,15 +196,17 @@ def make_move():
 
         # Remove the card from available_cards and replace from deck
         if not is_reserved:
+            # Remove the card from available_cards and replace from deck
             for level in ["level1", "level2", "level3"]:
                 available = state["available_cards"][level]
                 for i, c in enumerate(available):
                     if c["id"] == card_id:
-                        del available[i]
-                    if state["decks"][level]:
-                        new_card = state["decks"][level].pop()
-                        available.insert(i, new_card)
-                    break
+                        del available[i]  # Remove the bought card
+                        # Replace if deck has more cards
+                        if state["decks"][level]:
+                            new_card = state["decks"][level].pop()
+                            available.insert(i, new_card)
+                        break
         else:
             # Clear the reserved card after play
             player_state["reservedCard"] = None
