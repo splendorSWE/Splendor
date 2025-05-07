@@ -117,48 +117,6 @@ export default function Gameboard() {
     makeMove(moveData);
   };
 
-
-  // const playCard1 = () => {
-  //   console.log('selectedDeck:', selectedDeck);
-  //   if (!selectedCard) return;
-  //   const newDeck = deck1.filter((card) => card.id !== selectedCard.id);
-  //   setDeck1(newDeck);
-  //   setViewCard(false);
-  //   setSelectedCard(null);
-  // };
-
-  // const playCard2 = () => {
-  //   console.log('selectedDeck:', selectedDeck);
-  //   if (!selectedCard) return;
-  //   const newDeck = deck2.filter((card) => card.id !== selectedCard.id);
-  //   setDeck2(newDeck);
-  //   setViewCard(false);
-  //   setSelectedCard(null);
-  // };
-
-  // const playCard3 = () => {
-  //   console.log('selectedDeck:', selectedDeck);
-  //   if (!selectedCard) return;
-  //   const newDeck = deck3.filter((card) => card.id !== selectedCard.id);
-  //   setDeck3(newDeck);
-  //   setViewCard(false);
-  //   setSelectedCard(null);
-  // }
-
-  // const sampleCards = {
-  //   "/Images/MainCards/Blue 1.0.png": {
-  //     cardId: "card1",
-  //     cardColor: "blue",
-  //     tokenPrice: { blue: 0, red: 1, white: 1, green: 1, yellow: 1, wild: 0 },
-  //     points: 0
-  //   }
-  // };
-  useEffect(() => {
-    if (gameState?.game_over) {
-      setShowGameEnd(true);
-    }
-  }, [gameState?.gameOver]);
-
   const checkCardAffordability = async (cardId) => {
     if (gameState?.current_turn != playerID) {
       console.log("not your turn")
