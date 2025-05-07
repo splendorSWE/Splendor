@@ -13,7 +13,7 @@ from flask_socketio import SocketIO, emit, send, join_room, leave_room
 import random
 from random import shuffle
 import string
-from cards import initial_deck1, initial_deck2, initial_deck3
+from cards import initial_deck1, initial_deck2, initial_deck3, nobles
 
 
 app = Flask(__name__)
@@ -44,9 +44,11 @@ def initialize_game_state(players):
     deck1 = initial_deck1.copy()
     deck2 = initial_deck2.copy()
     deck3 = initial_deck3.copy()
+    noblesDeck = nobles.copy()
     shuffle(deck1)
     shuffle(deck2)
     shuffle(deck3)
+    shuffle(noblesDeck)
 
     return {
         "players": {
@@ -76,6 +78,7 @@ def initialize_game_state(players):
             "level2": deck2,
             "level3": deck3
         },
+        "nobles": [noblesDeck.pop() for _ in range(3)],
         "current_turn": players[0],
         "turn_order": players,
         "game_over": False

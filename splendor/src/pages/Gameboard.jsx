@@ -289,7 +289,7 @@ export default function Gameboard() {
 
               setSelectedCard(card);
               setViewCard(true);
-            }} />
+            }} styling="development-card"/>
 
           </div>
 
@@ -300,7 +300,7 @@ export default function Gameboard() {
 
               setSelectedCard(card);
               setViewCard(true);
-            }} />
+            }} styling="development-card"/>
 
           </div>
 
@@ -310,13 +310,14 @@ export default function Gameboard() {
 
               setSelectedCard(card);
               setViewCard(true);
-            }} />
+            }} styling="development-card" />
           </div>
         </div>
         <div className='cards'>
-          <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
+        {/* <DeckManager deck={gameState?.nobles} onClick={() => {}} styling="noble-card"/> */}
+          {/* <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
           <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
-          <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
+          <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} /> */}
         </div>
         <div>
           {/* {gameState && (
