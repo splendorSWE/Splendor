@@ -1,4 +1,4 @@
-import '../componentStyles/NobleCard.css';
+import '../ComponentStyles/NobleCard.css';
 
 export default function NobleCard({ ImagePath }) {
   return (

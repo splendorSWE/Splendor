@@ -1,4 +1,4 @@
-import '../componentStyles/CollectionCard.css';
+import '../ComponentStyles/CollectionCard.css';
 
 export default function CollectionCard({ ImagePath, number }) {
   return (

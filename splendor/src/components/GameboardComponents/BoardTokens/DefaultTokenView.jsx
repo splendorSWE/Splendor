@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Token from '../Token';
-import '../../componentStyles/BoardTokens.css';
+import '../../ComponentStyles/BoardTokens.css';
 
 export default function DefaultTokenView({ tokens, setView, tokenOrder, isTurn }) {
   return (
