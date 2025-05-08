@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { signup, login, logout, loginGuest, useAuth } from "../firebase";
 import { useNavigate } from "react-router-dom";
