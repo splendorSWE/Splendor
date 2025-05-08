@@ -68,13 +68,14 @@ export default function Select2Tokens({ tokens, setView, handleTakeTokens, handl
         </button>
       </div>
 
-      {tokenOrder.map(color => {
+      {(tokenOrder ?? []).map(color => {
         const number = tokens?.[color] ?? 0;
         return (
           <Token
             key={color}
             color={color}
             number={number}
+            alt={`${color} Token`}
             onClick={color === 'wild' ? undefined : () => handleTokenClick(color, number)}
             isSelected={selectedTokens?.[color] === 2}
             isDisabled={color === 'wild' || (number < 4 && !selectedTokens?.[color])}
