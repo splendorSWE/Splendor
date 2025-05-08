@@ -23,8 +23,7 @@ Ensure you have the following installed on your system:
 
     - in a Python terminal run the following lines:
         ```bash
-        cd splendor
-        python3 backend/run.py
+        python3 backend/run_multiplayer.py
 
 3. Run the frontend:
     - in a zsh terminal run the following lines:
