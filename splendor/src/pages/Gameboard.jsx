@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import './pageStyles/Gameboard.css';
+import './PageStyles/Gameboard.css';
 import { useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
-// import socket from '../socket/socket';
 import PageHeader from '../components/PageHeader';
 import GetPath from '../components/CardComponents/GetPath';
-// import { initialDeck1, initialDeck2, initialDeck3, shuffle } from "../components/CardComponents/Deck";
 import DeckManager from '../components/CardComponents/DeckManager';
 import GameEndPopup from '../components/GameboardComponents/GameEndPopup';
 import CollectionButton from '../components/GameboardComponents/CollectionButton';
@@ -30,7 +28,6 @@ export default function Gameboard() {
   const [deck1, setDeck1] = useState([]);
   const [deck2, setDeck2] = useState([]);
   const [deck3, setDeck3] = useState([]);
-  // const [selectedDeck, setSelectedDeck] = useState(null)
   const [showGameEnd, setShowGameEnd] = useState(false);
   const location = useLocation();
   const lobbyCode = location.state?.lobbyCode;
@@ -40,9 +37,6 @@ export default function Gameboard() {
 
   const socket = useContext(SocketContext);
   useEffect(() => {
-
-    console.log('Location State:', location.state);
-
     if (lobbyCode && playerID) {
       fetch('http://localhost:4000/game', {
         method: 'POST',
@@ -54,7 +48,6 @@ export default function Gameboard() {
         .then((res) => res.json())
         .then((data) => {
           setGameState(data);
-
           const cards = data[lobbyCode]?.available_cards;
           if (cards) {
             setDeck1(cards.level1 || []);
@@ -79,13 +72,12 @@ export default function Gameboard() {
     });
 
     return () => {
-      socket.off("game_update"); // Clean up listener on unmount
+      socket.off("game_update"); 
     };
   }, []);
 
   const makeMove = async (moveData) => {
     try {
-      console.log('Making move:', moveData, lobbyCode, playerID);
       const response = await fetch('http://localhost:4000/game/move', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -99,7 +91,6 @@ export default function Gameboard() {
         return;
       }
       const updatedState = await response.json();
-      console.log('Updated game state:', updatedState);
       setGameState(updatedState);
       setError('');
     } catch (err) {
@@ -109,7 +100,6 @@ export default function Gameboard() {
   };
 
   const handleTakeTokens = (selectedTokens) => {
-    console.log('Selected Tokens:', selectedTokens);
     const moveData = {
       action: "take_tokens",
       tokens: selectedTokens
@@ -119,31 +109,26 @@ export default function Gameboard() {
 
   const checkCardAffordability = async (cardId) => {
     if (gameState?.current_turn != playerID) {
-      console.log("not your turn")
       return false
     }
 
     try {
-      // Ensure lobbyCode and playerID are available in your component's state or props
-      console.log("Sending lobbyCode:", lobbyCode);
       const response = await fetch("http://localhost:4000/game/check_affordability", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          cardId: cardId,       // Send the cardId
-          lobbyCode: lobbyCode, // Ensure lobbyCode is set properly
-          player: playerID     // Ensure playerID is the correct player identifier
+          cardId: cardId,
+          lobbyCode: lobbyCode, 
+          player: playerID 
         })
       });
 
-      // Check for unsuccessful response
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Error checking card affordability:', errorData.error);
         throw new Error(errorData.error || "Failed to check card affordability");
       }
 
-      // Handle success: Return the affordability result
       const result = await response.json();
       return result.can_buy;
 
@@ -153,83 +138,10 @@ export default function Gameboard() {
     }
   };
 
-
-
-  const handlePlayCard = () => {
-    if (gameState?.current_turn != playerID) {
-      console.log("not your turn")
-      return false
-    }
-
-    const level1 = gameState.available_cards.level1 || [];
-    const level2 = gameState.available_cards.level2 || [];
-    const level3 = gameState.available_cards.level3 || [];
-
-    const reserved = gameState.players?.[playerID]?.reservedCard;
-
-    const card =
-      level1.find(c => c.id === selectedCard.id) ||
-      level2.find(c => c.id === selectedCard.id) ||
-      level3.find(c => c.id === selectedCard.id) ||
-      (reserved && reserved.id === selectedCard.id ? reserved : null);
-
-    if (!card) {
-      console.error("Card details not found");
-      return;
-    }
-    console.log("Selected card ID:", selectedCard.id);
-    const moveData = {
-      action: "play_card",
-      cardId: selectedCard.id
-    };
-    makeMove(moveData);
-    setViewCard(false);
-  };
-
-  const handleReserveCard = () => {
-    if (gameState?.current_turn != playerID) {
-      console.log("not your turn")
-      return false
-    }
-
-    console.log("Reserving card");
-    const level1 = gameState.available_cards.level1 || [];
-    const level2 = gameState.available_cards.level2 || [];
-    const level3 = gameState.available_cards.level3 || [];
-
-    const card =
-      level1.find(c => c.id === selectedCard.id) ||
-      level2.find(c => c.id === selectedCard.id) ||
-      level3.find(c => c.id === selectedCard.id);
-    if (!card) {
-      console.error("Card details not found");
-      return;
-    }
-    console.log("reserving card")
-    const moveData = {
-      action: "reserve_card",
-      cardId: selectedCard.id
-    };
-    console.log("Sending moveData:", moveData);
-    makeMove(moveData);
-    setViewCard(false);
-    setReservedCard(selectedCard);
-    addReserveToken()
-  };
-
-  const addReserveToken = () => {
-    console.log("Adding wild token");
-    const moveData = {
-      action: "take_tokens",
-      tokens: { wild: 1 }
-    }
-    makeMove(moveData);
-
-  };
-
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
+      
       <div className='main'>
         <CardPopUp
           ImagePath={selectedCard ? GetPath(selectedCard.id) : null}
@@ -239,16 +151,15 @@ export default function Gameboard() {
           playable={playable}
           setPlayable={setPlayable}
           setReservable={setReservable}
-          handlePlayCard={handlePlayCard}
-          addReserveToken={addReserveToken}
           setReservedCard={setReservedCard}
           gameState={gameState}
-          handleReserveCard={handleReserveCard}
           reservedCard={reservedCard}
           selectedCard={selectedCard}
-          checkCardAffordability={checkCardAffordability}
           playerID={playerID}
+          makeMove={makeMove}
+          checkCardAffordability={checkCardAffordability}
         />
+        
         <div>
           <CollectionButton
             player="My"
@@ -291,54 +202,36 @@ export default function Gameboard() {
 
         <BoardTokens gameState={gameState} handleTakeTokens={handleTakeTokens} playerID={playerID} />
 
-
-
         <div class='cards'>
           <div class='cards-row'>
             <DeckManager deck={gameState?.available_cards.level3} onClick={(card) => {
-
-
               setSelectedCard(card);
               setViewCard(true);
             }} />
-
           </div>
-
 
           <div class='cards-row'>
             <DeckManager deck={gameState?.available_cards.level2} onClick={(card) => {
-
-
               setSelectedCard(card);
               setViewCard(true);
             }} />
-
           </div>
-
 
           <div class='cards-row'>
             <DeckManager deck={gameState?.available_cards.level1} onClick={(card) => {
-
               setSelectedCard(card);
               setViewCard(true);
             }} />
           </div>
         </div>
+
         <div className='cards'>
           <NobleCard ImagePath={"/Images/MainCards/Noble 1.png"} />
           <NobleCard ImagePath={"/Images/MainCards/Noble 2.png"} />
           <NobleCard ImagePath={"/Images/MainCards/Noble 3.png"} />
         </div>
+
         <div>
-          {/* {gameState && (
-            <div className="turn-tracker">
-              <h3>
-                {gameState.current_turn === playerID
-                  ? "Your Turn!"
-                  : `Waiting for ${gameState.current_turn}'s Turn...`}
-              </h3>
-            </div>
-          )} */}
           {gameState && (
             <div className="turn-tracker">
               <img
@@ -357,6 +250,7 @@ export default function Gameboard() {
             </div>
           )}
         </div>
+        
       </div>
       <GameEndPopup
         visible={showGameEnd}

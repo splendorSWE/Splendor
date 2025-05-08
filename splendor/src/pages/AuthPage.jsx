@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { signup, login, logout, loginGuest, useAuth } from "../firebase";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +5,7 @@ import { ref, set, get } from "firebase/database";
 import { db } from "../firebase";
 import PageHeader from '../components/PageHeader';
 import NavigationButton from "../components/NavigationButton";
-import './pageStyles/AuthPage.css';
+import './PageStyles/AuthPage.css';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);

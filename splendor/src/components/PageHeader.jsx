@@ -1,7 +1,7 @@
 import React from 'react';
 import NavigationButton from './NavigationButton';
 
-import "./componentStyles/PageHeader.css";
+import "./ComponentStyles/PageHeader.css";
 
 
 

@@ -1,6 +1,6 @@
 
 import React from "react";
-import '../componentStyles/GameEnd.css';
+import '../ComponentStyles/GameEnd.css';
 
 export default function GameEndPopup({ visible, winner, playerName, opponentName, playerPoints, opponentPoints, playerPic, opponentPic, onClose }) {
   if (!visible) return null;

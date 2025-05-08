@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
-import './pageStyles/Home.css'
+import './PageStyles/Home.css'
 import PageHeader from "../components/PageHeader";
 import { useAuthContext } from '../context/AuthContext';
 import { useContext } from "react";
