@@ -46,9 +46,7 @@ export default function EditProfile() {
                 isGuest: user.isAnonymous,
               });
             } else {
-              // fallback values for both anonymous and signed-in users
               console.warn("No user data found!");
-        
               setUserInfo({
                 username: user.isAnonymous ? `Guest-${userId.slice(-4)}` : user.email?.split("@")[0],
                 createdAt: "N/A",
@@ -91,10 +89,8 @@ export default function EditProfile() {
         }
             
         try {
-          // Create credential with current password
           const credential = emailAuthProvider(user.email, currentPassword);
         
-          // Reauthenticate user and update password
           await updatePassword(user, credential, newPassword);
           alert("Password Updated Successfully")
           setPasswordSuccess(true); 
@@ -148,7 +144,7 @@ export default function EditProfile() {
               className='profile-pic-input'
               onChange={handleProfilePicChange}
               />
-              <button class="view-password-btn" disabled={loading || !photo} onClick={handleProfilePicClick}>
+              <button className="view-password-btn" disabled={loading || !photo} onClick={handleProfilePicClick}>
               Upload Profile Pic
               </button>
           </>
