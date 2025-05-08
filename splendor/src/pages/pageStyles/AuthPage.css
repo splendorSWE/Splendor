@@ -1,72 +1,70 @@
-
 .auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 1rem;
-    background-size: cover;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 1rem;
+  background-size: cover;
+}
   
-  .auth-card {
-    padding: 3rem 2rem;
-    text-align: center;
-    background-color: #253047;
-    width: 100%;
-    max-width: 400px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
-  
-  .auth-title {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
-    color: #F7D774;
-    font-family: "Fondamento", cursive;
-  }
-  
-  .auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  
-  .auth-input {
-    padding: 0.75rem;
-    font-size: 1rem;
-    border-radius: 4px;
-    border: none;
-    background-color: #E8E8E8;
-    font-family: "Fondamento", cursive;
-  }
-  
-  .auth-button {
-    padding: 0.75rem;
-    margin-top: 1rem;
-    background-color: #F7D774;
-    color: #253047;
-    font-weight: bold;
-    border: none;
-    border-radius: 4px;
-    font-size: 1.25rem;
-    cursor: pointer;
-    font-family: "Fondamento", cursive;
-  }
-  
-  .auth-toggle-text {
-    margin-top: 1rem;
-    color: white;
+.auth-card {
+  padding: 3rem 2rem;
+  text-align: center;
+  background-color: #253047;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
 
-    font-family: "Fondamento", cursive;
-  }
-  
-  .auth-toggle-button {
-    background: none;
-    border: none;
-    color: #F7D774;
-    cursor: pointer;
-    text-decoration: underline;
-    font-size: 1rem;
-    font-family: "Fondamento", cursive;
-  }
-  
+.auth-title {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  color: #F7D774;
+  font-family: "Fondamento", cursive;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.auth-input {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: none;
+  background-color: #E8E8E8;
+  font-family: "Fondamento", cursive;
+}
+
+.auth-button {
+  padding: 0.75rem;
+  margin-top: 1rem;
+  background-color: #F7D774;
+  color: #253047;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.25rem;
+  cursor: pointer;
+  font-family: "Fondamento", cursive;
+}
+
+.auth-toggle-text {
+  margin-top: 1rem;
+  color: white;
+
+  font-family: "Fondamento", cursive;
+}
+
+.auth-toggle-btn {
+  background: none;
+  border: none;
+  color: #F7D774;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 1rem;
+  font-family: "Fondamento", cursive;
+}

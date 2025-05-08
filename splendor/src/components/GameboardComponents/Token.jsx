@@ -1,5 +1,5 @@
 import React from 'react';
-import '../componentStyles/Token.css';
+import '../ComponentStyles/Token.css';
 
 export default function Token({ color, number, onClick, isSelected, isDisabled }) {
   return (
