@@ -10,7 +10,6 @@ export default function Rules() {
       <PageHeader title="Rules" home={true} userauth={!user} profile={user || user.isAnonymous} />
       <div className="rules-page">
         <main className="rules-content">
-          <h1 className="page-title">Splendor Rules</h1>
           <div className="rules-container">
             <h2 className="section-title">Objective</h2>
             <p>
