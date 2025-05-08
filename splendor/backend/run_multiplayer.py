@@ -121,7 +121,6 @@ def get_game_state():
     # Return the game state if everything is valid
     return jsonify(game)
 
-
 @app.route('/game/move', methods=['POST'])
 def make_move():
     data = request.get_json()
@@ -129,9 +128,9 @@ def make_move():
     lobby_code = data.get("lobbyCode")
     player = data.get("player")
 
+    # Basic validation
     if not lobby_code or lobby_code not in game_states:
         return jsonify({"error": "Invalid lobby code"}), 400
-
     if not player or player not in game_states[lobby_code]["players"]:
         return jsonify({"error": "Invalid player"}), 400
 
@@ -141,125 +140,104 @@ def make_move():
     if state["current_turn"] != player:
         return jsonify({"error": "Not your turn"}), 403
 
-    if action == "take_tokens":
-        tokens_requested = data.get("tokens", {})
+    handlers = {
+        "take_tokens": handle_take_tokens,
+        "play_card": handle_play_card,
+        "reserve_card": handle_reserve_card,
+    }
 
-        for token, count in tokens_requested.items():
-            available = state["tokens"].get(token, 0)
-            if available < count:
-                return jsonify({"error": f"Not enough {token} tokens available"}), 400
-
-        for token, count in tokens_requested.items():
-            state["tokens"][token] -= count
-            player_state["tokens"][token] += count
-
-        turn_order = state["turn_order"]
-        current_index = turn_order.index(state["current_turn"])
-        next_index = (current_index + 1) % len(turn_order)
-        state["current_turn"] = turn_order[next_index]
-
-        if game_states[lobby_code]["players"][player]["points"] >= 15:
-            game_states[lobby_code]["game_over"] = True
-        
-        update_clients(lobby_code)
-        return jsonify(state)
-
-    elif action == "play_card":
-        card_id = data.get("cardId")
-        if not card_id or card_id not in ALL_CARDS:
-            return jsonify({"error": "Invalid cardId"}), 400
-
-        card = ALL_CARDS[card_id]
-
-        can_buy, spend_colour, wild_needed = affordability(
-            card,
-            player_state["tokens"],
-            player_state["permanentGems"]
-        )
-
-        if not can_buy:
-            return jsonify({"error": "Not enough tokens (including wilds)"}), 400
-
-        # Deduct tokens and replenish on the board
-        for c, amt in spend_colour.items():
-            player_state["tokens"][c] -= amt
-            state["tokens"][c] += amt  # Return to board
-        player_state["tokens"]["wild"] -= wild_needed
-        state["tokens"]["wild"] += wild_needed
-
-        # Add permanent gem and points
-        gem_colour = card["color"]
-        player_state["permanentGems"][gem_colour] += 1
-        player_state["points"] += card["points"]
-
-        is_reserved = player_state.get("reservedCard") and player_state["reservedCard"]["id"] == card_id
-
-        # Remove the card from available_cards and replace from deck
-        if not is_reserved:
-            for level in ["level1", "level2", "level3"]:
-                available = state["available_cards"][level]
-                for i, c in enumerate(available):
-                    if c["id"] == card_id:
-                        del available[i]
-                    if state["decks"][level]:
-                        new_card = state["decks"][level].pop()
-                        available.insert(i, new_card)
-                    break
-        else:
-            # Clear the reserved card after play
-            player_state["reservedCard"] = None
-        
-        turn_order = state["turn_order"]
-        current_index = turn_order.index(state["current_turn"])
-        next_index = (current_index + 1) % len(turn_order)
-        state["current_turn"] = turn_order[next_index]
-
-        if game_states[lobby_code]["players"][player]["points"] >= 15:
-            game_states[lobby_code]["game_over"] = True
-
-        update_clients(lobby_code)
-        return jsonify(state)
-    
-    elif action == "reserve_card":
-        card_id = data.get("cardId")
-        if not card_id or card_id not in ALL_CARDS:
-            return jsonify({"error": "Invalid cardId"}), 400
-
-        card = ALL_CARDS[card_id]
-
-        if player_state["reservedCard"] is None:
-            player_state["reservedCard"] = card
-
-        # Remove the card from available_cards and replace from deck
-        for level in ["level1", "level2", "level3"]:
-            available = state["available_cards"][level]
-            for i, c in enumerate(available):
-                if c["id"] == card_id:
-                    del available[i]  # Remove the bought card
-
-                    # Replace if deck has more cards
-                    if state["decks"][level]:
-                        new_card = state["decks"][level].pop()
-                        available.insert(i, new_card)
-                    break
-        
-        # Add wild token
-        player_state["tokens"]["wild"] += 1
-        state["tokens"]["wild"] -= 1
-
-        # End player's turn
-        turn_order = state["turn_order"]
-        current_index = turn_order.index(state["current_turn"])
-        next_index = (current_index + 1) % len(turn_order)
-        state["current_turn"] = turn_order[next_index]
-
-        update_clients(lobby_code)
-        return jsonify(state)
-
+    handler = handlers.get(action)
+    if handler:
+        result = handler(state, player_state, data)
     else:
         return jsonify({"error": "Unknown action"}), 400
 
-    
+    # Check for win condition
+    if player_state["points"] >= 15:
+        state["game_over"] = True
+
+    # Advance turn
+    turn_order = state["turn_order"]
+    current_index = turn_order.index(state["current_turn"])
+    state["current_turn"] = turn_order[(current_index + 1) % len(turn_order)]
+
+    update_clients(lobby_code)
+    return jsonify(state)
+
+def handle_take_tokens(state, player_state, data):
+    tokens_requested = data.get("tokens", {})
+    for token, count in tokens_requested.items():
+        if state["tokens"].get(token, 0) < count:
+            raise ValueError(f"Not enough {token} tokens available")
+
+    for token, count in tokens_requested.items():
+        state["tokens"][token] -= count
+        player_state["tokens"][token] += count
+
+    return state
+
+
+def handle_play_card(state, player_state, data):
+    card_id = data.get("cardId")
+    if not card_id or card_id not in ALL_CARDS:
+        raise ValueError("Invalid cardId")
+
+    card = ALL_CARDS[card_id]
+    can_buy, spend_colour, wild_needed = affordability(
+        card, player_state["tokens"], player_state["permanentGems"]
+    )
+
+    if not can_buy:
+        raise ValueError("Not enough tokens (including wilds)")
+
+    # Pay tokens
+    for color, amt in spend_colour.items():
+        player_state["tokens"][color] -= amt
+        state["tokens"][color] += amt
+    player_state["tokens"]["wild"] -= wild_needed
+    state["tokens"]["wild"] += wild_needed
+
+    # Gain bonuses
+    player_state["permanentGems"][card["color"]] += 1
+    player_state["points"] += card["points"]
+
+    # Remove from board or reserved
+    is_reserved = player_state.get("reservedCard") and player_state["reservedCard"].get("id") == card_id
+    if is_reserved:
+        player_state["reservedCard"] = None
+    else:
+        remove_card_from_board(state, card_id)
+
+    return state
+
+
+def handle_reserve_card(state, player_state, data):
+    card_id = data.get("cardId")
+    if not card_id or card_id not in ALL_CARDS:
+        raise ValueError("Invalid cardId")
+
+    if player_state["reservedCard"] is None:
+        player_state["reservedCard"] = ALL_CARDS[card_id]
+        remove_card_from_board(state, card_id)
+
+        # Give wild token if available
+        if state["tokens"]["wild"] > 0:
+            player_state["tokens"]["wild"] += 1
+            state["tokens"]["wild"] -= 1
+
+    return state
+
+def remove_card_from_board(state, card_id):
+    for level in ["level1", "level2", "level3"]:
+        available = state["available_cards"][level]
+        for i, card in enumerate(available):
+            if card["id"] == card_id:
+                del available[i]
+                if state["decks"][level]:
+                    new_card = state["decks"][level].pop()
+                    available.insert(i, new_card)
+                return
+ 
 @app.route('/game/check_affordability', methods=['POST'])
 def check_affordability():
     data = request.get_json()

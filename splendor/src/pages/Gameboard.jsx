@@ -138,67 +138,6 @@ export default function Gameboard() {
     }
   };
 
-
-
-  const handlePlayCard = () => {
-    if (gameState?.current_turn != playerID) {
-      return false
-    }
-
-    const level1 = gameState.available_cards.level1 || [];
-    const level2 = gameState.available_cards.level2 || [];
-    const level3 = gameState.available_cards.level3 || [];
-    const reserved = gameState.players?.[playerID]?.reservedCard;
-    const card =
-      level1.find(c => c.id === selectedCard.id) ||
-      level2.find(c => c.id === selectedCard.id) ||
-      level3.find(c => c.id === selectedCard.id) ||
-      (reserved && reserved.id === selectedCard.id ? reserved : null);
-
-    if (!card) {
-      console.error("Card details not found");
-      return;
-    }
-
-    const moveData = {
-      action: "play_card",
-      cardId: selectedCard.id
-    };
-
-    makeMove(moveData);
-    setViewCard(false);
-  };
-
-  const handleReserveCard = () => {
-    if (gameState?.current_turn != playerID) {
-      return false
-    }
-
-    const level1 = gameState.available_cards.level1 || [];
-    const level2 = gameState.available_cards.level2 || [];
-    const level3 = gameState.available_cards.level3 || [];
-
-    const card =
-      level1.find(c => c.id === selectedCard.id) ||
-      level2.find(c => c.id === selectedCard.id) ||
-      level3.find(c => c.id === selectedCard.id);
-
-    if (!card) {
-      console.error("Card details not found");
-      return;
-    }
-
-    const moveData = {
-      action: "reserve_card",
-      cardId: selectedCard.id
-    };
-
-    makeMove(moveData);
-    setViewCard(false);
-    setReservedCard(selectedCard);
-  };
-
-
   return (
     <div>
       <PageHeader title='Gameboard' home={true} rules={true} userauth={!user && !user?.isAnonymous} profile={!!user || user?.isAnonymous} />
@@ -212,14 +151,13 @@ export default function Gameboard() {
           playable={playable}
           setPlayable={setPlayable}
           setReservable={setReservable}
-          handlePlayCard={handlePlayCard}
           setReservedCard={setReservedCard}
           gameState={gameState}
-          handleReserveCard={handleReserveCard}
           reservedCard={reservedCard}
           selectedCard={selectedCard}
-          checkCardAffordability={checkCardAffordability}
           playerID={playerID}
+          makeMove={makeMove}
+          checkCardAffordability={checkCardAffordability}
         />
         
         <div>
