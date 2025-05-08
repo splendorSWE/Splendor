@@ -29,8 +29,3 @@ export default function DefaultTokenView({ tokens, setView, tokenOrder, isTurn }
     </div>
   );
 }
-
-
-
-
-
