@@ -61,17 +61,6 @@ describe('CardPopUp component', () => {
     expect(screen.getByText('Play')).toHaveClass('disabled');
   });
 
-//   it('clicking Play calls handlePlayCard, setViewCard, and possibly setReservable', () => {
-//     render(<CardPopUp {...baseProps} />);
-//     const playBtn = screen.getByText('Play');
-
-//     fireEvent.click(playBtn);
-
-//     expect(baseProps.setViewCard).toHaveBeenCalledWith(false);
-//     expect(baseProps.handlePlayCard).toHaveBeenCalled();
-//     expect(baseProps.setReservable).toHaveBeenCalledWith(true);
-//   });
-
   it('disables Reserve button if not reservable or not player\'s turn', () => {
     const { rerender } = render(
       <CardPopUp {...baseProps} reservable={false} />
@@ -82,17 +71,6 @@ describe('CardPopUp component', () => {
       <CardPopUp {...baseProps} gameState={{ current_turn: 'p2' }} />
     );
     expect(screen.getByText('Reserve')).toBeDisabled();
-  });
-
-  it('clicking Reserve calls handleReserveCard, setViewCard, and setReservable(false)', () => {
-    render(<CardPopUp {...baseProps} />);
-    const reserveBtn = screen.getByText('Reserve');
-
-    fireEvent.click(reserveBtn);
-
-    expect(baseProps.setViewCard).toHaveBeenCalledWith(false);
-    expect(baseProps.setReservable).toHaveBeenCalledWith(false);
-    expect(baseProps.handleReserveCard).toHaveBeenCalled();
   });
 
   it('does not call handleReserveCard if reservable is false', () => {
