@@ -60,7 +60,6 @@ export default function Select2Tokens({ tokens, setView, handleTakeTokens, handl
         <button
           className="select-tokens-choice-button dimmed-choice"
           onClick={() => {
-            handleTakeTokens(selectedTokens);
             setView("select3");
           }}
         >
