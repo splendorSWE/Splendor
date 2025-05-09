@@ -1,12 +1,3 @@
-# needed installations
-    # pip3 install flask
-    # pip3 install flask_cors
-    # pip3 install flask_socketio
-    # to run it (if you're in the splendor directory) ---> python3 backend/run.py
-
-# from flask import Flask, request, jsonify
-# from flask_cors import CORS
-# from flask_socketio import SocketIO, emit
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
