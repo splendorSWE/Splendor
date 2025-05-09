@@ -8,8 +8,8 @@ import "./ComponentStyles/PageHeader.css";
 export default function PageHeader({ title, home, rules, userauth, profile }) {
     return (
     <div className="page-header">
-        <div className="page-title">{title}</div> {/* Title in the center */}
-        <div className="spacer"></div> {/* Flexible space to push title to center */}
+        <div className="page-title">{title}</div>
+        <div className="spacer"></div>
         <div className="nav-buttons">
           {home && <NavigationButton destination="Home" link="/" styling='dark-button' />}
           {rules && <NavigationButton destination="Rules" link="/rules" styling='dark-button' />}

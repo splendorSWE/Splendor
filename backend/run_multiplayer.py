@@ -15,21 +15,21 @@ socketio = SocketIO(app, cors_allowed_origins="http://localhost:3000")
 
 ALL_CARDS = {
     c["id"]: {
-        **c,  # Retain all other fields like id, color, level, etc.
+        **c,  
         "tokenPrice": {
             "red": c.get("redPrice", 0),
             "green": c.get("greenPrice", 0),
             "blue": c.get("bluePrice", 0),
             "yellow": c.get("yellowPrice", 0),
             "white": c.get("whitePrice", 0),
-            "wild": 0,  # You can add wild if needed for now, set to 0
+            "wild": 0,  
         }
     }
     for c in (initial_deck1 + initial_deck2 + initial_deck3)
 }
 COLORS = ["red", "green", "blue", "yellow", "white"]
 
-game_states = {}  # lobby_code -> game_state
+game_states = {}  
 
 def initialize_game_state(players):
     deck1 = initial_deck1.copy()
@@ -91,25 +91,19 @@ def affordability(card_row, player_tokens, permanent_gems):
 
 @app.route('/game', methods=['POST'])
 def get_game_state():
-    # Get the JSON data from the request
     data = request.get_json()
     
-    # Extract lobby code and player ID
     lobby_code = data.get("lobbyCode")
     player_id = data.get("playerID")
 
     print(f"Received lobby code: {lobby_code}")
-    # print(f"all lobby codes: {game_states}")
-    # Check if lobby code is provided and exists in game states
     if not lobby_code or lobby_code not in game_states:
         return jsonify({"error": "Invalid lobby code"}), 400
 
-    # Check if player ID is provided and is part of the game
     game = game_states[lobby_code]
     if not player_id or player_id not in game["players"]:
         return jsonify({"error": "Player not part of this game"}), 403
 
-    # Return the game state if everything is valid
     return jsonify(game)
 
 @app.route('/game/move', methods=['POST'])
@@ -119,7 +113,6 @@ def make_move():
     lobby_code = data.get("lobbyCode")
     player = data.get("player")
 
-    # Basic validation
     if not lobby_code or lobby_code not in game_states:
         return jsonify({"error": "Invalid lobby code"}), 400
     if not player or player not in game_states[lobby_code]["players"]:
@@ -143,11 +136,9 @@ def make_move():
     else:
         return jsonify({"error": "Unknown action"}), 400
 
-    # Check for win condition
     if player_state["points"] >= 15:
         state["game_over"] = True
 
-    # Advance turn
     turn_order = state["turn_order"]
     current_index = turn_order.index(state["current_turn"])
     state["current_turn"] = turn_order[(current_index + 1) % len(turn_order)]
@@ -181,18 +172,15 @@ def handle_play_card(state, player_state, data):
     if not can_buy:
         raise ValueError("Not enough tokens (including wilds)")
 
-    # Pay tokens
     for color, amt in spend_colour.items():
         player_state["tokens"][color] -= amt
         state["tokens"][color] += amt
     player_state["tokens"]["wild"] -= wild_needed
     state["tokens"]["wild"] += wild_needed
 
-    # Gain bonuses
     player_state["permanentGems"][card["color"]] += 1
     player_state["points"] += card["points"]
 
-    # Remove from board or reserved
     is_reserved = player_state.get("reservedCard") and player_state["reservedCard"].get("id") == card_id
     if is_reserved:
         player_state["reservedCard"] = None
@@ -211,7 +199,6 @@ def handle_reserve_card(state, player_state, data):
         player_state["reservedCard"] = ALL_CARDS[card_id]
         remove_card_from_board(state, card_id)
 
-        # Give wild token if available
         if state["tokens"]["wild"] > 0:
             player_state["tokens"]["wild"] += 1
             state["tokens"]["wild"] -= 1
@@ -233,10 +220,9 @@ def remove_card_from_board(state, card_id):
 def check_affordability():
     data = request.get_json()
     lobby_code = data.get("lobbyCode", "").strip().upper()
-    player = data.get("player")  # This is the player's username or ID
+    player = data.get("player") 
     card_id = data.get("cardId")
 
-    # Validate lobby and player
     if not lobby_code or lobby_code not in game_states:
         return jsonify({"error": "Invalid lobby code"}), 400
 
@@ -256,18 +242,13 @@ def check_affordability():
 
     return jsonify({"can_buy": can_buy, "spend_colour": spend_colour, "wild_needed": wild_needed})
 
-# JACKS LOBBY STUFF
 
-# Store lobby state
-lobbies = {}  # lobby_code -> [usernames]
+lobbies = {} 
 user_lobby_map = {}
-ready_players = {}  # lobby_code -> set of ready usernames
+ready_players = {} 
 
-# --- Utility ---
 def generate_lobby_code(length=5):
     return ''.join(random.choices(string.ascii_uppercase, k=length))
-
-# --- Socket Events ---
 
 @socketio.on("connect")
 def handle_connect():
@@ -312,11 +293,10 @@ def handle_create_lobby(data):
     if lobby_type == "Private" and provided_code:
         lobby_code = provided_code
     else:
-        lobby_code = generate_lobby_code()  # random 5-letter uppercase code
+        lobby_code = generate_lobby_code()
 
     lobbies[lobby_code] = [username]
     
-    # ✅ Step 3: Track lobby and username by socket ID
     user_lobby_map[request.sid] = lobby_code
     user_lobby_map[request.sid + "_name"] = username
 
@@ -347,7 +327,6 @@ def handle_join_lobby(data):
     join_room(lobby_code)
     lobbies[lobby_code].append(username)
 
-    # ✅ Step 3: Track lobby and username by socket ID
     user_lobby_map[request.sid] = lobby_code
     user_lobby_map[request.sid + "_name"] = username
     user_lobby_map[request.sid + "_photoURL"] = photo_url
@@ -368,12 +347,10 @@ def handle_unready(data):
         print("🚫 Invalid unready request.")
         return
 
-    # Ensure ready set exists
     if lobby_code in ready_players and username in ready_players[lobby_code]:
         ready_players[lobby_code].remove(username)
         print(f"⛔ {username} un-readied in lobby {lobby_code}")
 
-    # Emit updated list to everyone
     emit("ready_status", {
         "readyPlayers": list(ready_players.get(lobby_code, [])),
         "totalPlayers": lobbies[lobby_code],
@@ -386,13 +363,12 @@ def handle_ready_up(data):
     username = user_lobby_map.get(sid + "_name")
     photo_url = data.get("photoURL", "/images/default_pfp.jpg")
 
-    print("🎯 received ready_up:", data)  # ✅ this MUST print if it's working
+    print("🎯 received ready_up:", data)
 
     if not lobby_code or lobby_code not in lobbies or not username:
         print("🚫 Invalid ready_up request.")
         return
 
-    # Initialize if not already
     if lobby_code not in ready_players:
         ready_players[lobby_code] = set()
 
@@ -426,7 +402,6 @@ def handle_leave_lobby():
         return
 
     username = None
-    # Find and remove the player from the lobby list
     for name in lobbies[lobby_code]:
         if name == user_lobby_map.get(sid + "_name"):
             username = name
@@ -440,8 +415,6 @@ def handle_leave_lobby():
     user_lobby_map.pop(sid + "_name", None)
 
     print(f"👋 {username or sid} left lobby {lobby_code}")
-
-    # Notify remaining players
     emit("lobby_info", {"players": lobbies[lobby_code]}, room=lobby_code)
 
 @socketio.on("get_lobby_info")
@@ -459,13 +432,6 @@ def handle_custom_event(data):
     print(f"Received from frontend: {data}")
     send(f"Backend received: {data}", broadcast=True)
     
-    
 
-# # --- Run ---
 if __name__ == "__main__":
     socketio.run(app, host='0.0.0.0', port=4000, debug=True)
-
-
-
-# # if __name__ == '__main__':
-# #     app.run(debug=True)

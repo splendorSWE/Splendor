@@ -29,7 +29,7 @@ export default function Home() {
         });
       
         return () => {
-          socket.offAny(); // Clean up when component unmounts
+          socket.offAny();
         };
       }, [socket]);
 
@@ -86,30 +86,6 @@ export default function Home() {
         fetchUsername();
       }, [user]);
     
-    {
-        /* 
-    // Listen for messages from the server
-    useEffect(() => {
-        socket.on("message", (msg) => {
-        console.log("Message from server:", msg);
-        setMessages((prev) => [...prev, msg]);
-        });
-
-        // Clean up listener on component unmount
-        return () => socket.off("message");
-    }, []);
-    
-    const toggleUserStats = () => {
-        setShowUserStats((prev) => !prev);
-      };
-      const [messages, setMessages] = useState([]);
-        const [showUserStats, setShowUserStats] = useState(false);
-        const [profilePic, setProfilePic] = useState("../images/default_pfp.jpg")
-
-        */}
-
-        
-
         const handleCreateLobby = () => {
           const code = generateNumericCode(6);
           socket.emit("create_lobby", {
